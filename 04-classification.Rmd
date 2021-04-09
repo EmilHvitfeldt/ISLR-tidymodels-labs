@@ -2,9 +2,94 @@
 
 ## The Stock Market Data
 
+```{r}
+library(tidymodels)
+library(ISLR)
+
+Smarket <- as_tibble(Smarket)
+```
+
+```{r}
+library(corrr)
+cor_Smarket <- correlate(Smarket[-9])
+rplot(cor_Smarket, colours = c("indianred2", "black", "skyblue1"))
+```
+
+```{r}
+library(paletteer)
+cor_Smarket %>%
+  stretch() %>%
+  ggplot(aes(x, y, fill = r)) +
+  geom_tile() +
+  geom_text(aes(label = as.character(fashion(r)))) +
+  scale_fill_paletteer_c("scico::roma", limits = c(-1, 1), direction = -1) +
+  theme_minimal()
+```
+
+
+
 ## Logistic Regression
 
+```{r}
+lr_spec <- logistic_reg() %>%
+  set_engine("glm") %>%
+  set_mode("classification")
+```
+
+```{r}
+lr_fit <- lr_spec %>%
+  fit(
+    Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
+    data = Smarket
+    )
+
+lr_fit
+```
+
+```{r}
+summary(lr_fit$fit)
+```
+
+```{r}
+tidy(lr_fit)
+```
+
+```{r}
+predict(lr_fit, new_data = Smarket)
+```
+
+```{r}
+predict(lr_fit, new_data = Smarket, type = "prob")
+```
+
+```{r}
+augment(lr_fit, new_data = Smarket) %>%
+  conf_mat(truth = Direction, estimate = .pred_class)
+```
+
+```{r}
+augment(lr_fit, new_data = Smarket) %>%
+  conf_mat(truth = Direction, estimate = .pred_class) %>%
+  autoplot(type = "heatmap")
+```
+
+```{r}
+augment(lr_fit, new_data = Smarket) %>%
+  accuracy(truth = Direction, estimate = .pred_class)
+```
+
 ## Linear Discriminant Analysis
+
+```{r}
+library(discrim)
+lda_spec <- discrim_linear() %>%
+  set_engine("MASS")
+
+lda_fit <- lda_spec %>%
+  fit(Direction ~ Lag1 + Lag2, data = Smarket)
+
+lda_fit
+```
 
 ## Quadratic Discriminant Analysis
 

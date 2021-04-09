@@ -56,16 +56,194 @@
 <h2>
 <span class="header-section-number">4.1</span> The Stock Market Data<a class="anchor" aria-label="anchor" href="#the-stock-market-data"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
+
+<span class="va">Smarket</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Smarket</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/corrr">corrr</a></span><span class="op">)</span>
+<span class="va">cor_Smarket</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/corrr/man/correlate.html">correlate</a></span><span class="op">(</span><span class="va">Smarket</span><span class="op">[</span><span class="op">-</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<pre><code>## 
+## Correlation method: 'pearson'
+## Missing treated using: 'pairwise.complete.obs'</code></pre>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/corrr/man/rplot.html">rplot</a></span><span class="op">(</span><span class="va">cor_Smarket</span>, colours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"indianred2"</span>, <span class="st">"black"</span>, <span class="st">"skyblue1"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## Don't know how to automatically pick scale for object of type noquote. Defaulting to continuous.</code></pre>
+<div class="inline-figure"><img src="ISLR-tidymodels-labs_files/figure-html/unnamed-chunk-24-1.png" width="672"></div>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EmilHvitfeldt/paletteer">paletteer</a></span><span class="op">)</span>
+<span class="va">cor_Smarket</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/corrr/man/stretch.html">stretch</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, fill <span class="op">=</span> <span class="va">r</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_tile</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/corrr/man/fashion.html">fashion</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/paletteer/man/ggplot2-scales-continuous.html">scale_fill_paletteer_c</a></span><span class="op">(</span><span class="st">"scico::roma"</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="ISLR-tidymodels-labs_files/figure-html/unnamed-chunk-25-1.png" width="672"></div>
 </div>
 <div id="logistic-regression" class="section level2" number="4.2">
 <h2>
 <span class="header-section-number">4.2</span> Logistic Regression<a class="anchor" aria-label="anchor" href="#logistic-regression"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lr_spec</span> <span class="op">&lt;-</span> <span class="fu">logistic_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lr_fit</span> <span class="op">&lt;-</span> <span class="va">lr_spec</span> <span class="op">%&gt;%</span>
+  <span class="fu">fit</span><span class="op">(</span>
+    <span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span> <span class="op">+</span> <span class="va">Lag3</span> <span class="op">+</span> <span class="va">Lag4</span> <span class="op">+</span> <span class="va">Lag5</span> <span class="op">+</span> <span class="va">Volume</span>,
+    data <span class="op">=</span> <span class="va">Smarket</span>
+    <span class="op">)</span>
+
+<span class="va">lr_fit</span></code></pre></div>
+<pre><code>## parsnip model object
+## 
+## Fit time:  7ms 
+## 
+## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
+##     Lag5 + Volume, family = stats::binomial, data = data)
+## 
+## Coefficients:
+## (Intercept)         Lag1         Lag2         Lag3         Lag4         Lag5  
+##   -0.126000    -0.073074    -0.042301     0.011085     0.009359     0.010313  
+##      Volume  
+##    0.135441  
+## 
+## Degrees of Freedom: 1249 Total (i.e. Null);  1243 Residual
+## Null Deviance:       1731 
+## Residual Deviance: 1728  AIC: 1742</code></pre>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">lr_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
+##     Lag5 + Volume, family = stats::binomial, data = data)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -1.446  -1.203   1.065   1.145   1.326  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -0.126000   0.240736  -0.523    0.601
+## Lag1        -0.073074   0.050167  -1.457    0.145
+## Lag2        -0.042301   0.050086  -0.845    0.398
+## Lag3         0.011085   0.049939   0.222    0.824
+## Lag4         0.009359   0.049974   0.187    0.851
+## Lag5         0.010313   0.049511   0.208    0.835
+## Volume       0.135441   0.158360   0.855    0.392
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 1731.2  on 1249  degrees of freedom
+## Residual deviance: 1727.6  on 1243  degrees of freedom
+## AIC: 1741.6
+## 
+## Number of Fisher Scoring iterations: 3</code></pre>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lr_fit</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 7 x 5
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept) -0.126      0.241     -0.523   0.601
+## 2 Lag1        -0.0731     0.0502    -1.46    0.145
+## 3 Lag2        -0.0423     0.0501    -0.845   0.398
+## 4 Lag3         0.0111     0.0499     0.222   0.824
+## 5 Lag4         0.00936    0.0500     0.187   0.851
+## 6 Lag5         0.0103     0.0495     0.208   0.835
+## 7 Volume       0.135      0.158      0.855   0.392</code></pre>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1,250 x 1
+##    .pred_class
+##    &lt;fct&gt;      
+##  1 Up         
+##  2 Down       
+##  3 Down       
+##  4 Up         
+##  5 Up         
+##  6 Up         
+##  7 Down       
+##  8 Up         
+##  9 Up         
+## 10 Down       
+## # … with 1,240 more rows</code></pre>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1,250 x 2
+##    .pred_Down .pred_Up
+##         &lt;dbl&gt;    &lt;dbl&gt;
+##  1      0.493    0.507
+##  2      0.519    0.481
+##  3      0.519    0.481
+##  4      0.485    0.515
+##  5      0.489    0.511
+##  6      0.493    0.507
+##  7      0.507    0.493
+##  8      0.491    0.509
+##  9      0.482    0.518
+## 10      0.511    0.489
+## # … with 1,240 more rows</code></pre>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
+<pre><code>##           Truth
+## Prediction Down  Up
+##       Down  145 141
+##       Up    457 507</code></pre>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">autoplot</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="ISLR-tidymodels-labs_files/figure-html/unnamed-chunk-33-1.png" width="672"></div>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 3
+##   .metric  .estimator .estimate
+##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+## 1 accuracy binary         0.522</code></pre>
 </div>
 <div id="linear-discriminant-analysis" class="section level2" number="4.3">
 <h2>
 <span class="header-section-number">4.3</span> Linear Discriminant Analysis<a class="anchor" aria-label="anchor" href="#linear-discriminant-analysis"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://discrim.tidymodels.org">discrim</a></span><span class="op">)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: 'discrim'</code></pre>
+<pre><code>## The following object is masked from 'package:dials':
+## 
+##     smoothness</code></pre>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lda_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://discrim.tidymodels.org/reference/discrim_linear.html">discrim_linear</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"MASS"</span><span class="op">)</span>
+
+<span class="va">lda_fit</span> <span class="op">&lt;-</span> <span class="va">lda_spec</span> <span class="op">%&gt;%</span>
+  <span class="fu">fit</span><span class="op">(</span><span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span>, data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span>
+
+<span class="va">lda_fit</span></code></pre></div>
+<pre><code>## parsnip model object
+## 
+## Fit time:  5ms 
+## Call:
+## lda(Direction ~ Lag1 + Lag2, data = data)
+## 
+## Prior probabilities of groups:
+##   Down     Up 
+## 0.4816 0.5184 
+## 
+## Group means:
+##             Lag1        Lag2
+## Down  0.05068605  0.03229734
+## Up   -0.03969136 -0.02244444
+## 
+## Coefficients of linear discriminants:
+##             LD1
+## Lag1 -0.7567605
+## Lag2 -0.4707872</code></pre>
 </div>
 <div id="quadratic-discriminant-analysis" class="section level2" number="4.4">
 <h2>

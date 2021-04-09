@@ -2,14 +2,151 @@
 
 ## Libraries
 
+```{r}
+library(tidymodels)
+library(ISLR)
+library(MASS) # For Boston data set
+
+Boston <- as_tibble(Boston)
+Carseats <- as_tibble(Carseats)
+```
+
 ## Simple linear regression
+
+```{r}
+lm_spec <- linear_reg() %>%
+  set_mode("regression") %>%
+  set_engine("lm")
+```
+
+```{r}
+lm_fit <- lm_spec %>%
+  fit(medv ~ lstat, data = Boston)
+```
+
+```{r}
+names(lm_fit)
+```
+
+```{r}
+names(lm_fit$fit)
+```
+
+```{r}
+summary(lm_fit$fit)
+```
+
+```{r}
+tidy(lm_fit)
+```
+
+```{r}
+glance(lm_fit)
+```
+
+```{r, error=TRUE}
+predict(lm_fit)
+```
+
+```{r}
+predict(lm_fit, new_data = Boston)
+```
+
+```{r}
+predict(lm_fit, new_data = Boston, type = "conf_int")
+```
+
+```{r}
+augment(lm_fit, new_data = Boston)
+```
+
+```{r}
+par(mfrow = c(2, 2))
+plot(lm_fit$fit)
+```
 
 ## Multiple linear regression
 
+```{r}
+lm_fit <- lm_spec %>% 
+  fit(medv ~ lstat + age, data = Boston)
+
+lm_fit
+```
+
 ## Interaction terms
+
+```{r}
+lm_fit <- lm_spec %>%
+  fit(medv ~ lstat * age, data = Boston)
+
+lm_fit
+```
+
+```{r}
+rec_spec <- recipe(medv ~ lstat + age, data = Boston) %>%
+  step_interact(~ lstat:age)
+
+lm_wf <- workflow() %>%
+  add_model(lm_spec) %>%
+  add_recipe(rec_spec)
+
+lm_wf %>% fit(Boston)
+```
 
 ## Non-linear transformations of the predictors
 
+```{r}
+lm_fit <- lm_spec %>%
+  fit(medv ~ lstat + I(lstat ^ 2), data = Boston)
+
+lm_fit
+```
+
+```{r}
+rec_spec <- recipe(medv ~ lstat, data = Boston) %>%
+  step_mutate(lstat2 = lstat ^ 2)
+
+lm_wf <- workflow() %>%
+  add_model(lm_spec) %>%
+  add_recipe(rec_spec)
+
+lm_fit2 <- lm_wf %>% fit(Boston)
+```
+
+```{r}
+rec_spec <- recipe(medv ~ lstat, data = Boston) %>%
+  step_log(lstat)
+
+lm_wf <- workflow() %>%
+  add_model(lm_spec) %>%
+  add_recipe(rec_spec)
+
+lm_wf %>% fit(Boston)
+```
+
 ## Qualitative predictors
+
+```{r}
+Carseats
+```
+
+
+```{r}
+lm_spec %>% 
+  fit(Sales ~ . + Income:Advertising + Price:Age, data = Carseats)
+```
+
+```{r}
+rec_spec <- recipe(Sales ~ ., data = Carseats) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_interact(~ Income:Advertising + Price:Age)
+
+lm_wf <- workflow() %>%
+  add_model(lm_spec) %>%
+  add_recipe(rec_spec)
+
+lm_wf %>% fit(Carseats)
+```
 
 ## Writing functions
