@@ -1,0 +1,306 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{book}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+  \usepackage{amssymb}
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={A Minimal Book Example},
+  pdfauthor={Yihui Xie},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{booktabs}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[]{natbib}
+\bibliographystyle{apalike}
+
+\title{A Minimal Book Example}
+\author{Yihui Xie}
+\date{2021-04-09}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\hypertarget{prerequisites}{%
+\chapter{Prerequisites}\label{prerequisites}}
+
+This is a \emph{sample} book written in \textbf{Markdown}. You can use anything that Pandoc's Markdown supports, e.g., a math equation \(a^2 + b^2 = c^2\).
+
+The \textbf{bookdown} package can be installed from CRAN or Github:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"bookdown"}\NormalTok{)}
+\CommentTok{\# or the development version}
+\CommentTok{\# devtools::install\_github("rstudio/bookdown")}
+\end{Highlighting}
+\end{Shaded}
+
+Remember each Rmd file contains one and only one chapter, and a chapter is defined by the first-level heading \texttt{\#}.
+
+To compile this example to PDF, you need XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): \url{https://yihui.org/tinytex/}.
+
+\hypertarget{introduction-to-tidymodels}{%
+\chapter{Introduction to tidymodels}\label{introduction-to-tidymodels}}
+
+\hypertarget{statististical-learning}{%
+\chapter{Statististical learning}\label{statististical-learning}}
+
+Here is a review of existing methods.
+
+\hypertarget{linear-regression}{%
+\chapter{Linear Regression}\label{linear-regression}}
+
+\hypertarget{libraries}{%
+\section{Libraries}\label{libraries}}
+
+\hypertarget{simple-linear-regression}{%
+\section{Simple linear regression}\label{simple-linear-regression}}
+
+\hypertarget{multiple-linear-regression}{%
+\section{Multiple linear regression}\label{multiple-linear-regression}}
+
+\hypertarget{interaction-terms}{%
+\section{Interaction terms}\label{interaction-terms}}
+
+\hypertarget{non-linear-transformations-of-the-predictors}{%
+\section{Non-linear transformations of the predictors}\label{non-linear-transformations-of-the-predictors}}
+
+\hypertarget{qualitative-predictors}{%
+\section{Qualitative predictors}\label{qualitative-predictors}}
+
+\hypertarget{writing-functions}{%
+\section{Writing functions}\label{writing-functions}}
+
+\hypertarget{classification}{%
+\chapter{Classification}\label{classification}}
+
+\hypertarget{the-stock-market-data}{%
+\section{The Stock Market Data}\label{the-stock-market-data}}
+
+\hypertarget{logistic-regression}{%
+\section{Logistic Regression}\label{logistic-regression}}
+
+\hypertarget{linear-discriminant-analysis}{%
+\section{Linear Discriminant Analysis}\label{linear-discriminant-analysis}}
+
+\hypertarget{quadratic-discriminant-analysis}{%
+\section{Quadratic Discriminant Analysis}\label{quadratic-discriminant-analysis}}
+
+\hypertarget{k-nearest-neighbors}{%
+\section{K-Nearest Neighbors}\label{k-nearest-neighbors}}
+
+\hypertarget{an-application-to-caravan-insurance-data}{%
+\section{An Application to Caravan Insurance Data}\label{an-application-to-caravan-insurance-data}}
+
+\hypertarget{resampling-methods}{%
+\chapter{Resampling Methods}\label{resampling-methods}}
+
+\hypertarget{the-validation-set-approach}{%
+\section{The Validation Set Approach}\label{the-validation-set-approach}}
+
+\hypertarget{leave-one-out-cross-validation}{%
+\section{Leave-One-Out Cross-Validation}\label{leave-one-out-cross-validation}}
+
+\hypertarget{k-fold-cross-validation}{%
+\section{k-Fold Cross-Validation}\label{k-fold-cross-validation}}
+
+\hypertarget{the-bootstrap}{%
+\section{The Bootstrap}\label{the-bootstrap}}
+
+\hypertarget{linear-model-selection-and-regularization}{%
+\chapter{Linear Model Selection and Regularization}\label{linear-model-selection-and-regularization}}
+
+\hypertarget{best-subset-selection}{%
+\section{Best Subset Selection}\label{best-subset-selection}}
+
+\hypertarget{forward-and-backward-stepwise-selection}{%
+\section{Forward and Backward Stepwise Selection}\label{forward-and-backward-stepwise-selection}}
+
+\hypertarget{choosing-amoung-models-using-the-validation-set-approach-and-cross-validation}{%
+\section{Choosing Amoung Models Using the Validation Set Approach and Cross-Validation}\label{choosing-amoung-models-using-the-validation-set-approach-and-cross-validation}}
+
+\hypertarget{ridge-regression}{%
+\section{Ridge Regression}\label{ridge-regression}}
+
+\hypertarget{the-lasso}{%
+\section{The Lasso}\label{the-lasso}}
+
+\hypertarget{principal-components-regression}{%
+\section{Principal Components Regression}\label{principal-components-regression}}
+
+\hypertarget{partial-least-squares}{%
+\section{Partial Least Squares}\label{partial-least-squares}}
+
+\hypertarget{moving-beyond-linearity}{%
+\chapter{Moving Beyond Linearity}\label{moving-beyond-linearity}}
+
+\hypertarget{polynomial-regression-and-step-functions}{%
+\section{Polynomial Regression and Step Functions}\label{polynomial-regression-and-step-functions}}
+
+\hypertarget{splines}{%
+\section{Splines}\label{splines}}
+
+\hypertarget{gams}{%
+\section{GAMs}\label{gams}}
+
+\hypertarget{tree-based-methods}{%
+\chapter{Tree-Based Methods}\label{tree-based-methods}}
+
+\hypertarget{fitting-classification-trees}{%
+\section{Fitting Classification Trees}\label{fitting-classification-trees}}
+
+\hypertarget{fitting-regression-trees}{%
+\section{Fitting Regression Trees}\label{fitting-regression-trees}}
+
+\hypertarget{bagging-and-random-forests}{%
+\section{Bagging and Random Forests}\label{bagging-and-random-forests}}
+
+\hypertarget{boosting}{%
+\section{Boosting}\label{boosting}}
+
+\hypertarget{support-vector-machines}{%
+\chapter{Support Vector Machines}\label{support-vector-machines}}
+
+\hypertarget{support-vector-classifier}{%
+\section{Support Vector Classifier}\label{support-vector-classifier}}
+
+\hypertarget{support-vector-machine}{%
+\section{Support Vector Machine}\label{support-vector-machine}}
+
+\hypertarget{roc-curves}{%
+\section{ROC Curves}\label{roc-curves}}
+
+\hypertarget{svm-with-multiple-classes}{%
+\section{SVM with Multiple Classes}\label{svm-with-multiple-classes}}
+
+\hypertarget{application-to-gene-expression-data}{%
+\section{Application to Gene Expression Data}\label{application-to-gene-expression-data}}
+
+\hypertarget{unsupervised-learning}{%
+\chapter{Unsupervised Learning}\label{unsupervised-learning}}
+
+\hypertarget{principal-components-analysis}{%
+\section{Principal Components Analysis}\label{principal-components-analysis}}
+
+\hypertarget{k-means-clustering}{%
+\section{K-Means Clustering}\label{k-means-clustering}}
+
+\hypertarget{hierarchical-clustering}{%
+\section{Hierarchical Clustering}\label{hierarchical-clustering}}
+
+\hypertarget{pca-on-the-nci60-data}{%
+\section{PCA on the NCI60 Data}\label{pca-on-the-nci60-data}}
+
+\hypertarget{clustering-the-observations-of-the-nci60-data}{%
+\section{Clustering the Observations of the NCI60 Data}\label{clustering-the-observations-of-the-nci60-data}}
+
+  \bibliography{book.bib,packages.bib}
+
+\end{document}

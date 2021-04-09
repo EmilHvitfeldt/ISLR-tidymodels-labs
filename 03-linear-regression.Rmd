@@ -1,0 +1,15 @@
+# Linear Regression
+
+## Libraries
+
+## Simple linear regression
+
+## Multiple linear regression
+
+## Interaction terms
+
+## Non-linear transformations of the predictors
+
+## Qualitative predictors
+
+## Writing functions

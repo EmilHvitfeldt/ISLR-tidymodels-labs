@@ -1,0 +1,3 @@
+bookdown::bs4_book:
+  theme:
+    primary: "#74a180"

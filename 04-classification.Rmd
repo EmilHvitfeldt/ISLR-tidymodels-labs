@@ -1,0 +1,13 @@
+# Classification
+
+## The Stock Market Data
+
+## Logistic Regression
+
+## Linear Discriminant Analysis
+
+## Quadratic Discriminant Analysis
+
+## K-Nearest Neighbors
+
+## An Application to Caravan Insurance Data
