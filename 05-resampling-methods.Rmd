@@ -1,9 +1,172 @@
 # Resampling Methods
 
+```{r}
+library(tidymodels)
+library(ISLR)
+
+Auto <- as_tibble(Auto)
+Portfolio <- as_tibble(Portfolio)
+```
+
+
 ## The Validation Set Approach
+
+```{r}
+set.seed(1)
+Auto_split <- initial_split(Auto)
+
+Auto_train <- training(Auto_split)
+Auto_test <- testing(Auto_split)
+```
+
+```{r}
+lm_spec <- linear_reg() %>%
+  set_engine("lm")
+```
+
+```{r}
+lm_fit <- lm_spec %>% 
+  fit(mpg ~ horsepower, data = Auto_train)
+```
+
+```{r}
+augment(lm_fit, new_data = Auto_test) %>%
+  rmse(truth = mpg, estimate = .pred)
+```
+
+```{r}
+poly_fit <- lm_spec %>% 
+  fit(mpg ~ poly(horsepower, 2), data = Auto_train)
+```
+
+```{r}
+augment(poly_fit, new_data = Auto_test) %>%
+  rmse(truth = mpg, estimate = .pred)
+```
+
+```{r}
+poly_rec <- recipe(mpg ~ horsepower, data = Auto_train) %>%
+  step_poly(horsepower, degree = 2)
+
+poly_wf <- workflow() %>%
+  add_recipe(poly_rec) %>%
+  add_model(lm_spec)
+
+poly_fit <- fit(poly_wf, data = Auto_train)
+```
+
+```{r}
+augment(poly_fit, new_data = Auto_test) %>%
+  rmse(truth = mpg, estimate = .pred)
+```
+
+```{r}
+set.seed(2)
+Auto_split <- initial_split(Auto)
+
+Auto_train <- training(Auto_split)
+Auto_test <- testing(Auto_split)
+```
+
+```{r}
+poly_fit <- fit(poly_wf, data = Auto_train)
+
+augment(poly_fit, new_data = Auto_test) %>%
+  rmse(truth = mpg, estimate = .pred)
+```
 
 ## Leave-One-Out Cross-Validation
 
+Leave-One-Out Cross-Validation is not integrated into the broader tidymodels framework. For more information read [here](https://www.tmwr.org/resampling.html#leave-one-out-cross-validation).
+
 ## k-Fold Cross-Validation
 
+```{r}
+poly_rec <- recipe(mpg ~ horsepower, data = Auto_train) %>%
+  step_poly(horsepower, degree = tune())
+```
+
+```{r}
+lm_spec <- linear_reg() %>%
+  set_engine("lm")
+
+poly_wf <- workflow() %>%
+  add_recipe(poly_rec) %>%
+  add_model(lm_spec)
+
+Auto_folds <- vfold_cv(Auto_train, v = 10)
+
+degree_grid <- grid_regular(degree(range = c(1, 10)), levels = 10)
+
+tune_res <- tune_grid(
+  object = poly_wf, 
+  resamples = Auto_folds, 
+  grid = degree_grid
+)
+```
+
+It can be helpful to add `control = control_grid(verbose = TRUE)` 
+
+```{r}
+autoplot(tune_res)
+```
+
+```{r}
+collect_metrics(tune_res)
+```
+```{r}
+show_best(tune_res, metric = "rmse")
+```
+
+```{r}
+best_degree <- select_best(tune_res, metric = "rmse")
+```
+
+```{r}
+final_wf <- finalize_workflow(poly_wf, best_degree)
+
+final_wf
+```
+
+```{r}
+final_fit <- fit(final_wf, Auto_train)
+
+final_fit
+```
+
 ## The Bootstrap
+
+```{r}
+Portfolio_boots <- bootstraps(Portfolio, times = 1000)
+
+alpha.fn <- function(split) {
+  data <- analysis(split)
+  X <- data$X
+  Y <- data$Y
+  
+  (var(Y) - cov(X, Y)) / (var(X) + var(Y) - 2 * cov(X, Y))
+}
+
+alpha_res <- Portfolio_boots %>%
+  mutate(alpha = map_dbl(splits, alpha.fn))
+
+alpha_res
+```
+
+```{r}
+Auto_boots <- bootstraps(Auto)
+
+boot.fn <- function(split) {
+  lm_fit <- lm_spec %>% fit(mpg ~ horsepower, data = analysis(split))
+  tidy(lm_fit)
+}
+
+boot_res <- Auto_boots %>%
+  mutate(models = map(splits, boot.fn))
+
+boot_res %>%
+  unnest(cols = c(models)) %>%
+  group_by(term) %>%
+  summarise(mean = mean(estimate),
+            sd = sd(estimate))
+```
