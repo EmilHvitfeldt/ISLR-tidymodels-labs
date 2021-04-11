@@ -7,6 +7,7 @@ library(tidymodels)
 library(ISLR)
 
 Smarket <- as_tibble(Smarket)
+Caravan <- as_tibble(Caravan)
 ```
 
 ```{r}
@@ -78,6 +79,55 @@ augment(lr_fit, new_data = Smarket) %>%
   accuracy(truth = Direction, estimate = .pred_class)
 ```
 
+```{r}
+Smarket_train <- Smarket %>%
+  filter(Year != 2005)
+
+Smarket_test <- Smarket %>%
+  filter(Year == 2005)
+```
+
+```{r}
+lr_fit <- lr_spec %>%
+  fit(
+    Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
+    data = Smarket_train
+    )
+```
+
+```{r}
+augment(lr_fit, new_data = Smarket_test) %>%
+  conf_mat(truth = Direction, estimate = .pred_class) 
+
+augment(lr_fit, new_data = Smarket_test) %>%
+  accuracy(truth = Direction, estimate = .pred_class) 
+```
+
+```{r}
+lr_fit <- lr_spec %>%
+  fit(
+    Direction ~ Lag1 + Lag2,
+    data = Smarket_train
+    )
+```
+
+```{r}
+augment(lr_fit, new_data = Smarket_test) %>%
+  conf_mat(truth = Direction, estimate = .pred_class) 
+
+augment(lr_fit, new_data = Smarket_test) %>%
+  accuracy(truth = Direction, estimate = .pred_class) 
+```
+
+```{r}
+predict(
+  lr_fit,
+  new_data = tibble(Lag1 = c(1.2, 1.5), Lag2 = c(1.1, -0.8)), 
+  type = "prob"
+)
+```
+
+
 ## Linear Discriminant Analysis
 
 ```{r}
@@ -86,13 +136,130 @@ lda_spec <- discrim_linear() %>%
   set_engine("MASS")
 
 lda_fit <- lda_spec %>%
-  fit(Direction ~ Lag1 + Lag2, data = Smarket)
+  fit(Direction ~ Lag1 + Lag2, data = Smarket_train)
 
 lda_fit
 ```
 
+```{r}
+predict(lda_fit, new_data = Smarket_test)
+predict(lda_fit, new_data = Smarket_test, type = "prob")
+```
+
+```{r}
+augment(lda_fit, new_data = Smarket_test) %>%
+  conf_mat(truth = Direction, estimate = .pred_class) 
+
+augment(lda_fit, new_data = Smarket_test) %>%
+  accuracy(truth = Direction, estimate = .pred_class) 
+```
+
 ## Quadratic Discriminant Analysis
+
+```{r}
+library(discrim)
+qda_spec <- discrim_regularized() %>%
+  set_args(frac_common_cov = 0, frac_identity = 0) %>%
+  set_engine("klaR")
+
+qda_fit <- qda_spec %>%
+  fit(Direction ~ Lag1 + Lag2, data = Smarket_train)
+
+qda_fit
+```
+
+```{r}
+augment(qda_fit, new_data = Smarket_test) %>%
+  conf_mat(truth = Direction, estimate = .pred_class) 
+
+augment(qda_fit, new_data = Smarket_test) %>%
+  accuracy(truth = Direction, estimate = .pred_class) 
+```
 
 ## K-Nearest Neighbors
 
+```{r}
+knn_spec <- nearest_neighbor(neighbors = 3) %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+
+knn_fit <- knn_spec %>%
+  fit(Direction ~ Lag1 + Lag2, data = Smarket_train)
+
+knn_fit
+```
+
+```{r}
+augment(knn_fit, new_data = Smarket_test) %>%
+  conf_mat(truth = Direction, estimate = .pred_class) 
+
+augment(knn_fit, new_data = Smarket_test) %>%
+  accuracy(truth = Direction, estimate = .pred_class) 
+```
+
 ## An Application to Caravan Insurance Data
+
+```{r}
+Caravan_test <- Caravan[seq_len(1000), ]
+Caravan_train <- Caravan[-seq_len(1000), ]
+```
+
+```{r}
+rec_spec <- recipe(Purchase ~ ., data = Caravan_train) %>%
+  step_normalize(all_numeric_predictors())
+```
+
+```{r}
+Caravan_wf <- workflow() %>%
+  add_recipe(rec_spec)
+```
+
+```{r}
+knn_spec <- nearest_neighbor() %>%
+  set_engine("kknn") %>%
+  set_mode("classification")
+```
+
+```{r}
+knn1_wf <- Caravan_wf %>%
+  add_model(knn_spec %>% set_args(neighbors = 1))
+```
+
+```{r}
+knn1_fit <- fit(knn1_wf, data = Caravan_train)
+```
+
+```{r}
+augment(knn1_fit, new_data = Caravan_test) %>%
+  conf_mat(truth = Purchase, estimate = .pred_class)
+```
+
+```{r}
+augment(knn1_fit, new_data = Caravan_test) %>%
+  accuracy(truth = Purchase, estimate = .pred_class)
+```
+
+```{r}
+knn3_wf <- Caravan_wf %>%
+  add_model(knn_spec %>% set_args(neighbors = 3))
+
+knn3_fit <- fit(knn3_wf, Caravan_train)
+```
+
+```{r}
+augment(knn3_fit, new_data = Caravan_test) %>%
+  conf_mat(truth = Purchase, estimate = .pred_class)
+```
+
+
+```{r}
+knn5_wf <- Caravan_wf %>%
+  add_model(knn_spec %>% set_args(neighbors = 5))
+
+knn5_fit <- fit(knn5_wf, Caravan_train)
+```
+
+```{r}
+augment(knn5_fit, new_data = Caravan_test) %>%
+  conf_mat(truth = Purchase, estimate = .pred_class)
+```
