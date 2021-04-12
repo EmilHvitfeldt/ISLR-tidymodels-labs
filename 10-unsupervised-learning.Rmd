@@ -1,8 +1,8 @@
 # Unsupervised Learning
 
 ```{r}
-library("tidymodels")
-library("tidyverse")
+library(tidymodels)
+library(tidyverse)
 library(factoextra)
 ```
 
