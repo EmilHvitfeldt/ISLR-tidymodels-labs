@@ -45,7 +45,7 @@ svm-with-multiple-classes
 application-to-gene-expression-data
 unsupervised-learning
 principal-components-analysis
-k-means-clustering
+kmeans-clustering
 hierarchical-clustering
 pca-on-the-nci60-data
-clustering-the-observations-of-the-nci60-data
+clustering-on-nci60-dataset

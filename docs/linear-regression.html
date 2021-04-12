@@ -58,9 +58,6 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Registered S3 method overwritten by 'tune':
-##   method                   from   
-##   required_pkgs.model_spec parsnip</code></pre>
 <pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.2 ──</code></pre>
 <pre><code>## ✓ broom     0.7.5           ✓ recipes   0.1.15.9000
 ## ✓ dials     0.0.9           ✓ rsample   0.0.9      
@@ -68,14 +65,14 @@
 ## ✓ ggplot2   3.3.3           ✓ tidyr     1.1.3      
 ## ✓ infer     0.5.4           ✓ tune      0.1.3      
 ## ✓ modeldata 0.1.0           ✓ workflows 0.2.2      
-## ✓ parsnip   0.1.5.9002      ✓ yardstick 0.0.8      
+## ✓ parsnip   0.1.5           ✓ yardstick 0.0.8      
 ## ✓ purrr     0.3.4</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 ## x purrr::discard() masks scales::discard()
 ## x dplyr::filter()  masks stats::filter()
 ## x dplyr::lag()     masks stats::lag()
 ## x recipes::step()  masks stats::step()</code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span> <span class="co"># For Boston data set</span></code></pre></div>
 <pre><code>## 
@@ -83,7 +80,7 @@
 <pre><code>## The following object is masked from 'package:dplyr':
 ## 
 ##     select</code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Boston</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span>
 <span class="va">Carseats</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Carseats</span><span class="op">)</span></code></pre></div>
 </div>
@@ -91,22 +88,22 @@
 <h2>
 <span class="header-section-number">3.2</span> Simple linear regression<a class="anchor" aria-label="anchor" href="#simple-linear-regression"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "lvl"     "spec"    "fit"     "preproc" "elapsed"</code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
 <pre><code>##  [1] "coefficients"  "residuals"     "effects"       "rank"         
 ##  [5] "fitted.values" "assign"        "qr"            "df.residual"  
 ##  [9] "xlevels"       "call"          "terms"         "model"</code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ## Call:
@@ -126,24 +123,24 @@
 ## Residual standard error: 6.216 on 504 degrees of freedom
 ## Multiple R-squared:  0.5441, Adjusted R-squared:  0.5432 
 ## F-statistic: 601.6 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
 ##   term        estimate std.error statistic   p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 (Intercept)   34.6      0.563       61.4 3.74e-236
 ## 2 lstat         -0.950    0.0387     -24.5 5.08e- 88</code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">glance</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 12
 ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     0.544         0.543  6.22      602. 5.08e-88     1 -1641. 3289. 3302.
 ## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## Error in predict_numeric(object = object, new_data = new_data, ...): argument "new_data" is missing, with no default</code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 506 x 1
 ##    .pred
@@ -159,7 +156,7 @@
 ##  9  6.12
 ## 10 18.3 
 ## # … with 496 more rows</code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 506 x 2
 ##    .pred_lower .pred_upper
@@ -175,7 +172,7 @@
 ##  9        4.70        7.54
 ## 10       17.7        18.9 
 ## # … with 496 more rows</code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 506 x 16
 ##       crim    zn indus  chas   nox    rm   age   dis   rad   tax ptratio black
@@ -192,23 +189,23 @@
 ## 10 0.170    12.5  7.87     0 0.524  6.00  85.9  6.59     5   311    15.2  387.
 ## # … with 496 more rows, and 4 more variables: lstat &lt;dbl&gt;, medv &lt;dbl&gt;,
 ## #   .pred &lt;dbl&gt;, .resid &lt;dbl&gt;</code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="ISLR-tidymodels-labs_files/figure-html/unnamed-chunk-13-1.png" width="672"></div>
+<div class="inline-figure"><img src="03-linear-regression_files/figure-html/unnamed-chunk-13-1.png" width="672"></div>
 </div>
 <div id="multiple-linear-regression" class="section level2" number="3.3">
 <h2>
 <span class="header-section-number">3.3</span> Multiple linear regression<a class="anchor" aria-label="anchor" href="#multiple-linear-regression"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> 
   <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>
 
 <span class="va">lm_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  1ms 
+## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat + age, data = data)
@@ -221,7 +218,7 @@
 <h2>
 <span class="header-section-number">3.4</span> Interaction terms<a class="anchor" aria-label="anchor" href="#interaction-terms"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">*</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>
 
@@ -236,7 +233,7 @@
 ## Coefficients:
 ## (Intercept)        lstat          age    lstat:age  
 ##  36.0885359   -1.3921168   -0.0007209    0.0041560</code></pre>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_interact</span><span class="op">(</span><span class="op">~</span> <span class="va">lstat</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>
 
@@ -267,14 +264,14 @@
 <h2>
 <span class="header-section-number">3.5</span> Non-linear transformations of the predictors<a class="anchor" aria-label="anchor" href="#non-linear-transformations-of-the-predictors"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">lstat</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>
 
 <span class="va">lm_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat + I(lstat^2), data = data)
@@ -282,7 +279,7 @@
 ## Coefficients:
 ## (Intercept)        lstat   I(lstat^2)  
 ##    42.86201     -2.33282      0.04355</code></pre>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_mutate</span><span class="op">(</span>lstat2 <span class="op">=</span> <span class="va">lstat</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span>
 
@@ -291,7 +288,7 @@
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec</span><span class="op">)</span>
 
 <span class="va">lm_fit2</span> <span class="op">&lt;-</span> <span class="va">lm_wf</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_log</span><span class="op">(</span><span class="va">lstat</span><span class="op">)</span>
 
@@ -322,7 +319,7 @@
 <h2>
 <span class="header-section-number">3.6</span> Qualitative predictors<a class="anchor" aria-label="anchor" href="#qualitative-predictors"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Carseats</span></code></pre></div>
 <pre><code>## # A tibble: 400 x 11
 ##    Sales CompPrice Income Advertising Population Price ShelveLoc   Age Education
@@ -338,12 +335,12 @@
 ##  9  6.54       132    110           0        108   124 Medium       76        10
 ## 10  4.69       132    113           0        131   124 Medium       76        17
 ## # … with 390 more rows, and 2 more variables: Urban &lt;fct&gt;, US &lt;fct&gt;</code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">%&gt;%</span> 
   <span class="fu">fit</span><span class="op">(</span><span class="va">Sales</span> <span class="op">~</span> <span class="va">.</span> <span class="op">+</span> <span class="va">Income</span><span class="op">:</span><span class="va">Advertising</span> <span class="op">+</span> <span class="va">Price</span><span class="op">:</span><span class="va">Age</span>, data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## 
 ## Call:
 ## stats::lm(formula = Sales ~ . + Income:Advertising + Price:Age, 
@@ -358,7 +355,7 @@
 ##         -0.0579466          -0.0208525           0.1401597          -0.1575571  
 ## Income:Advertising           Price:Age  
 ##          0.0007510           0.0001068</code></pre>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Sales</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_interact</span><span class="op">(</span><span class="op">~</span> <span class="va">Income</span><span class="op">:</span><span class="va">Advertising</span> <span class="op">+</span> <span class="va">Price</span><span class="op">:</span><span class="va">Age</span><span class="op">)</span>
@@ -432,7 +429,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-04-10.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-04-12.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

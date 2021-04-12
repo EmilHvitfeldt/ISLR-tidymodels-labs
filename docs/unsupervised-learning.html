@@ -52,30 +52,541 @@
 <h1>
 <span class="header-section-number">10</span> Unsupervised Learning<a class="anchor" aria-label="anchor" href="#unsupervised-learning"><i class="fas fa-link"></i></a>
 </h1>
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></code></pre></div>
+<pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.2 ──</code></pre>
+<pre><code>## ✓ broom     0.7.5           ✓ recipes   0.1.15.9000
+## ✓ dials     0.0.9           ✓ rsample   0.0.9      
+## ✓ dplyr     1.0.5           ✓ tibble    3.1.0      
+## ✓ ggplot2   3.3.3           ✓ tidyr     1.1.3      
+## ✓ infer     0.5.4           ✓ tune      0.1.3      
+## ✓ modeldata 0.1.0           ✓ workflows 0.2.2      
+## ✓ parsnip   0.1.5           ✓ yardstick 0.0.8      
+## ✓ purrr     0.3.4</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+## x purrr::discard() masks scales::discard()
+## x dplyr::filter()  masks stats::filter()
+## x dplyr::lag()     masks stats::lag()
+## x recipes::step()  masks stats::step()</code></pre>
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></code></pre></div>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ readr   1.4.0     ✓ forcats 0.5.1
+## ✓ stringr 1.4.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x readr::col_factor() masks scales::col_factor()
+## x purrr::discard()    masks scales::discard()
+## x dplyr::filter()     masks stats::filter()
+## x stringr::fixed()    masks recipes::fixed()
+## x dplyr::lag()        masks stats::lag()
+## x readr::spec()       masks yardstick::spec()</code></pre>
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org">magrittr</a></span><span class="op">)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: 'magrittr'</code></pre>
+<pre><code>## The following object is masked from 'package:tidyr':
+## 
+##     extract</code></pre>
+<pre><code>## The following object is masked from 'package:purrr':
+## 
+##     set_names</code></pre>
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></code></pre></div>
+<pre><code>## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa</code></pre>
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">proxy</span><span class="op">)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: 'proxy'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     as.dist, dist</code></pre>
+<pre><code>## The following object is masked from 'package:base':
+## 
+##     as.matrix</code></pre>
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mclust-org.github.io/mclust/">mclust</a></span><span class="op">)</span></code></pre></div>
+<pre><code>## Package 'mclust' version 5.4.6
+## Type 'citation("mclust")' for citing this R package in publications.</code></pre>
+<pre><code>## 
+## Attaching package: 'mclust'</code></pre>
+<pre><code>## The following object is masked from 'package:purrr':
+## 
+##     map</code></pre>
 <div id="principal-components-analysis" class="section level2" number="10.1">
 <h2>
 <span class="header-section-number">10.1</span> Principal Components Analysis<a class="anchor" aria-label="anchor" href="#principal-components-analysis"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">usarrests</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">USArrests</span>, rownames <span class="op">=</span> <span class="st">"state"</span><span class="op">)</span>
+<span class="fu">glimpse</span><span class="op">(</span><span class="va">usarrests</span><span class="op">)</span></code></pre></div>
+<pre><code>## Rows: 50
+## Columns: 5
+## $ state    &lt;chr&gt; "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Co…
+## $ Murder   &lt;dbl&gt; 13.2, 10.0, 8.1, 8.8, 9.0, 7.9, 3.3, 5.9, 15.4, 17.4, 5.3, 2.…
+## $ Assault  &lt;int&gt; 236, 263, 294, 190, 276, 204, 110, 238, 335, 211, 46, 120, 24…
+## $ UrbanPop &lt;int&gt; 58, 48, 80, 50, 91, 78, 77, 72, 80, 60, 83, 54, 83, 65, 57, 6…
+## $ Rape     &lt;dbl&gt; 21.2, 44.5, 31.0, 19.5, 40.6, 38.7, 11.1, 15.8, 31.9, 25.8, 2…</code></pre>
+<div class="sourceCode" id="cb186"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># scale before applyig PCA</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">pca_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, data <span class="op">=</span> <span class="va">usarrests</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">step_scale</span><span class="op">(</span><span class="fu">all_numeric</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_numeric</span><span class="op">(</span><span class="op">)</span>, id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">prep</span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">usarrests</span> <span class="op">%&gt;%</span>
+  <span class="fu">column_to_rownames</span><span class="op">(</span><span class="st">"state"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_pca.html">fviz_pca_biplot</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Biplot PCA on usarrests"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-3-1.png" width="672"></div>
+<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># loadings</span>
+<span class="fu">tidy</span><span class="op">(</span><span class="va">pca_recipe</span>, type <span class="op">=</span> <span class="st">"coef"</span>, id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 4
+##    terms      value component id   
+##    &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;
+##  1 Murder   -0.319  PC1       pca  
+##  2 Assault  -0.368  PC1       pca  
+##  3 UrbanPop -0.774  PC1       pca  
+##  4 Rape     -0.405  PC1       pca  
+##  5 Murder   -0.579  PC2       pca  
+##  6 Assault  -0.484  PC2       pca  
+##  7 UrbanPop  0.603  PC2       pca  
+##  8 Rape     -0.258  PC2       pca  
+##  9 Murder    0.418  PC3       pca  
+## 10 Assault   0.197  PC3       pca  
+## 11 UrbanPop  0.188  PC3       pca  
+## 12 Rape     -0.867  PC3       pca  
+## 13 Murder   -0.624  PC4       pca  
+## 14 Assault   0.769  PC4       pca  
+## 15 UrbanPop -0.0381 PC4       pca  
+## 16 Rape     -0.134  PC4       pca</code></pre>
+<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">pca_recipe</span>, type <span class="op">=</span> <span class="st">"coef"</span>, id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">pivot_wider</span><span class="op">(</span>
+    id_cols <span class="op">=</span> <span class="st">"terms"</span>,
+    names_from <span class="op">=</span> <span class="st">"component"</span>,
+    values_from <span class="op">=</span> <span class="st">"value"</span>
+  <span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   terms       PC1    PC2    PC3     PC4
+##   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Murder   -0.319 -0.579  0.418 -0.624 
+## 2 Assault  -0.368 -0.484  0.197  0.769 
+## 3 UrbanPop -0.774  0.603  0.188 -0.0381
+## 4 Rape     -0.405 -0.258 -0.867 -0.134</code></pre>
+<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># variance</span>
+<span class="fu">tidy</span><span class="op">(</span><span class="va">pca_recipe</span>, type <span class="op">=</span> <span class="st">"variance"</span>, id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 16 x 4
+##    terms                         value component id   
+##    &lt;chr&gt;                         &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;
+##  1 variance                     35.7           1 pca  
+##  2 variance                      1.47          2 pca  
+##  3 variance                      0.394         3 pca  
+##  4 variance                      0.180         4 pca  
+##  5 cumulative variance          35.7           1 pca  
+##  6 cumulative variance          37.1           2 pca  
+##  7 cumulative variance          37.5           3 pca  
+##  8 cumulative variance          37.7           4 pca  
+##  9 percent variance             94.6           1 pca  
+## 10 percent variance              3.90          2 pca  
+## 11 percent variance              1.05          3 pca  
+## 12 percent variance              0.478         4 pca  
+## 13 cumulative percent variance  94.6           1 pca  
+## 14 cumulative percent variance  98.5           2 pca  
+## 15 cumulative percent variance  99.5           3 pca  
+## 16 cumulative percent variance 100             4 pca</code></pre>
+<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">pca_recipe</span>, type <span class="op">=</span> <span class="st">"variance"</span>, id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">pivot_wider</span><span class="op">(</span>
+    id_cols <span class="op">=</span> <span class="st">"terms"</span>,
+    names_from <span class="op">=</span> <span class="st">"component"</span>,
+    names_prefix <span class="op">=</span> <span class="st">"PC_"</span>,
+    values_from <span class="op">=</span> <span class="st">"value"</span>
+  <span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   terms                        PC_1  PC_2   PC_3    PC_4
+##   &lt;chr&gt;                       &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+## 1 variance                     35.7  1.47  0.394   0.180
+## 2 cumulative variance          35.7 37.1  37.5    37.7  
+## 3 percent variance             94.6  3.90  1.05    0.478
+## 4 cumulative percent variance  94.6 98.5  99.5   100</code></pre>
+<div class="sourceCode" id="cb195"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># cumulative varianvce plot</span>
+<span class="fu">tidy</span><span class="op">(</span><span class="va">pca_recipe</span>, type <span class="op">=</span> <span class="st">"variance"</span>, id <span class="op">=</span> <span class="st">"pca"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">terms</span> <span class="op">==</span> <span class="st">"cumulative variance"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">component</span>, <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.window.html">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ylab</span><span class="op">(</span><span class="st">"Cumulative variance"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-3-2.png" width="672"></div>
+<div class="sourceCode" id="cb196"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># on the direct PCA object</span>
+<span class="va">usarrests_pca</span> <span class="op">&lt;-</span> <span class="va">usarrests</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">state</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu">tidy</span><span class="op">(</span><span class="va">usarrests_pca</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 200 x 3
+##      row    PC  value
+##    &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1     1     1 -0.976
+##  2     1     2  1.12 
+##  3     1     3 -0.440
+##  4     1     4  0.155
+##  5     2     1 -1.93 
+##  6     2     2  1.06 
+##  7     2     3  2.02 
+##  8     2     4 -0.434
+##  9     3     1 -1.75 
+## 10     3     2 -0.738
+## # … with 190 more rows</code></pre>
+<div class="sourceCode" id="cb198"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">usarrests_pca</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 50 x 5
+##    .rownames .fittedPC1 .fittedPC2 .fittedPC3 .fittedPC4
+##    &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+##  1 1            -0.976      1.12      -0.440     0.155  
+##  2 2            -1.93       1.06       2.02     -0.434  
+##  3 3            -1.75      -0.738      0.0542   -0.826  
+##  4 4             0.140      1.11       0.113    -0.181  
+##  5 5            -2.50      -1.53       0.593    -0.339  
+##  6 6            -1.50      -0.978      1.08      0.00145
+##  7 7             1.34      -1.08      -0.637    -0.117  
+##  8 8            -0.0472    -0.322     -0.711    -0.873  
+##  9 9            -2.98       0.0388    -0.571    -0.0953 
+## 10 10           -1.62       1.27      -0.339     1.07   
+## # … with 40 more rows</code></pre>
 </div>
-<div id="k-means-clustering" class="section level2" number="10.2">
+<div id="kmeans-clustering" class="section level2" number="10.2">
 <h2>
-<span class="header-section-number">10.2</span> K-Means Clustering<a class="anchor" aria-label="anchor" href="#k-means-clustering"><i class="fas fa-link"></i></a>
+<span class="header-section-number">10.2</span> Kmeans Clustering<a class="anchor" aria-label="anchor" href="#kmeans-clustering"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb200"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">50</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">3</span>
+<span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">25</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">4</span>
+
+
+<span class="va">x_df</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"V1"</span>, <span class="st">"V2"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
+## Using compatibility `.name_repair`.</code></pre>
+<div class="sourceCode" id="cb202"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x_df</span></code></pre></div>
+<pre><code>## # A tibble: 50 x 2
+##       V1    V2
+##    &lt;dbl&gt; &lt;dbl&gt;
+##  1  2.10 -4.84
+##  2  3.18 -1.93
+##  3  4.59 -4.56
+##  4  1.87 -2.72
+##  5  2.92 -5.05
+##  6  3.13 -5.97
+##  7  3.71 -4.32
+##  8  2.76 -3.06
+##  9  4.98 -2.86
+## 10  2.86 -2.33
+## # … with 40 more rows</code></pre>
+<div class="sourceCode" id="cb204"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html">kmeans</a></span><span class="op">(</span><span class="va">x_df</span>, centers <span class="op">=</span> <span class="fl">3</span>, nstart <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
+<span class="fu">glance</span><span class="op">(</span><span class="va">res_kmeans</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 4
+##   totss tot.withinss betweenss  iter
+##   &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+## 1  474.         98.0      376.     2</code></pre>
+<div class="sourceCode" id="cb206"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">res_kmeans</span>, <span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##       V1      V2  size withinss cluster
+##    &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;fct&gt;  
+## 1  3.78  -4.56      17     25.7 1      
+## 2 -0.382 -0.0874    23     52.7 2      
+## 3  2.30  -2.70      10     19.6 3</code></pre>
+<div class="sourceCode" id="cb208"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">res_kmeans</span>, data <span class="op">=</span> <span class="va">x_df</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 50 x 3
+##       V1    V2 .cluster
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;   
+##  1  2.10 -4.84 1       
+##  2  3.18 -1.93 3       
+##  3  4.59 -4.56 1       
+##  4  1.87 -2.72 3       
+##  5  2.92 -5.05 1       
+##  6  3.13 -5.97 1       
+##  7  3.71 -4.32 1       
+##  8  2.76 -3.06 3       
+##  9  4.98 -2.86 1       
+## 10  2.86 -2.33 3       
+## # … with 40 more rows</code></pre>
 </div>
 <div id="hierarchical-clustering" class="section level2" number="10.3">
 <h2>
 <span class="header-section-number">10.3</span> Hierarchical Clustering<a class="anchor" aria-label="anchor" href="#hierarchical-clustering"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb210"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_hclust_complete</span> <span class="op">&lt;-</span> <span class="va">x_df</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">dist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span>
+
+<span class="va">res_hclust_average</span> <span class="op">&lt;-</span> <span class="va">x_df</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">dist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span>
+
+<span class="va">res_hclust_single</span> <span class="op">&lt;-</span> <span class="va">x_df</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">dist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html">wrap_plots</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_complete</span>, main <span class="op">=</span> <span class="st">"complete"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_average</span>, main <span class="op">=</span> <span class="st">"average"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_single</span>, main <span class="op">=</span> <span class="st">"single"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,
+  ncol <span class="op">=</span> <span class="fl">1</span>
+<span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
+<div class="sourceCode" id="cb211"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># clustering with scaled features</span>
+<span class="va">x_df</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">dist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
+<div class="sourceCode" id="cb212"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># correlation based distance</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+
+<span class="va">x</span> <span class="op">%&gt;%</span>
+  <span class="fu">proxy</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">dist</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"correlation"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-8-2.png" width="672"></div>
 </div>
 <div id="pca-on-the-nci60-data" class="section level2" number="10.4">
 <h2>
 <span class="header-section-number">10.4</span> PCA on the NCI60 Data<a class="anchor" aria-label="anchor" href="#pca-on-the-nci60-data"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb213"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">NCI60</span>, package <span class="op">=</span> <span class="st">"ISLR"</span><span class="op">)</span>
+<span class="va">nci60</span> <span class="op">&lt;-</span> <span class="va">NCI60</span><span class="op">$</span><span class="va">data</span> <span class="op">%&gt;%</span>
+  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://magrittr.tidyverse.org/reference/aliases.html">set_colnames</a></span><span class="op">(</span><span class="va">.</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"V_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">mutate</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">NCI60</span><span class="op">$</span><span class="va">labs</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">relocate</span><span class="op">(</span><span class="va">label</span><span class="op">)</span>
+
+<span class="va">nci60</span> <span class="op">%&gt;%</span>
+  <span class="fu">count</span><span class="op">(</span><span class="va">label</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 14 x 2
+##    label           n
+##    &lt;fct&gt;       &lt;int&gt;
+##  1 NSCLC           9
+##  2 RENAL           9
+##  3 MELANOMA        8
+##  4 BREAST          7
+##  5 COLON           7
+##  6 LEUKEMIA        6
+##  7 OVARIAN         6
+##  8 CNS             5
+##  9 PROSTATE        2
+## 10 K562A-repro     1
+## 11 K562B-repro     1
+## 12 MCF7A-repro     1
+## 13 MCF7D-repro     1
+## 14 UNKNOWN         1</code></pre>
+<div class="sourceCode" id="cb215"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nci60_pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span><span class="va">nci60</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">label</span><span class="op">)</span>, scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu">tidy</span><span class="op">(</span><span class="va">nci60_pca</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 4,096 x 3
+##      row    PC   value
+##    &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;
+##  1     1     1 -19.7  
+##  2     1     2   3.53 
+##  3     1     3  -9.74 
+##  4     1     4   0.818
+##  5     1     5 -12.5  
+##  6     1     6   7.41 
+##  7     1     7 -14.1  
+##  8     1     8   3.17 
+##  9     1     9 -21.8  
+## 10     1    10  20.2  
+## # … with 4,086 more rows</code></pre>
+<div class="sourceCode" id="cb217"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">nci60_pca</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 64 x 65
+##    .rownames .fittedPC1 .fittedPC2 .fittedPC3 .fittedPC4 .fittedPC5 .fittedPC6
+##    &lt;chr&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+##  1 1              -19.7       3.53     -9.74       0.818     -12.5       7.41 
+##  2 2              -22.9       6.39    -13.4       -5.59       -7.97      3.69 
+##  3 3              -27.2       2.45     -3.51       1.33      -12.5      17.2  
+##  4 4              -42.5      -9.69     -0.883     -3.42      -41.9      27.0  
+##  5 5              -55.0      -5.16    -20.9      -15.7       -10.4      12.9  
+##  6 6              -27.0       6.73    -21.6      -13.7         7.93      0.707
+##  7 7              -31.2       3.83    -30.1      -41.3        10.3     -16.9  
+##  8 8              -22.2      10.3     -18.6       -6.90       -5.48     11.6  
+##  9 9              -14.2      16.0     -19.6       -6.51       -3.77     -7.96 
+## 10 10             -29.5      23.8      -5.84       9.94        3.42     11.6  
+## # … with 54 more rows, and 58 more variables: .fittedPC7 &lt;dbl&gt;,
+## #   .fittedPC8 &lt;dbl&gt;, .fittedPC9 &lt;dbl&gt;, .fittedPC10 &lt;dbl&gt;, .fittedPC11 &lt;dbl&gt;,
+## #   .fittedPC12 &lt;dbl&gt;, .fittedPC13 &lt;dbl&gt;, .fittedPC14 &lt;dbl&gt;, .fittedPC15 &lt;dbl&gt;,
+## #   .fittedPC16 &lt;dbl&gt;, .fittedPC17 &lt;dbl&gt;, .fittedPC18 &lt;dbl&gt;, .fittedPC19 &lt;dbl&gt;,
+## #   .fittedPC20 &lt;dbl&gt;, .fittedPC21 &lt;dbl&gt;, .fittedPC22 &lt;dbl&gt;, .fittedPC23 &lt;dbl&gt;,
+## #   .fittedPC24 &lt;dbl&gt;, .fittedPC25 &lt;dbl&gt;, .fittedPC26 &lt;dbl&gt;, .fittedPC27 &lt;dbl&gt;,
+## #   .fittedPC28 &lt;dbl&gt;, .fittedPC29 &lt;dbl&gt;, .fittedPC30 &lt;dbl&gt;, .fittedPC31 &lt;dbl&gt;,
+## #   .fittedPC32 &lt;dbl&gt;, .fittedPC33 &lt;dbl&gt;, .fittedPC34 &lt;dbl&gt;, .fittedPC35 &lt;dbl&gt;,
+## #   .fittedPC36 &lt;dbl&gt;, .fittedPC37 &lt;dbl&gt;, .fittedPC38 &lt;dbl&gt;, .fittedPC39 &lt;dbl&gt;,
+## #   .fittedPC40 &lt;dbl&gt;, .fittedPC41 &lt;dbl&gt;, .fittedPC42 &lt;dbl&gt;, .fittedPC43 &lt;dbl&gt;,
+## #   .fittedPC44 &lt;dbl&gt;, .fittedPC45 &lt;dbl&gt;, .fittedPC46 &lt;dbl&gt;, .fittedPC47 &lt;dbl&gt;,
+## #   .fittedPC48 &lt;dbl&gt;, .fittedPC49 &lt;dbl&gt;, .fittedPC50 &lt;dbl&gt;, .fittedPC51 &lt;dbl&gt;,
+## #   .fittedPC52 &lt;dbl&gt;, .fittedPC53 &lt;dbl&gt;, .fittedPC54 &lt;dbl&gt;, .fittedPC55 &lt;dbl&gt;,
+## #   .fittedPC56 &lt;dbl&gt;, .fittedPC57 &lt;dbl&gt;, .fittedPC58 &lt;dbl&gt;, .fittedPC59 &lt;dbl&gt;,
+## #   .fittedPC60 &lt;dbl&gt;, .fittedPC61 &lt;dbl&gt;, .fittedPC62 &lt;dbl&gt;, .fittedPC63 &lt;dbl&gt;,
+## #   .fittedPC64 &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pc_first_three</span> <span class="op">&lt;-</span> <span class="fu">augment</span><span class="op">(</span><span class="va">nci60_pca</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">.fittedPC1</span>, <span class="va">.fittedPC2</span>, <span class="va">.fittedPC3</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">mutate</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">NCI60</span><span class="op">$</span><span class="va">labs</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html">wrap_plots</a></span><span class="op">(</span>
+  <span class="va">pc_first_three</span> <span class="op">%&gt;%</span>
+    <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">.fittedPC1</span>, <span class="va">.fittedPC2</span>, color <span class="op">=</span> <span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">scale_color_discrete</span><span class="op">(</span>guide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
+  <span class="va">pc_first_three</span> <span class="op">%&gt;%</span>
+    <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">.fittedPC1</span>, <span class="va">.fittedPC3</span>, color <span class="op">=</span> <span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
+<div class="sourceCode" id="cb220"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">nci60_pca</span><span class="op">)</span><span class="op">$</span><span class="va">importance</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">as_tibble</span><span class="op">(</span>.name_repair <span class="op">=</span> <span class="st">"universal"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">rowid_to_column</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Standard.deviation</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="va">rowid</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">rowid</span>, <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">facet_wrap</span><span class="op">(</span><span class="va">name</span> <span class="op">~</span> <span class="va">.</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Principal Component"</span><span class="op">)</span></code></pre></div>
+<pre><code>## New names:
+## * `Standard deviation` -&gt; Standard.deviation
+## * `Proportion of Variance` -&gt; Proportion.of.Variance
+## * `Cumulative Proportion` -&gt; Cumulative.Proportion</code></pre>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-9-2.png" width="672"></div>
 </div>
-<div id="clustering-the-observations-of-the-nci60-data" class="section level2" number="10.5">
+<div id="clustering-on-nci60-dataset" class="section level2" number="10.5">
 <h2>
-<span class="header-section-number">10.5</span> Clustering the Observations of the NCI60 Data<a class="anchor" aria-label="anchor" href="#clustering-the-observations-of-the-nci60-data"><i class="fas fa-link"></i></a>
+<span class="header-section-number">10.5</span> Clustering on nci60 dataset<a class="anchor" aria-label="anchor" href="#clustering-on-nci60-dataset"><i class="fas fa-link"></i></a>
 </h2>
+<div class="sourceCode" id="cb222"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nci60_scaled_mat</span> <span class="op">&lt;-</span> <span class="va">nci60</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">label</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">nci60_scaled_mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">nci60</span><span class="op">$</span><span class="va">label</span><span class="op">)</span>
+
+<span class="co"># hierarchical clustering of NIC60 data</span>
+<span class="va">produce_dend</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">method</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">nci60_scaled_mat</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">dist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">method</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html">wrap_plots</a></span><span class="op">(</span>
+  <span class="fu">produce_dend</span><span class="op">(</span><span class="st">"complete"</span><span class="op">)</span>,
+  <span class="fu">produce_dend</span><span class="op">(</span><span class="st">"average"</span><span class="op">)</span>,
+  <span class="fu">produce_dend</span><span class="op">(</span><span class="st">"single"</span><span class="op">)</span>,
+  ncol <span class="op">=</span> <span class="fl">1</span>
+<span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
+<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">res_hclust_complete</span> <span class="op">&lt;-</span> <span class="va">nci60_scaled_mat</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">dist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span>
+
+<span class="va">res_hclust_complete</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, main <span class="op">=</span> <span class="st">"hclust(complete) on nci60"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-10-2.png" width="672"></div>
+<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">tibble</span><span class="op">(</span>
+  label <span class="op">=</span> <span class="va">nci60</span><span class="op">$</span><span class="va">label</span>,
+  cluster_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">res_hclust_complete</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">count</span><span class="op">(</span><span class="va">label</span>, <span class="va">cluster_id</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">group_by</span><span class="op">(</span><span class="va">cluster_id</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">mutate</span><span class="op">(</span>prop <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">slice_max</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, order_by <span class="op">=</span> <span class="va">prop</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 4
+##   label    cluster_id     n  prop
+##   &lt;fct&gt;         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+## 1 MELANOMA          1     8 0.2  
+## 2 NSCLC             1     8 0.2  
+## 3 RENAL             1     8 0.2  
+## 4 BREAST            2     3 0.429
+## 5 LEUKEMIA          3     6 0.75 
+## 6 COLON             4     5 0.556</code></pre>
+<div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
+<span class="va">res_kmeans_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html">kmeans</a></span><span class="op">(</span><span class="va">nci60_scaled_mat</span>, centers <span class="op">=</span> <span class="fl">4</span>, nstart <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
+<span class="fu">glance</span><span class="op">(</span><span class="va">res_kmeans_scaled</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 4
+##    totss tot.withinss betweenss  iter
+##    &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+## 1 430290      344567.    85723.     3</code></pre>
+<div class="sourceCode" id="cb228"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">res_kmeans_scaled</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">cluster</span>, <span class="va">size</span>, <span class="va">withinss</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 3
+##   cluster  size withinss
+##   &lt;fct&gt;   &lt;int&gt;    &lt;dbl&gt;
+## 1 1          20  108801.
+## 2 2          27  154545.
+## 3 3           9   37150.
+## 4 4           8   44071.</code></pre>
+<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cluster_kmeans</span> <span class="op">&lt;-</span> <span class="va">res_kmeans_scaled</span><span class="op">$</span><span class="va">cluster</span>
+<span class="va">cluster_hclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">res_hclust_complete</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+
+<span class="fu">tibble</span><span class="op">(</span>
+  kmeans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cluster_kmeans</span><span class="op">)</span>,
+  hclust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cluster_hclust</span><span class="op">)</span>
+<span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">conf_mat</span><span class="op">(</span><span class="va">kmeans</span>, <span class="va">hclust</span><span class="op">)</span></code></pre></div>
+<pre><code>##           Truth
+## Prediction  1  2  3  4
+##          1 11 20  9  0
+##          2  0  7  0  0
+##          3  0  0  0  8
+##          4  9  0  0  0</code></pre>
+<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://mclust-org.github.io/mclust/reference/adjustedRandIndex.html">adjustedRandIndex</a></span><span class="op">(</span><span class="va">cluster_kmeans</span>, <span class="va">cluster_hclust</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.2238347</code></pre>
+<div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># pick first five PC and observe the clusters from hclust</span>
+<span class="va">nci60_scaled_mat</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">PC</span> <span class="op">&lt;=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">pivot_wider</span><span class="op">(</span>
+    id_cols <span class="op">=</span> <span class="va">row</span>,
+    names_from <span class="op">=</span> <span class="va">PC</span>,
+    values_from <span class="op">=</span> <span class="va">value</span>,
+    names_prefix <span class="op">=</span> <span class="st">"PC_"</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">row</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://magrittr.tidyverse.org/reference/aliases.html">set_rownames</a></span><span class="op">(</span><span class="va">nci60</span><span class="op">$</span><span class="va">label</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/proxy/man/dist.html">dist</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, main <span class="op">=</span> <span class="st">"hclust on first five PCs"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-10-3.png" width="672"></div>
 
 </div>
 </div>
@@ -87,10 +598,10 @@
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#unsupervised-learning"><span class="header-section-number">10</span> Unsupervised Learning</a></li>
 <li><a class="nav-link" href="#principal-components-analysis"><span class="header-section-number">10.1</span> Principal Components Analysis</a></li>
-<li><a class="nav-link" href="#k-means-clustering"><span class="header-section-number">10.2</span> K-Means Clustering</a></li>
+<li><a class="nav-link" href="#kmeans-clustering"><span class="header-section-number">10.2</span> Kmeans Clustering</a></li>
 <li><a class="nav-link" href="#hierarchical-clustering"><span class="header-section-number">10.3</span> Hierarchical Clustering</a></li>
 <li><a class="nav-link" href="#pca-on-the-nci60-data"><span class="header-section-number">10.4</span> PCA on the NCI60 Data</a></li>
-<li><a class="nav-link" href="#clustering-the-observations-of-the-nci60-data"><span class="header-section-number">10.5</span> Clustering the Observations of the NCI60 Data</a></li>
+<li><a class="nav-link" href="#clustering-on-nci60-dataset"><span class="header-section-number">10.5</span> Clustering on nci60 dataset</a></li>
 </ul>
 
       <div class="book-extra">
@@ -107,7 +618,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-04-10.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-04-12.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
