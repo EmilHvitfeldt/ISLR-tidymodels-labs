@@ -79,15 +79,15 @@ x <- matrix(rnorm(50 * 2), ncol = 2)
 x[1:25, 1] <- x[1:25, 1] + 3
 x[1:25, 2] <- x[1:25, 2] - 4
 
-
-x_df <- as_tibble(setNames(x, c("V1", "V2")))
+colnames(x) <- c("V1", "V2")
+x_df <- as_tibble(x)
 x_df
 ```
 
 ```{r}
 res_kmeans <- kmeans(x_df, centers = 3, nstart = 20)
 glance(res_kmeans)
-tidy(res_kmeans, )
+tidy(res_kmeans)
 augment(res_kmeans, data = x_df)
 ```
 

@@ -321,16 +321,8 @@ x <- matrix(rnorm(50 * 2), ncol = 2)
 x[1:25, 1] <- x[1:25, 1] + 3
 x[1:25, 2] <- x[1:25, 2] - 4
 
-
-x_df <- as_tibble(setNames(x, c("V1", "V2")))
-```
-
-```
-## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
-## Using compatibility `.name_repair`.
-```
-
-```r
+colnames(x) <- c("V1", "V2")
+x_df <- as_tibble(x)
 x_df
 ```
 
@@ -365,7 +357,7 @@ glance(res_kmeans)
 ```
 
 ```r
-tidy(res_kmeans, )
+tidy(res_kmeans)
 ```
 
 ```
