@@ -253,4 +253,3 @@ nci60_scaled_mat %>%
   hclust() %>%
   fviz_dend(k = 4, main = "hclust on first five PCs")
 ```
-

@@ -5,3 +5,5 @@ language:
     chapter_name: "Chapter "
 
 output_dir: "docs"
+
+new_session: yes
