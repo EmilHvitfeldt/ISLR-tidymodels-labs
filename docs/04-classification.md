@@ -476,7 +476,7 @@ qda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  44ms 
+## Fit time:  41ms 
 ## Call: 
 ## rda(formula = Direction ~ Lag1 + Lag2, data = data, lambda = ~0, 
 ##     gamma = ~0)
@@ -535,7 +535,7 @@ knn_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  36ms 
+## Fit time:  37ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))

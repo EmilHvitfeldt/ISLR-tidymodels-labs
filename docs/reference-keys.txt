@@ -23,7 +23,6 @@ the-bootstrap
 linear-model-selection-and-regularization
 best-subset-selection
 forward-and-backward-stepwise-selection
-choosing-amoung-models-using-the-validation-set-approach-and-cross-validation
 ridge-regression
 the-lasso
 principal-components-regression
