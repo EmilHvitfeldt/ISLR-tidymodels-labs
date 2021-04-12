@@ -1,9 +1,13 @@
 # Unsupervised Learning
 
 ```{r}
-library("tidymodels")
-library("tidyverse")
+library(tidymodels)
+library(tidyverse)
+library(magrittr)
 library(factoextra)
+library(patchwork)
+library(proxy)
+library(mclust)
 ```
 
 ## Principal Components Analysis
@@ -11,7 +15,6 @@ library(factoextra)
 ```{r}
 usarrests <- as_tibble(USArrests, rownames = "state")
 glimpse(usarrests)
-skimr::skim(usarrests)
 ```
 
 ```{r}
@@ -25,7 +28,7 @@ pca_recipe <- recipe(~., data = usarrests) %>%
 usarrests %>%
   column_to_rownames("state") %>%
   prcomp(scale = TRUE) %>%
-  factoextra::fviz_pca_biplot(title = "Biplot PCA on usarrests")
+  fviz_pca_biplot(title = "Biplot PCA on usarrests")
 
 # loadings
 tidy(pca_recipe, type = "coef", id = "pca")
@@ -79,7 +82,6 @@ x[1:25, 2] <- x[1:25, 2] - 4
 
 x_df <- as_tibble(setNames(x, c("V1", "V2")))
 x_df
-skimr::skim(x_df)
 ```
 
 ```{r}
@@ -104,10 +106,10 @@ res_hclust_single <- x_df %>%
   dist() %>%
   hclust(method = "single")
 
-patchwork::wrap_plots(
-  factoextra::fviz_dend(res_hclust_complete, main = "complete", k = 2),
-  factoextra::fviz_dend(res_hclust_average, main = "average", k = 2),
-  factoextra::fviz_dend(res_hclust_single, main = "single", k = 2),
+wrap_plots(
+  fviz_dend(res_hclust_complete, main = "complete", k = 2),
+  fviz_dend(res_hclust_average, main = "average", k = 2),
+  fviz_dend(res_hclust_single, main = "single", k = 2),
   ncol = 1
 )
 ```
@@ -118,7 +120,7 @@ x_df %>%
   scale() %>%
   dist() %>%
   hclust(method = "complete") %>%
-  factoextra::fviz_dend(k = 2)
+  fviz_dend(k = 2)
 
 # correlation based distance
 set.seed(2)
@@ -127,7 +129,7 @@ x <- matrix(rnorm(30 * 3), ncol = 3)
 x %>%
   proxy::dist(method = "correlation") %>%
   hclust(method = "complete") %>%
-  factoextra::fviz_dend()
+  fviz_dend()
 ```
 
 ## PCA on the NCI60 Data
@@ -136,7 +138,7 @@ x %>%
 data(NCI60, package = "ISLR")
 nci60 <- NCI60$data %>%
   as_tibble() %>%
-  magrittr::set_colnames(., paste0("V_", 1:ncol(.))) %>%
+  set_colnames(., paste0("V_", 1:ncol(.))) %>%
   mutate(label = factor(NCI60$labs)) %>%
   relocate(label)
 
@@ -151,7 +153,7 @@ pc_first_three <- augment(nci60_pca) %>%
   select(c(.fittedPC1, .fittedPC2, .fittedPC3)) %>%
   mutate(label = factor(NCI60$labs))
 
-patchwork::wrap_plots(
+wrap_plots(
   pc_first_three %>%
     ggplot(aes(.fittedPC1, .fittedPC2, color = label)) +
     geom_point(size = 5, alpha = 0.5) +
@@ -188,10 +190,10 @@ produce_dend <- function(method) {
   nci60_scaled_mat %>%
     dist() %>%
     hclust(method = method) %>%
-    factoextra::fviz_dend()
+    fviz_dend()
 }
 
-patchwork::wrap_plots(
+wrap_plots(
   produce_dend("complete"),
   produce_dend("average"),
   produce_dend("single"),
@@ -203,7 +205,7 @@ res_hclust_complete <- nci60_scaled_mat %>%
   hclust(method = "complete")
 
 res_hclust_complete %>%
-  factoextra::fviz_dend(k = 4, main = "hclust(complete) on nci60")
+  fviz_dend(k = 4, main = "hclust(complete) on nci60")
 
 tibble(
   label = nci60$label,
@@ -230,7 +232,7 @@ tibble(
 ) %>%
   conf_mat(kmeans, hclust)
 
-mclust::adjustedRandIndex(cluster_kmeans, cluster_hclust)
+adjustedRandIndex(cluster_kmeans, cluster_hclust)
 
 # pick first five PC and observe the clusters from hclust
 nci60_scaled_mat %>%
@@ -246,9 +248,9 @@ nci60_scaled_mat %>%
   ) %>%
   select(-row) %>%
   as.matrix() %>%
-  magrittr::set_rownames(nci60$label) %>%
+  set_rownames(nci60$label) %>%
   dist() %>%
   hclust() %>%
-  factoextra::fviz_dend(k = 4, main = "hclust on first five PCs")
+  fviz_dend(k = 4, main = "hclust on first five PCs")
 ```
 
