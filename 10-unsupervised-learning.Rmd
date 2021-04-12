@@ -1,8 +1,9 @@
-## Unsupervised Learning
+# Unsupervised Learning
 
 ```{r}
 library("tidymodels")
 library("tidyverse")
+library(factoextra)
 ```
 
 ## Principal Components Analysis
