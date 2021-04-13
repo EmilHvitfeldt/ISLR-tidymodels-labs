@@ -98,7 +98,7 @@ lr_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  9ms 
+## Fit time:  10ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -476,7 +476,7 @@ qda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  41ms 
+## Fit time:  42ms 
 ## Call: 
 ## rda(formula = Direction ~ Lag1 + Lag2, data = data, lambda = ~0, 
 ##     gamma = ~0)

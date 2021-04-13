@@ -258,7 +258,7 @@ lm_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  1ms 
+## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat * age, data = data)
