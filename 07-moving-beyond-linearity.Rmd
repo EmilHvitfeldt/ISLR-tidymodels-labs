@@ -54,25 +54,6 @@ tidy(raw_poly_fit)
 ```
 
 ```{r}
-fit=lm(wage~poly(age,4),data=Wage)
-```
-
-```{r}
-agelims=range(Wage$age)
-age.grid=seq(from=agelims[1],to=agelims[2])
-preds=predict(fit,newdata=list(age=age.grid),se=TRUE)
-se.bands=cbind(preds$fit+2*preds$se.fit,preds$fit-2*preds$se.fit)
-```
-
-```{r}
-par(mfrow=c(1,2),mar=c(4.5,4.5,1,1),oma=c(0,0,4,0))
-plot(Wage$age,Wage$wage,xlim=agelims,cex=.5,col="darkgrey")
-title("Degree-4 Polynomial",outer=T)
-lines(age.grid,preds$fit,lwd=2,col="blue")
-matlines(age.grid,se.bands,lwd=1,col="blue",lty=3)
-```
-
-```{r}
 age_range <- tibble(age = seq(min(Wage$age), max(Wage$age)))
 
 regression_lines <- bind_cols(

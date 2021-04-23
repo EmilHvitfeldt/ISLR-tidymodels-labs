@@ -163,20 +163,6 @@
 ## 4 age_poly_3     0.00681    0.00307        2.22 0.0264  
 ## 5 age_poly_4    -0.0000320  0.0000164     -1.95 0.0510</code></pre>
 <div class="sourceCode" id="cb218"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">wage</span><span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">age</span>,<span class="fl">4</span><span class="op">)</span>,data<span class="op">=</span><span class="va">Wage</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">agelims</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">Wage</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>
-<span class="va">age.grid</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span>from<span class="op">=</span><span class="va">agelims</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,to<span class="op">=</span><span class="va">agelims</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
-<span class="va">preds</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>,newdata<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>age<span class="op">=</span><span class="va">age.grid</span><span class="op">)</span>,se<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">se.bands</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">preds</span><span class="op">$</span><span class="va">fit</span><span class="op">+</span><span class="fl">2</span><span class="op">*</span><span class="va">preds</span><span class="op">$</span><span class="va">se.fit</span>,<span class="va">preds</span><span class="op">$</span><span class="va">fit</span><span class="op">-</span><span class="fl">2</span><span class="op">*</span><span class="va">preds</span><span class="op">$</span><span class="va">se.fit</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb220"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4.5</span>,<span class="fl">4.5</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,oma<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">4</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">Wage</span><span class="op">$</span><span class="va">age</span>,<span class="va">Wage</span><span class="op">$</span><span class="va">wage</span>,xlim<span class="op">=</span><span class="va">agelims</span>,cex<span class="op">=</span><span class="fl">.5</span>,col<span class="op">=</span><span class="st">"darkgrey"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"Degree-4 Polynomial"</span>,outer<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span><span class="op">(</span><span class="va">age.grid</span>,<span class="va">preds</span><span class="op">$</span><span class="va">fit</span>,lwd<span class="op">=</span><span class="fl">2</span>,col<span class="op">=</span><span class="st">"blue"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html">matlines</a></span><span class="op">(</span><span class="va">age.grid</span>,<span class="va">se.bands</span>,lwd<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">"blue"</span>,lty<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
-<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">age_range</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">Wage</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">Wage</span><span class="op">$</span><span class="va">age</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span>
@@ -192,17 +178,17 @@
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, 
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
-<div class="sourceCode" id="cb222"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
+<div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Wage</span> <span class="op">&lt;-</span> <span class="va">Wage</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>high <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">wage</span> <span class="op">&gt;</span> <span class="fl">250</span>, 
                        levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, 
                        labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"High"</span>, <span class="st">"Low"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb220"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_spec</span> <span class="op">&lt;-</span> <span class="fu">logistic_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_poly</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_poly</span><span class="op">(</span><span class="va">age</span>, degree <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 
@@ -227,7 +213,7 @@
 ##  9 Low        
 ## 10 Low        
 ## # … with 2,990 more rows</code></pre>
-<div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3,000 x 2
 ##       .pred_High .pred_Low
@@ -243,7 +229,7 @@
 ##  9 0.0334            0.967
 ## 10 0.0323            0.968
 ## # … with 2,990 more rows</code></pre>
-<div class="sourceCode" id="cb228"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb225"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3,000 x 4
 ##    .pred_lower_High .pred_upper_High .pred_lower_Low .pred_upper_Low
@@ -259,7 +245,7 @@
 ##  9         2.39e- 2          0.0465            0.953           0.976
 ## 10         2.26e- 2          0.0458            0.954           0.977
 ## # … with 2,990 more rows</code></pre>
-<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb227"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span>
   <span class="fu">augment</span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span>
@@ -274,8 +260,8 @@
   <span class="fu">geom_jitter</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="op">(</span><span class="va">high</span> <span class="op">==</span> <span class="st">"High"</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">Wage</span>, 
               shape <span class="op">=</span> <span class="st">"|"</span>, height <span class="op">=</span> <span class="fl">0</span>, width <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Removed 8 row(s) containing missing values (geom_path).</code></pre>
-<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
-<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
+<div class="sourceCode" id="cb229"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_cut</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_discretize</span><span class="op">(</span><span class="va">age</span>, num_breaks <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 
@@ -300,7 +286,7 @@
 ##  9 Low        
 ## 10 Low        
 ## # … with 2,990 more rows</code></pre>
-<div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb231"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">cut_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3,000 x 2
 ##    .pred_High .pred_Low
@@ -316,7 +302,7 @@
 ##  9    0.0290      0.971
 ## 10    0.0356      0.964
 ## # … with 2,990 more rows</code></pre>
-<div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb233"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">cut_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3,000 x 4
 ##    .pred_lower_High .pred_upper_High .pred_lower_Low .pred_upper_Low
@@ -337,7 +323,7 @@
 <h2>
 <span class="header-section-number">7.2</span> Splines<a class="anchor" aria-label="anchor" href="#splines"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb238"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb235"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_spline</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">wage</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_bs</span><span class="op">(</span><span class="va">age</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>knots <span class="op">=</span> <span class="fl">25</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span>
 
@@ -362,7 +348,7 @@
 ##  9 119. 
 ## 10 120. 
 ## # … with 2,990 more rows</code></pre>
-<div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb237"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">cut_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3,000 x 2
 ##    .pred_lower .pred_upper
@@ -378,7 +364,7 @@
 ##  9       117.        121. 
 ## 10       117.        122. 
 ## # … with 2,990 more rows</code></pre>
-<div class="sourceCode" id="cb242"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb239"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span>
   <span class="fu">augment</span><span class="op">(</span><span class="va">cut_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">cut_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span>
@@ -392,7 +378,7 @@
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, 
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-17-1.png" width="672"></div>
+<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
 </div>
 <div id="gams" class="section level2" number="7.3">
 <h2>

@@ -264,7 +264,7 @@ lm_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  2ms 
+## Fit time:  1ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat * age, data = data)
@@ -407,7 +407,7 @@ lm_spec %>%
 ```
 ## parsnip model object
 ## 
-## Fit time:  5ms 
+## Fit time:  4ms 
 ## 
 ## Call:
 ## stats::lm(formula = Sales ~ . + Income:Advertising + Price:Age, 

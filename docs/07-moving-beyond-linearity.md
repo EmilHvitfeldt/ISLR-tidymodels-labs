@@ -157,30 +157,6 @@ tidy(raw_poly_fit)
 
 
 ```r
-fit=lm(wage~poly(age,4),data=Wage)
-```
-
-
-```r
-agelims=range(Wage$age)
-age.grid=seq(from=agelims[1],to=agelims[2])
-preds=predict(fit,newdata=list(age=age.grid),se=TRUE)
-se.bands=cbind(preds$fit+2*preds$se.fit,preds$fit-2*preds$se.fit)
-```
-
-
-```r
-par(mfrow=c(1,2),mar=c(4.5,4.5,1,1),oma=c(0,0,4,0))
-plot(Wage$age,Wage$wage,xlim=agelims,cex=.5,col="darkgrey")
-title("Degree-4 Polynomial",outer=T)
-lines(age.grid,preds$fit,lwd=2,col="blue")
-matlines(age.grid,se.bands,lwd=1,col="blue",lty=3)
-```
-
-<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-9-1.png" width="672" />
-
-
-```r
 age_range <- tibble(age = seq(min(Wage$age), max(Wage$age)))
 
 regression_lines <- bind_cols(
@@ -198,7 +174,7 @@ Wage %>%
             linetype = "dashed", color = "blue")
 ```
 
-<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
 
 ```r
@@ -309,7 +285,7 @@ regression_lines %>%
 ## Warning: Removed 8 row(s) containing missing values (geom_path).
 ```
 
-<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 
 ```r
@@ -455,7 +431,7 @@ Wage %>%
             linetype = "dashed", color = "blue")
 ```
 
-<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 
 ## GAMs
