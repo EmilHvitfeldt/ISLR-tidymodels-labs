@@ -1,7 +1,188 @@
 # Moving Beyond Linearity
 
+```{r}
+library(tidymodels)
+library(ISLR)
+
+Wage <- as_tibble(Wage)
+```
+
 ## Polynomial Regression and Step Functions
 
+```{r}
+lm_spec <- linear_reg() %>%
+  set_engine("lm") %>%
+  set_mode("regression")
+
+lm_fit <- fit(lm_spec, wage ~ poly(age, 4), data = Wage)
+
+tidy(lm_fit)
+```
+
+```{r}
+rec_poly <- recipe(wage ~ age, data = Wage) %>%
+  step_poly(age, degree = 4)
+
+poly_wf <- workflow() %>%
+  add_model(lm_spec) %>%
+  add_recipe(rec_poly)
+
+poly_fit <- fit(poly_wf, data = Wage)
+
+tidy(poly_fit)
+```
+
+```{r}
+poly(1:4, degree = 2, raw = TRUE)
+```
+
+```{r}
+poly(1:4, degree = 2, raw = FALSE)
+```
+
+```{r}
+rec_poly <- recipe(wage ~ age, data = Wage) %>%
+  step_poly(age, degree = 4, options = list(raw = TRUE))
+
+poly_wf <- workflow() %>%
+  add_model(lm_spec) %>%
+  add_recipe(rec_poly)
+
+raw_poly_fit <- fit(poly_wf, data = Wage)
+
+tidy(raw_poly_fit)
+```
+
+```{r}
+fit=lm(wage~poly(age,4),data=Wage)
+```
+
+```{r}
+agelims=range(Wage$age)
+age.grid=seq(from=agelims[1],to=agelims[2])
+preds=predict(fit,newdata=list(age=age.grid),se=TRUE)
+se.bands=cbind(preds$fit+2*preds$se.fit,preds$fit-2*preds$se.fit)
+```
+
+```{r}
+par(mfrow=c(1,2),mar=c(4.5,4.5,1,1),oma=c(0,0,4,0))
+plot(Wage$age,Wage$wage,xlim=agelims,cex=.5,col="darkgrey")
+title("Degree-4 Polynomial",outer=T)
+lines(age.grid,preds$fit,lwd=2,col="blue")
+matlines(age.grid,se.bands,lwd=1,col="blue",lty=3)
+```
+
+```{r}
+age_range <- tibble(age = seq(min(Wage$age), max(Wage$age)))
+
+regression_lines <- bind_cols(
+  augment(poly_fit, new_data = age_range),
+  predict(poly_fit, new_data = age_range, type = "conf_int")
+)
+
+Wage %>%
+  ggplot(aes(age, wage)) +
+  geom_point(alpha = 0.2) +
+  geom_line(aes(y = .pred), data = regression_lines, color = "blue") +
+  geom_line(aes(y = .pred_lower), data = regression_lines, 
+            linetype = "dashed", color = "blue") +
+  geom_line(aes(y = .pred_upper), data = regression_lines, 
+            linetype = "dashed", color = "blue")
+```
+
+```{r}
+Wage <- Wage %>%
+  mutate(high = factor(wage > 250, 
+                       levels = c(TRUE, FALSE), 
+                       labels = c("High", "Low")))
+```
+
+```{r}
+lr_spec <- logistic_reg() %>%
+  set_engine("glm") %>%
+  set_mode("classification")
+```
+
+```{r}
+rec_poly <- recipe(high ~ age, data = Wage) %>%
+  step_poly(age, degree = 4)
+
+poly_wf <- workflow() %>%
+  add_model(lr_spec) %>%
+  add_recipe(rec_poly)
+
+poly_fit <- fit(poly_wf, data = Wage)
+
+predict(poly_fit, new_data = Wage)
+
+predict(poly_fit, new_data = Wage, type = "prob")
+predict(poly_fit, new_data = Wage, type = "conf_int")
+```
+
+```{r}
+regression_lines <- bind_cols(
+  augment(poly_fit, new_data = age_range, type = "prob"),
+  predict(poly_fit, new_data = age_range, type = "conf_int")
+)
+
+regression_lines %>%
+  ggplot(aes(age)) +
+  ylim(c(0, 0.2)) +
+  geom_line(aes(y = .pred_High), color = "blue") +
+  geom_line(aes(y = .pred_lower_High), color = "blue", linetype = "dashed") +
+  geom_line(aes(y = .pred_upper_High), color = "blue", linetype = "dashed") +
+  geom_jitter(aes(y = (high == "High") / 5), data = Wage, 
+              shape = "|", height = 0, width = 0.2)
+```
+
+```{r}
+rec_cut <- recipe(high ~ age, data = Wage) %>%
+  step_discretize(age, num_breaks = 4)
+
+cut_wf <- workflow() %>%
+  add_model(lr_spec) %>%
+  add_recipe(rec_cut)
+
+cut_fit <- fit(cut_wf, data = Wage)
+
+predict(cut_fit, new_data = Wage)
+
+predict(cut_fit, new_data = Wage, type = "prob")
+predict(cut_fit, new_data = Wage, type = "conf_int")
+```
+
 ## Splines
+
+```{r}
+rec_spline <- recipe(wage ~ age, data = Wage) %>%
+  step_bs(age, options = list(knots = 25, 40, 60))
+
+spline_wf <- workflow() %>%
+  add_model(lm_spec) %>%
+  add_recipe(rec_spline)
+
+cut_fit <- fit(spline_wf, data = Wage)
+
+predict(cut_fit, new_data = Wage)
+
+predict(cut_fit, new_data = Wage, type = "conf_int")
+```
+
+```{r}
+regression_lines <- bind_cols(
+  augment(cut_fit, new_data = age_range),
+  predict(cut_fit, new_data = age_range, type = "conf_int")
+)
+
+Wage %>%
+  ggplot(aes(age, wage)) +
+  geom_point(alpha = 0.2) +
+  geom_line(aes(y = .pred), data = regression_lines, color = "blue") +
+  geom_line(aes(y = .pred_lower), data = regression_lines, 
+            linetype = "dashed", color = "blue") +
+  geom_line(aes(y = .pred_upper), data = regression_lines, 
+            linetype = "dashed", color = "blue")
+```
+
 
 ## GAMs

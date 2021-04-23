@@ -1,9 +1,246 @@
 # Tree-Based Methods
 
+```{r}
+library(tidymodels)
+library(ISLR)
+library(MASS)
+
+Boston <- as_tibble(Boston)
+```
+
 ## Fitting Classification Trees
+
+```{r}
+Carseats <- as_tibble(Carseats) %>%
+  mutate(High = factor(if_else(Sales <= 8, "No", "Yes")))
+```
+
+```{r}
+tree_spec <- decision_tree() %>%
+  set_engine("rpart")
+```
+
+```{r}
+class_tree_spec <- tree_spec %>%
+  set_mode("classification")
+```
+
+```{r}
+class_tree_fit <- fit(class_tree_spec, High ~ . - Sales, data = Carseats)
+```
+
+```{r}
+class_tree_fit$fit
+```
+
+```{r, warning=FALSE}
+library(rpart.plot)
+rpart.plot(class_tree_fit$fit)
+```
+
+```{r}
+augment(class_tree_fit, new_data = Carseats) %>%
+  accuracy(truth = High, estimate = .pred_class)
+```
+
+```{r}
+Carseats_split <- initial_split(Carseats)
+
+Carseats_train <- training(Carseats_split)
+Carseats_test <- testing(Carseats_split)
+
+
+class_tree_fit <- fit(class_tree_spec, High ~ . - Sales, data = Carseats_train)
+```
+
+```{r}
+augment(class_tree_fit, new_data = Carseats_train) %>%
+  conf_mat(truth = High, estimate = .pred_class)
+```
+
+```{r}
+augment(class_tree_fit, new_data = Carseats_test) %>%
+  conf_mat(truth = High, estimate = .pred_class)
+```
+
+```{r}
+class_tree_wf <- workflow() %>%
+  add_model(class_tree_spec %>% set_args(cost_complexity = tune())) %>%
+  add_formula(High ~ . - Sales)
+
+set.seed(1234)
+Carseats_fold <- vfold_cv(Carseats_train)
+
+param_grid <- grid_regular(cost_complexity(), levels = 10)
+
+tune_res <- tune_grid(
+  class_tree_wf, 
+  resamples = Carseats_fold, 
+  grid = param_grid, 
+  metrics = metric_set(accuracy)
+)
+
+autoplot(tune_res)
+```
+
+```{r, warning=FALSE}
+best_complexity <- select_best(tune_res)
+
+class_tree_final <- finalize_workflow(class_tree_wf, best_complexity)
+
+class_tree_final_fit <- fit(class_tree_final, data = Carseats_train)
+
+rpart.plot(class_tree_final_fit$fit$fit$fit)
+```
+
 
 ## Fitting Regression Trees
 
+```{r}
+reg_tree_spec <- tree_spec %>%
+  set_mode("regression")
+```
+
+```{r, warning=FALSE}
+set.seed(1234)
+Boston_split <- initial_split(Boston)
+
+Boston_train <- training(Boston_split)
+Boston_test <- testing(Boston_split)
+
+reg_tree_fit <- fit(reg_tree_spec, medv ~ ., Boston_train)
+
+rpart.plot(reg_tree_fit$fit)
+```
+
+
+```{r}
+reg_tree_wf <- workflow() %>%
+  add_model(reg_tree_spec %>% set_args(cost_complexity = tune())) %>%
+  add_formula(medv ~ .)
+
+set.seed(1234)
+Boston_fold <- vfold_cv(Boston_train)
+
+param_grid <- grid_regular(cost_complexity(), levels = 10)
+
+tune_res <- tune_grid(
+  reg_tree_wf, 
+  resamples = Boston_fold, 
+  grid = param_grid
+)
+
+autoplot(tune_res)
+```
+
+```{r, warning=FALSE}
+best_complexity <- select_best(tune_res, metric = "rmse")
+
+reg_tree_final <- finalize_workflow(reg_tree_wf, best_complexity)
+
+reg_tree_final_fit <- fit(reg_tree_final, data = Boston_train)
+
+rpart.plot(reg_tree_final_fit$fit$fit$fit)
+```
+
 ## Bagging and Random Forests
 
+```{r}
+bagging_spec <- rand_forest(mtry = .cols()) %>%
+  set_engine("randomForest", importance = TRUE) %>%
+  set_mode("regression")
+```
+
+```{r}
+bagging_fit <- fit(bagging_spec, medv ~ ., data = Boston_train)
+```
+
+```{r}
+augment(bagging_fit, new_data = Boston_test) %>%
+  rmse(truth = medv, estimate = .pred)
+```
+
+```{r}
+augment(bagging_fit, new_data = Boston_test) %>%
+  ggplot(aes(medv, .pred)) +
+  geom_abline() +
+  geom_point(alpha = 0.5)
+```
+
+```{r}
+library(vip)
+vip(bagging_fit)
+```
+
+```{r}
+rf_spec <- rand_forest(mtry = 6) %>%
+  set_engine("randomForest", importance = TRUE) %>%
+  set_mode("regression")
+```
+
+```{r}
+rf_fit <- fit(rf_spec, medv ~ ., data = Boston_train)
+```
+
+```{r}
+augment(rf_fit, new_data = Boston_test) %>%
+  rmse(truth = medv, estimate = .pred)
+```
+
+```{r}
+augment(rf_fit, new_data = Boston_test) %>%
+  ggplot(aes(medv, .pred)) +
+  geom_abline() +
+  geom_point(alpha = 0.5)
+```
+
+```{r}
+library(vip)
+vip(rf_fit)
+```
+
 ## Boosting
+
+```{r}
+boost_spec <- boost_tree(trees = 5000, tree_depth = 4) %>%
+  set_engine("xgboost") %>%
+  set_mode("regression")
+```
+
+```{r}
+boost_fit <- fit(boost_spec, medv ~ ., data = Boston_train)
+```
+
+```{r}
+augment(boost_fit, new_data = Boston_test) %>%
+  rmse(truth = medv, estimate = .pred)
+```
+
+```{r}
+augment(boost_fit, new_data = Boston_test) %>%
+  ggplot(aes(medv, .pred)) +
+  geom_abline() +
+  geom_point(alpha = 0.5)
+```
+
+```{r}
+boost_spec <- boost_tree(trees = 5000, tree_depth = 4, learn_rate = 0.2) %>%
+  set_engine("xgboost") %>%
+  set_mode("regression")
+```
+
+```{r}
+boost_fit <- fit(boost_spec, medv ~ ., data = Boston_train)
+```
+
+```{r}
+augment(boost_fit, new_data = Boston_test) %>%
+  rmse(truth = medv, estimate = .pred)
+```
+
+```{r}
+augment(boost_fit, new_data = Boston_test) %>%
+  ggplot(aes(medv, .pred)) +
+  geom_abline() +
+  geom_point(alpha = 0.5)
+```

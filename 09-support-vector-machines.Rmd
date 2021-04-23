@@ -1,8 +1,100 @@
 # Support Vector Machines
 
+```{r}
+library(tidymodels)
+library(ISLR)
+```
+
 ## Support Vector Classifier
 
+```{r}
+set.seed(1)
+sim_data <- tibble(
+  x1 = rnorm(20),
+  x2 = rnorm(20),
+  y  = factor(rep(c(-1, 1), 10))
+) %>%
+  mutate(x1 = ifelse(y == 1, x1 + 1, x1),
+         x2 = ifelse(y == 1, x2 + 1, x2))
+
+ggplot(sim_data, aes(x1, x2, color = y)) +
+  geom_point()
+```
+
+```{r}
+svm_linear_spec <- svm_poly(degree = 1) %>%
+  set_mode("classification") %>%
+  set_engine("kernlab", scaled = FALSE)
+
+svm_linear_fit <- svm_linear_spec %>% 
+  set_args(cost = 10) %>%
+  fit(y ~ ., data = sim_data)
+
+svm_linear_fit
+
+library(kernlab)
+plot(svm_linear_fit$fit)
+```
+
+```{r}
+svm_linear_fit <- svm_linear_spec %>% 
+  set_args(cost = 0.1) %>%
+  fit(y ~ ., data = sim_data)
+
+svm_linear_fit
+```
+
+```{r}
+svm_linear_wf <- workflow() %>%
+  add_model(svm_linear_spec %>% set_args(cost = tune())) %>%
+  add_formula(y ~ .)
+
+set.seed(1234)
+sim_data_fold <- vfold_cv(sim_data, strata = y)
+
+param_grid <- grid_regular(cost(), levels = 10)
+
+tune_res <- tune_grid(
+  svm_linear_wf, 
+  resamples = sim_data_fold, 
+  grid = param_grid
+)
+
+autoplot(tune_res)
+```
+
+```{r}
+best_cost <- select_best(tune_res, metric = "accuracy")
+```
+
+```{r}
+svm_linear_final <- finalize_workflow(svm_linear_wf, best_cost)
+
+svm_linear_fit <- svm_linear_final %>%
+  fit(sim_data)
+```
+
+```{r}
+set.seed(2)
+sim_data_test <- tibble(
+  x1 = rnorm(20),
+  x2 = rnorm(20),
+  y  = factor(rep(c(-1, 1), 10))
+) %>%
+  mutate(x1 = ifelse(y == 1, x1 + 1, x1),
+         x2 = ifelse(y == 1, x2 + 1, x2))
+```
+
+```{r}
+augment(svm_linear_fit, new_data = sim_data_test) %>%
+  conf_mat(truth = y, estimate = .pred_class)
+```
+
+
+
 ## Support Vector Machine
+
+
 
 ## ROC Curves
 

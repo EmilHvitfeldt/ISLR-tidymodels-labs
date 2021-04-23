@@ -6,6 +6,12 @@ library(tidymodels)
 ```
 
 ```
+## Registered S3 method overwritten by 'tune':
+##   method                   from   
+##   required_pkgs.model_spec parsnip
+```
+
+```
 ## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.2 ──
 ```
 
@@ -16,7 +22,7 @@ library(tidymodels)
 ## ✓ ggplot2   3.3.3           ✓ tidyr     1.1.3      
 ## ✓ infer     0.5.4           ✓ tune      0.1.3      
 ## ✓ modeldata 0.1.0           ✓ workflows 0.2.2      
-## ✓ parsnip   0.1.5           ✓ yardstick 0.0.8      
+## ✓ parsnip   0.1.5.9002      ✓ yardstick 0.0.8      
 ## ✓ purrr     0.3.4
 ```
 
@@ -253,26 +259,26 @@ tidy(ridge_final_fit)
 ## # A tibble: 20 x 3
 ##    term        estimate penalty
 ##    <chr>          <dbl>   <dbl>
-##  1 (Intercept)  558.       569.
-##  2 AtBat         15.3      569.
-##  3 Hits          35.6      569.
-##  4 HmRun          9.08     569.
-##  5 Runs          24.2      569.
-##  6 RBI           30.0      569.
-##  7 Walks         29.0      569.
-##  8 Years          5.62     569.
-##  9 CAtBat        26.0      569.
-## 10 CHits         35.5      569.
-## 11 CHmRun        26.3      569.
-## 12 CRuns         35.3      569.
-## 13 CRBI          32.7      569.
-## 14 CWalks        16.5      569.
-## 15 PutOuts       64.1      569.
-## 16 Assists        8.02     569.
-## 17 Errors         0.524    569.
-## 18 League_N      13.2      569.
-## 19 Division_W   -32.7      569.
-## 20 NewLeague_N    7.88     569.
+##  1 (Intercept)  534.       356.
+##  2 AtBat         21.4      356.
+##  3 Hits          47.0      356.
+##  4 HmRun         -1.36     356.
+##  5 Runs          31.0      356.
+##  6 RBI           31.2      356.
+##  7 Walks         40.4      356.
+##  8 Years          9.79     356.
+##  9 CAtBat        28.2      356.
+## 10 CHits         39.2      356.
+## 11 CHmRun        25.8      356.
+## 12 CRuns         36.8      356.
+## 13 CRBI          41.5      356.
+## 14 CWalks        12.8      356.
+## 15 PutOuts       40.9      356.
+## 16 Assists        2.62     356.
+## 17 Errors        -2.32     356.
+## 18 League_N       4.25     356.
+## 19 Division_W   -37.2      356.
+## 20 NewLeague_N    0.991    356.
 ```
 
 ## The Lasso
@@ -327,26 +333,26 @@ tidy(lasso_final_fit)
 ## # A tibble: 20 x 3
 ##    term        estimate penalty
 ##    <chr>          <dbl>   <dbl>
-##  1 (Intercept)    558.     47.1
-##  2 AtBat            0      47.1
-##  3 Hits            55.2    47.1
-##  4 HmRun            0      47.1
-##  5 Runs             0      47.1
-##  6 RBI             38.6    47.1
-##  7 Walks           15.1    47.1
-##  8 Years            0      47.1
-##  9 CAtBat           0      47.1
-## 10 CHits            0      47.1
-## 11 CHmRun           0      47.1
-## 12 CRuns          155.     47.1
-## 13 CRBI            13.2    47.1
-## 14 CWalks           0      47.1
-## 15 PutOuts        107.     47.1
-## 16 Assists          0      47.1
-## 17 Errors           0      47.1
-## 18 League_N         0      47.1
-## 19 Division_W     -21.8    47.1
-## 20 NewLeague_N      0      47.1
+##  1 (Intercept)   534.      3.39
+##  2 AtBat        -162.      3.39
+##  3 Hits          235.      3.39
+##  4 HmRun         -14.9     3.39
+##  5 Runs            0       3.39
+##  6 RBI            11.4     3.39
+##  7 Walks         103.      3.39
+##  8 Years         -28.8     3.39
+##  9 CAtBat          0       3.39
+## 10 CHits           0       3.39
+## 11 CHmRun          0       3.39
+## 12 CRuns         156.      3.39
+## 13 CRBI          190.      3.39
+## 14 CWalks       -122.      3.39
+## 15 PutOuts        63.2     3.39
+## 16 Assists         3.09    3.39
+## 17 Errors          0       3.39
+## 18 League_N        3.16    3.39
+## 19 Division_W    -60.9     3.39
+## 20 NewLeague_N     0       3.39
 ```
 ## Principal Components Regression
 
@@ -400,14 +406,14 @@ tidy(pca_final_fit)
 ## # A tibble: 8 x 5
 ##   term        estimate std.error statistic  p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
-## 1 (Intercept)    558.      24.1      23.1  4.76e-57
-## 2 PC1            110.       9.05     12.2  1.59e-25
-## 3 PC2             32.2     11.8       2.74 6.79e- 3
-## 4 PC3            -42.9     17.3      -2.47 1.42e- 2
-## 5 PC4            -58.7     19.1      -3.07 2.44e- 3
-## 6 PC5             65.4     24.3       2.69 7.89e- 3
-## 7 PC6             92.4     26.5       3.49 5.99e- 4
-## 8 PC7             43.3     28.4       1.53 1.29e- 1
+## 1 (Intercept)    534.      22.3     24.0   2.68e-59
+## 2 PC1           -115.       8.36   -13.7   3.69e-30
+## 3 PC2            -35.4     10.9     -3.25  1.37e- 3
+## 4 PC3             22.9     15.5      1.48  1.41e- 1
+## 5 PC4             26.2     18.3      1.43  1.53e- 1
+## 6 PC5             57.8     22.1      2.61  9.85e- 3
+## 7 PC6             63.3     25.2      2.52  1.27e- 2
+## 8 PC7             22.8     26.4      0.864 3.89e- 1
 ```
 
 ## Partial Least Squares
@@ -459,23 +465,11 @@ tidy(pls_final_fit)
 ```
 
 ```
-## # A tibble: 16 x 5
-##    term        estimate std.error statistic  p.value
-##    <chr>          <dbl>     <dbl>     <dbl>    <dbl>
-##  1 (Intercept)    558.      22.3     25.0   1.10e-60
-##  2 PLS01          120.       8.57    14.0   1.42e-30
-##  3 PLS02           86.4     17.0      5.09  8.97e- 7
-##  4 PLS03           42.9     14.5      2.96  3.51e- 3
-##  5 PLS04           56.2     23.4      2.40  1.74e- 2
-##  6 PLS05          129.      41.2      3.13  2.05e- 3
-##  7 PLS06           69.1     25.0      2.76  6.33e- 3
-##  8 PLS07           58.3     33.0      1.77  7.86e- 2
-##  9 PLS08           75.6     42.3      1.79  7.58e- 2
-## 10 PLS09           45.8     38.8      1.18  2.39e- 1
-## 11 PLS10           67.2     54.0      1.24  2.15e- 1
-## 12 PLS11           55.8     44.5      1.25  2.12e- 1
-## 13 PLS12           58.1     63.8      0.910 3.64e- 1
-## 14 PLS13           48.8     74.2      0.657 5.12e- 1
-## 15 PLS14           46.8     90.3      0.518 6.05e- 1
-## 16 PLS15           65.1    118.       0.554 5.80e- 1
+## # A tibble: 4 x 5
+##   term        estimate std.error statistic  p.value
+##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)    534.      21.8      24.5  2.13e-61
+## 2 PLS1           121.       8.27     14.6  5.47e-33
+## 3 PLS2            51.9     15.1       3.44 7.01e- 4
+## 4 PLS3            48.3     16.8       2.88 4.44e- 3
 ```

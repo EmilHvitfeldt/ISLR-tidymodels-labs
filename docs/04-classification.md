@@ -8,6 +8,12 @@ library(tidymodels)
 ```
 
 ```
+## Registered S3 method overwritten by 'tune':
+##   method                   from   
+##   required_pkgs.model_spec parsnip
+```
+
+```
 ## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.2 ──
 ```
 
@@ -18,7 +24,7 @@ library(tidymodels)
 ## ✓ ggplot2   3.3.3           ✓ tidyr     1.1.3      
 ## ✓ infer     0.5.4           ✓ tune      0.1.3      
 ## ✓ modeldata 0.1.0           ✓ workflows 0.2.2      
-## ✓ parsnip   0.1.5           ✓ yardstick 0.0.8      
+## ✓ parsnip   0.1.5.9002      ✓ yardstick 0.0.8      
 ## ✓ purrr     0.3.4
 ```
 
@@ -98,7 +104,7 @@ lr_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  10ms 
+## Fit time:  7ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -476,7 +482,7 @@ qda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  42ms 
+## Fit time:  44ms 
 ## Call: 
 ## rda(formula = Direction ~ Lag1 + Lag2, data = data, lambda = ~0, 
 ##     gamma = ~0)
