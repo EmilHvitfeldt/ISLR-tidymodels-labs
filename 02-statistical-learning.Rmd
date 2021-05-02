@@ -12,3 +12,5 @@ Proper introductions to the various tidymodels packages will not be present in t
 - [tune](https://www.tidymodels.org/start/tuning/)
 
 The charts whenever possible will be created using ggplot2, if you are unfamiliar with ggplot2 I would recommend you start by reading the [Data Visualisation](https://r4ds.had.co.nz/data-visualisation.html) chapter of the [R for Data Science](https://r4ds.had.co.nz/index.html) book.
+
+The tidymodels packages can be installed as a whole using `install.packages("tidymodels")` and the ISLR package which contains many of the data set we will be using can be installed using `install.packages("ISLR")`.
