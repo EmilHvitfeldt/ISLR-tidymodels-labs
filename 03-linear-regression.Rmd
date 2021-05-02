@@ -1,17 +1,26 @@
 # Linear Regression
 
+This lab will go over how to perform linear regression. This will include [simple linear regression] and [multiple linear regression] in addition to how you can apply transformations to the predictors. This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
+ 
 ## Libraries
 
-```{r}
+We load tidymodels and ISLR and MASS for data sets.
+
+```{r, message=FALSE}
+library(MASS) # For Boston data set
 library(tidymodels)
 library(ISLR)
-library(MASS) # For Boston data set
-
-Boston <- as_tibble(Boston)
-Carseats <- as_tibble(Carseats)
 ```
 
 ## Simple linear regression
+
+The `Boston` data set contain various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (`medv`) as the response with a variable indicating the percentage of the population that belongs to a lower status (`lstat`) as the predictor.
+
+```{block, type='infobox'}
+The `Boston` data set is quite outdated and contains some really unfortunate variables.
+```
+
+We start by creating a parsnip specification for a linear regression model.
 
 ```{r}
 lm_spec <- linear_reg() %>%
@@ -19,50 +28,93 @@ lm_spec <- linear_reg() %>%
   set_engine("lm")
 ```
 
+While it is unnecessary to set the mode for a linear regression since it can only be regression, we continue to do it in these labs to be explicit.
+
+The specification doesn't perform any calculations by itself. It is just a specification of what we want to do.
+
+```{r}
+lm_spec
+```
+
+Once we have the specification we can `fit` it by supplying a formula expression and the data we want to fit the model on.
+The formula is written on the form `y ~ x` where `y` is the name of the response and `x` is the name of the predictors.
+The names used in the formula should match the names of the variables in the data set passed to `data`.
+
 ```{r}
 lm_fit <- lm_spec %>%
   fit(medv ~ lstat, data = Boston)
+
+lm_fit
 ```
 
-```{r}
-names(lm_fit)
-```
+The result of this fit is a parsnip model object. This object contains the underlying fit as well as some parsnip-specific information. If we want to look at the underlying fit object we can access it with `lm_fit$fit` or with
 
 ```{r}
-names(lm_fit$fit)
+lm_fit %>% 
+  pluck("fit")
 ```
 
+The `lm` object has a nice `summary()` method that shows more information about the fit, including parameter estimates and lack-of-fit statistics.
+
 ```{r}
-summary(lm_fit$fit)
+lm_fit %>% 
+  pluck("fit") %>%
+  summary()
 ```
+
+We can use packages from the [broom](https://broom.tidymodels.org/) package to extract key information out of the model objects in tidy formats.
+
+the `tidy()` function returns the parameter estimates of a `lm` object
 
 ```{r}
 tidy(lm_fit)
 ```
 
+and `glance()` can be used to extract the model statistics.
+
 ```{r}
 glance(lm_fit)
 ```
+
+Suppose that we like the model fit and we want to generate predictions, we would typically use the `predict()` function like so:
 
 ```{r, error=TRUE}
 predict(lm_fit)
 ```
 
+But this produces an error when used on a parsnip model object. This is happening because we need to explicitly supply the data set that the predictions should be performed on via the `new_data` argument
+
 ```{r}
 predict(lm_fit, new_data = Boston)
 ```
+
+Notice how the predictions are returned as a tibble. This will always be the case for parsnip models, no matter what engine is used. This is very useful since consistency allows us to combine data sets easily.
+
+We can also return other types of predicts by specifying the `type` argument. Setting `type = "conf_int"` return a 95% confidence interval. 
 
 ```{r}
 predict(lm_fit, new_data = Boston, type = "conf_int")
 ```
 
-```{r}
-augment(lm_fit, new_data = Boston)
+```{block, type='infobox'}
+Not all engines can return all types of predictions.
 ```
 
+If you want to evaluate the performance of a model, you might want to compare the observed value and the predicted value for a data set. You 
+
 ```{r}
-par(mfrow = c(2, 2))
-plot(lm_fit$fit)
+bind_cols(
+  Boston,
+  predict(lm_fit, new_data = Boston)
+) %>%
+  select(medv, .pred)
+```
+
+You can get the same results using the `augment()` function to same you a little bit of typing
+
+```{r}
+augment(lm_fit, new_data = Boston) %>%
+  select(medv, .pred)
 ```
 
 ## Multiple linear regression
