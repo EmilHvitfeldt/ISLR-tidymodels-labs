@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 1 Introduction | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.8/header-attrs.js"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.12/header-attrs.js"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9002/tabs.js"></script><script src="libs/bs3compat-0.2.4.9002/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
@@ -53,16 +53,217 @@
 <span class="header-section-number">1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction"><i class="fas fa-link"></i></a>
 </h1>
 <p>This book aims to be a complement to the 1st version <a href="https://www.statlearning.com/">An Introduction to Statistical Learning</a> book with translations of the labs into using the <a href="https://www.tidymodels.org/">tidymodels</a> set of packages.</p>
-<p>The labs will be mirrored quite closely to stay as true to the original material.</p>
-<p>This book is open to view on <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs">Github</a>.</p>
-
+<p>The labs will be mirrored quite closely to stay true to the original material.</p>
+<div id="colophon" class="section level2 unnumbered">
+<h2>Colophon<a class="anchor" aria-label="anchor" href="#colophon"><i class="fas fa-link"></i></a>
+</h2>
+<p>This book was written in <a href="http://www.rstudio.com/ide/">RStudio</a> using <a href="http://bookdown.org/"><strong>bookdown</strong></a>. The <a href="https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html">website</a> is hosted via <a href="https://pages.github.com/">GitHub Pages</a>, and the complete source is available on <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs">GitHub</a>.</p>
+<p>This version of the book was built with R version 4.0.2 (2020-06-22) and the following packages:</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th align="left">package</th>
+<th align="left">version</th>
+<th align="left">source</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">broom</td>
+<td align="left">0.7.6</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">corrr</td>
+<td align="left">0.4.2</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">dials</td>
+<td align="left">0.0.9</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">dplyr</td>
+<td align="left">1.0.5</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">factoextra</td>
+<td align="left">1.0.7</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">ggplot2</td>
+<td align="left">3.3.3</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">glmnet</td>
+<td align="left">4.1-1</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">infer</td>
+<td align="left">0.5.4</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">ISLR</td>
+<td align="left">1.2</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">kernlab</td>
+<td align="left">0.9-29</td>
+<td align="left">CRAN (R 4.0.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">kknn</td>
+<td align="left">1.3.1</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">klaR</td>
+<td align="left">0.6-15</td>
+<td align="left">CRAN (R 4.0.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">MASS</td>
+<td align="left">7.3-53.1</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">mclust</td>
+<td align="left">5.4.6</td>
+<td align="left">CRAN (R 4.0.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">modeldata</td>
+<td align="left">0.1.0</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">paletteer</td>
+<td align="left">1.3.0</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">parsnip</td>
+<td align="left">0.1.5.9002</td>
+<td align="left">Github (tidymodels/parsnip@639fe1a)</td>
+</tr>
+<tr class="even">
+<td align="left">patchwork</td>
+<td align="left">1.0.1</td>
+<td align="left">CRAN (R 4.0.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">proxy</td>
+<td align="left">0.4-25</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">purrr</td>
+<td align="left">0.3.4</td>
+<td align="left">CRAN (R 4.0.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">randomForest</td>
+<td align="left">4.6-14</td>
+<td align="left">CRAN (R 4.0.0)</td>
+</tr>
+<tr class="even">
+<td align="left">readr</td>
+<td align="left">1.4.0</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">recipes</td>
+<td align="left">0.1.16</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">rpart</td>
+<td align="left">4.1-15</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">rpart.plot</td>
+<td align="left">3.0.9</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">rsample</td>
+<td align="left">0.0.9</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">scico</td>
+<td align="left">1.2.0</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">tibble</td>
+<td align="left">3.1.1</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">tidymodels</td>
+<td align="left">0.1.3</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">tidyr</td>
+<td align="left">1.1.3</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">tidyverse</td>
+<td align="left">1.3.0</td>
+<td align="left">CRAN (R 4.0.0)</td>
+</tr>
+<tr class="even">
+<td align="left">tune</td>
+<td align="left">0.1.5</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">vip</td>
+<td align="left">0.3.2</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">workflows</td>
+<td align="left">0.2.2</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">workflowsets</td>
+<td align="left">0.0.2</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="even">
+<td align="left">xgboost</td>
+<td align="left">1.4.1.1</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">yardstick</td>
+<td align="left">0.0.8</td>
+<td align="left">CRAN (R 4.0.2)</td>
+</tr>
+</tbody>
+</table></div>
+</div>
 </div>
   <div class="chapter-nav">
 <div class="empty"></div>
 <div class="next"><a href="statististical-learning.html"><span class="header-section-number">2</span> Statististical learning</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#introduction"><span class="header-section-number">1</span> Introduction</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+<li><a class="nav-link" href="#colophon">Colophon</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
@@ -78,7 +279,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-04-22.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-02.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

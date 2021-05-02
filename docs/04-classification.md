@@ -14,18 +14,18 @@ library(tidymodels)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.2 ──
+## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──
 ```
 
 ```
-## ✓ broom     0.7.5           ✓ recipes   0.1.15.9000
-## ✓ dials     0.0.9           ✓ rsample   0.0.9      
-## ✓ dplyr     1.0.5           ✓ tibble    3.1.0      
-## ✓ ggplot2   3.3.3           ✓ tidyr     1.1.3      
-## ✓ infer     0.5.4           ✓ tune      0.1.3      
-## ✓ modeldata 0.1.0           ✓ workflows 0.2.2      
-## ✓ parsnip   0.1.5.9002      ✓ yardstick 0.0.8      
-## ✓ purrr     0.3.4
+## ✓ broom        0.7.6          ✓ recipes      0.1.16    
+## ✓ dials        0.0.9          ✓ rsample      0.0.9     
+## ✓ dplyr        1.0.5          ✓ tibble       3.1.1     
+## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
+## ✓ infer        0.5.4          ✓ tune         0.1.5     
+## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
+## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
+## ✓ purrr        0.3.4          ✓ yardstick    0.0.8
 ```
 
 ```
@@ -34,6 +34,7 @@ library(tidymodels)
 ## x dplyr::filter()  masks stats::filter()
 ## x dplyr::lag()     masks stats::lag()
 ## x recipes::step()  masks stats::step()
+## • Use tidymodels_prefer() to resolve common conflicts.
 ```
 
 ```r
@@ -482,7 +483,7 @@ qda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  45ms 
+## Fit time:  42ms 
 ## Call: 
 ## rda(formula = Direction ~ Lag1 + Lag2, data = data, lambda = ~0, 
 ##     gamma = ~0)
@@ -541,7 +542,7 @@ knn_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  37ms 
+## Fit time:  36ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))

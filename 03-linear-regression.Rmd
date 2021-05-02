@@ -104,8 +104,8 @@ If you want to evaluate the performance of a model, you might want to compare th
 
 ```{r}
 bind_cols(
-  Boston,
-  predict(lm_fit, new_data = Boston)
+  predict(lm_fit, new_data = Boston),
+  Boston
 ) %>%
   select(medv, .pred)
 ```

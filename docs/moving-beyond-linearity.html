@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 7 Moving Beyond Linearity | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.8/header-attrs.js"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.12/header-attrs.js"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9002/tabs.js"></script><script src="libs/bs3compat-0.2.4.9002/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
@@ -57,20 +57,21 @@
 <pre><code>## Registered S3 method overwritten by 'tune':
 ##   method                   from   
 ##   required_pkgs.model_spec parsnip</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.2 ──</code></pre>
-<pre><code>## ✓ broom     0.7.5           ✓ recipes   0.1.15.9000
-## ✓ dials     0.0.9           ✓ rsample   0.0.9      
-## ✓ dplyr     1.0.5           ✓ tibble    3.1.0      
-## ✓ ggplot2   3.3.3           ✓ tidyr     1.1.3      
-## ✓ infer     0.5.4           ✓ tune      0.1.3      
-## ✓ modeldata 0.1.0           ✓ workflows 0.2.2      
-## ✓ parsnip   0.1.5.9002      ✓ yardstick 0.0.8      
-## ✓ purrr     0.3.4</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──</code></pre>
+<pre><code>## ✓ broom        0.7.6          ✓ recipes      0.1.16    
+## ✓ dials        0.0.9          ✓ rsample      0.0.9     
+## ✓ dplyr        1.0.5          ✓ tibble       3.1.1     
+## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
+## ✓ infer        0.5.4          ✓ tune         0.1.5     
+## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
+## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
+## ✓ purrr        0.3.4          ✓ yardstick    0.0.8</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 ## x purrr::discard() masks scales::discard()
 ## x dplyr::filter()  masks stats::filter()
 ## x dplyr::lag()     masks stats::lag()
-## x recipes::step()  masks stats::step()</code></pre>
+## x recipes::step()  masks stats::step()
+## • Use tidymodels_prefer() to resolve common conflicts.</code></pre>
 <div class="sourceCode" id="cb207"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
 
@@ -90,7 +91,7 @@
 <pre><code>## # A tibble: 5 x 5
 ##   term          estimate std.error statistic  p.value
 ##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)      112.      0.729    153.   0.      
+## 1 (Intercept)      112.      0.729    153.   0       
 ## 2 poly(age, 4)1    447.     39.9       11.2  1.48e-28
 ## 3 poly(age, 4)2   -478.     39.9      -12.0  2.36e-32
 ## 4 poly(age, 4)3    126.     39.9        3.14 1.68e- 3
@@ -109,7 +110,7 @@
 <pre><code>## # A tibble: 5 x 5
 ##   term        estimate std.error statistic  p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    112.      0.729    153.   0.      
+## 1 (Intercept)    112.      0.729    153.   0       
 ## 2 age_poly_1     447.     39.9       11.2  1.48e-28
 ## 3 age_poly_2    -478.     39.9      -12.0  2.36e-32
 ## 4 age_poly_3     126.     39.9        3.14 1.68e- 3
@@ -234,7 +235,7 @@
 <pre><code>## # A tibble: 3,000 x 4
 ##    .pred_lower_High .pred_upper_High .pred_lower_Low .pred_upper_Low
 ##               &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
-##  1         2.22e-16          0.00166           0.998           1.00 
+##  1         2.22e-16          0.00166           0.998           1    
 ##  2         1.82e- 6          0.00786           0.992           1.00 
 ##  3         2.19e- 2          0.0428            0.957           0.978
 ##  4         2.31e- 2          0.0442            0.956           0.977
@@ -413,7 +414,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-04-22.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-02.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

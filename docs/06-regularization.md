@@ -12,18 +12,18 @@ library(tidymodels)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.2 ──
+## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──
 ```
 
 ```
-## ✓ broom     0.7.5           ✓ recipes   0.1.15.9000
-## ✓ dials     0.0.9           ✓ rsample   0.0.9      
-## ✓ dplyr     1.0.5           ✓ tibble    3.1.0      
-## ✓ ggplot2   3.3.3           ✓ tidyr     1.1.3      
-## ✓ infer     0.5.4           ✓ tune      0.1.3      
-## ✓ modeldata 0.1.0           ✓ workflows 0.2.2      
-## ✓ parsnip   0.1.5.9002      ✓ yardstick 0.0.8      
-## ✓ purrr     0.3.4
+## ✓ broom        0.7.6          ✓ recipes      0.1.16    
+## ✓ dials        0.0.9          ✓ rsample      0.0.9     
+## ✓ dplyr        1.0.5          ✓ tibble       3.1.1     
+## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
+## ✓ infer        0.5.4          ✓ tune         0.1.5     
+## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
+## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
+## ✓ purrr        0.3.4          ✓ yardstick    0.0.8
 ```
 
 ```
@@ -32,6 +32,7 @@ library(tidymodels)
 ## x dplyr::filter()  masks stats::filter()
 ## x dplyr::lag()     masks stats::lag()
 ## x recipes::step()  masks stats::step()
+## • Use tidymodels_prefer() to resolve common conflicts.
 ```
 
 ```r
@@ -259,26 +260,26 @@ tidy(ridge_final_fit)
 ## # A tibble: 20 x 3
 ##    term        estimate penalty
 ##    <chr>          <dbl>   <dbl>
-##  1 (Intercept)   541.      356.
-##  2 AtBat           3.86    356.
-##  3 Hits           30.3     356.
-##  4 HmRun           5.31    356.
-##  5 Runs           20.1     356.
-##  6 RBI            19.6     356.
-##  7 Walks          40.7     356.
-##  8 Years           2.88    356.
-##  9 CAtBat         25.2     356.
-## 10 CHits          34.5     356.
-## 11 CHmRun         24.3     356.
-## 12 CRuns          35.0     356.
-## 13 CRBI           33.8     356.
-## 14 CWalks         20.4     356.
-## 15 PutOuts        52.2     356.
-## 16 Assists        12.0     356.
-## 17 Errors         -6.16    356.
-## 18 League_N        4.65    356.
-## 19 Division_W    -33.7     356.
-## 20 NewLeague_N     3.60    356.
+##  1 (Intercept) 533.        356.
+##  2 AtBat        25.0       356.
+##  3 Hits         33.4       356.
+##  4 HmRun        11.5       356.
+##  5 Runs         29.2       356.
+##  6 RBI          31.9       356.
+##  7 Walks        32.3       356.
+##  8 Years        12.5       356.
+##  9 CAtBat       28.5       356.
+## 10 CHits        33.1       356.
+## 11 CHmRun       27.5       356.
+## 12 CRuns        34.8       356.
+## 13 CRBI         33.0       356.
+## 14 CWalks       12.6       356.
+## 15 PutOuts      27.2       356.
+## 16 Assists      -0.762     356.
+## 17 Errors       -7.45      356.
+## 18 League_N     10.8       356.
+## 19 Division_W  -19.8       356.
+## 20 NewLeague_N   0.0189    356.
 ```
 
 ## The Lasso
@@ -333,26 +334,26 @@ tidy(lasso_final_fit)
 ## # A tibble: 20 x 3
 ##    term        estimate penalty
 ##    <chr>          <dbl>   <dbl>
-##  1 (Intercept)    541.     22.2
-##  2 AtBat            0      22.2
-##  3 Hits            52.2    22.2
-##  4 HmRun            0      22.2
-##  5 Runs             0      22.2
-##  6 RBI              0      22.2
-##  7 Walks           61.4    22.2
-##  8 Years            0      22.2
-##  9 CAtBat           0      22.2
-## 10 CHits            0      22.2
-## 11 CHmRun           0      22.2
-## 12 CRuns           90.3    22.2
-## 13 CRBI            85.5    22.2
-## 14 CWalks           0      22.2
-## 15 PutOuts         72.0    22.2
-## 16 Assists          0      22.2
-## 17 Errors           0      22.2
-## 18 League_N         0      22.2
-## 19 Division_W     -40.9    22.2
-## 20 NewLeague_N      0      22.2
+##  1 (Intercept)    533.     4.09
+##  2 AtBat            0      4.09
+##  3 Hits            59.5    4.09
+##  4 HmRun            0      4.09
+##  5 Runs             0      4.09
+##  6 RBI             46.5    4.09
+##  7 Walks           80.2    4.09
+##  8 Years            0      4.09
+##  9 CAtBat           0      4.09
+## 10 CHits            0      4.09
+## 11 CHmRun           0      4.09
+## 12 CRuns          200.     4.09
+## 13 CRBI            80.0    4.09
+## 14 CWalks         -97.9    4.09
+## 15 PutOuts         41.0    4.09
+## 16 Assists          0      4.09
+## 17 Errors         -19.0    4.09
+## 18 League_N        24.3    4.09
+## 19 Division_W     -32.7    4.09
+## 20 NewLeague_N    -10.8    4.09
 ```
 ## Principal Components Regression
 
@@ -403,17 +404,12 @@ tidy(pca_final_fit)
 ```
 
 ```
-## # A tibble: 8 x 5
+## # A tibble: 3 x 5
 ##   term        estimate std.error statistic  p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
-## 1 (Intercept)   541.       24.4     22.2   1.53e-54
-## 2 PC1            95.9       9.21    10.4   2.35e-20
-## 3 PC2           -23.2      11.7     -1.99  4.81e- 2
-## 4 PC3            36.3      17.3      2.09  3.76e- 2
-## 5 PC4            31.3      19.7      1.58  1.15e- 1
-## 6 PC5            37.3      24.3      1.53  1.27e- 1
-## 7 PC6           -94.8      27.3     -3.48  6.31e- 4
-## 8 PC7            -3.53     29.7     -0.119 9.05e- 1
+## 1 (Intercept)    533.      20.7      25.7  1.32e-64
+## 2 PC1            107.       7.80     13.7  1.68e-30
+## 3 PC2            -28.8     10.1      -2.87 4.63e- 3
 ```
 
 ## Partial Least Squares
@@ -468,6 +464,6 @@ tidy(pls_final_fit)
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic  p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
-## 1 (Intercept)     541.     25.0       21.7 6.67e-54
-## 2 PLS1            102.      9.59      10.6 3.47e-21
+## 1 (Intercept)     533.     20.6       25.9 2.93e-65
+## 2 PLS1            111.      7.80      14.2 5.51e-32
 ```

@@ -12,18 +12,18 @@ library(tidymodels)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.2 ──
+## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──
 ```
 
 ```
-## ✓ broom     0.7.5           ✓ recipes   0.1.15.9000
-## ✓ dials     0.0.9           ✓ rsample   0.0.9      
-## ✓ dplyr     1.0.5           ✓ tibble    3.1.0      
-## ✓ ggplot2   3.3.3           ✓ tidyr     1.1.3      
-## ✓ infer     0.5.4           ✓ tune      0.1.3      
-## ✓ modeldata 0.1.0           ✓ workflows 0.2.2      
-## ✓ parsnip   0.1.5.9002      ✓ yardstick 0.0.8      
-## ✓ purrr     0.3.4
+## ✓ broom        0.7.6          ✓ recipes      0.1.16    
+## ✓ dials        0.0.9          ✓ rsample      0.0.9     
+## ✓ dplyr        1.0.5          ✓ tibble       3.1.1     
+## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
+## ✓ infer        0.5.4          ✓ tune         0.1.5     
+## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
+## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
+## ✓ purrr        0.3.4          ✓ yardstick    0.0.8
 ```
 
 ```
@@ -32,6 +32,7 @@ library(tidymodels)
 ## x dplyr::filter()  masks stats::filter()
 ## x dplyr::lag()     masks stats::lag()
 ## x recipes::step()  masks stats::step()
+## • Use tidymodels_prefer() to resolve common conflicts.
 ```
 
 ```r
@@ -57,7 +58,7 @@ tidy(lm_fit)
 ## # A tibble: 5 x 5
 ##   term          estimate std.error statistic  p.value
 ##   <chr>            <dbl>     <dbl>     <dbl>    <dbl>
-## 1 (Intercept)      112.      0.729    153.   0.      
+## 1 (Intercept)      112.      0.729    153.   0       
 ## 2 poly(age, 4)1    447.     39.9       11.2  1.48e-28
 ## 3 poly(age, 4)2   -478.     39.9      -12.0  2.36e-32
 ## 4 poly(age, 4)3    126.     39.9        3.14 1.68e- 3
@@ -82,7 +83,7 @@ tidy(poly_fit)
 ## # A tibble: 5 x 5
 ##   term        estimate std.error statistic  p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
-## 1 (Intercept)    112.      0.729    153.   0.      
+## 1 (Intercept)    112.      0.729    153.   0       
 ## 2 age_poly_1     447.     39.9       11.2  1.48e-28
 ## 3 age_poly_2    -478.     39.9      -12.0  2.36e-32
 ## 4 age_poly_3     126.     39.9        3.14 1.68e- 3
@@ -251,7 +252,7 @@ predict(poly_fit, new_data = Wage, type = "conf_int")
 ## # A tibble: 3,000 x 4
 ##    .pred_lower_High .pred_upper_High .pred_lower_Low .pred_upper_Low
 ##               <dbl>            <dbl>           <dbl>           <dbl>
-##  1         2.22e-16          0.00166           0.998           1.00 
+##  1         2.22e-16          0.00166           0.998           1    
 ##  2         1.82e- 6          0.00786           0.992           1.00 
 ##  3         2.19e- 2          0.0428            0.957           0.978
 ##  4         2.31e- 2          0.0442            0.956           0.977
