@@ -119,12 +119,37 @@ augment(lm_fit, new_data = Boston) %>%
 
 ## Multiple linear regression
 
+The multiple linear regression model can be fit in much the same way as the [simple linear regression] model. The only difference is how we specify the predictors. We are using the same formula expression `y ~ x`, but we can specify multiple values by separating them with `+`s.
+
 ```{r}
-lm_fit <- lm_spec %>% 
+lm_fit2 <- lm_spec %>% 
   fit(medv ~ lstat + age, data = Boston)
 
-lm_fit
+lm_fit2
 ```
+
+Everything else works the same. From extracting parameter estimates
+
+```{r}
+tidy(lm_fit2)
+```
+
+to predicting new values
+
+```{r}
+predict(lm_fit2, new_data = Boston)
+```
+
+A shortcut when using formulas is to use the form `y ~ .` which means; set `y` as the response and set the remaining variables as predictors. This is very useful if you have a lot of variables and you don't want to type them out.
+
+```{r}
+lm_fit3 <- lm_spec %>% 
+  fit(medv ~ ., data = Boston)
+
+lm_fit3
+```
+
+For more formula syntax look at `?formula`.
 
 ## Interaction terms
 
