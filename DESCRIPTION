@@ -1,0 +1,55 @@
+Package: ISLR-tidymodels-labs
+Title: ISLR tidymodels Labs
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Emil",
+           family = "Hvitfeldt",
+           role = c("aut", "cre"),
+           email = "emilhhvitfeldt@gmail.com",
+           comment = c(ORCID = "0000-0002-0679-1945"))
+License: MIT + file LICENSE
+Imports: 
+    broom,
+    corrr,
+    dials,
+    dplyr,
+    factoextra,
+    ggplot2,
+    glmnet,
+    infer,
+    ISLR,
+    kernlab,
+    kknn,
+    klaR,
+    MASS,
+    mclust,
+    modeldata,
+    paletteer,
+    parsnip (>= 0.1.5.9002),
+    patchwork,
+    proxy,
+    purrr,
+    randomForest,
+    readr,
+    recipes (>= 0.1.16.9000),
+    rpart,
+    rpart.plot,
+    rsample,
+    scico,
+    tibble,
+    tidymodels,
+    tidyr,
+    tidyverse,
+    tune,
+    vip,
+    workflows,
+    workflowsets,
+    xgboost,
+    yardstick
+Remotes: 
+    tidymodels/parsnip,
+    tidymodels/recipes
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1.9001

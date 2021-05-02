@@ -14,6 +14,22 @@ description: "tidymodels lab sections mirroring ISLR labs"
 
 This book aims to be a complement to the 1st version [An Introduction to Statistical Learning](https://www.statlearning.com/) book with translations of the labs into using the [tidymodels](https://www.tidymodels.org/) set of packages.
 
-The labs will be mirrored quite closely to stay as true to the original material.
+The labs will be mirrored quite closely to stay true to the original material.
 
-This book is open to view on [Github](https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs).
+## Colophon {-}
+
+This book was written in [RStudio](http://www.rstudio.com/ide/) using [**bookdown**](http://bookdown.org/). The [website](https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html) is hosted via [GitHub Pages](https://pages.github.com/), and the complete source is available on [GitHub](https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs).
+
+This version of the book was built with `r R.version.string` and the following packages:
+
+```{r, echo = FALSE, results="asis"}
+deps <- desc::desc_get_deps()
+pkgs <- sort(deps$package[deps$type == "Imports"])
+pkgs <- sessioninfo::package_info(pkgs, dependencies = FALSE)
+df <- tibble::tibble(
+  package = pkgs$package,
+  version = pkgs$ondiskversion,
+  source = gsub("@", "\\\\@", pkgs$source)
+)
+knitr::kable(df, format = "markdown")
+```
