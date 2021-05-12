@@ -3,39 +3,6 @@
 
 ```r
 library(tidymodels)
-```
-
-```
-## Registered S3 method overwritten by 'tune':
-##   method                   from   
-##   required_pkgs.model_spec parsnip
-```
-
-```
-## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──
-```
-
-```
-## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.0.9     
-## ✓ dplyr        1.0.5          ✓ tibble       3.1.1     
-## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
-## ✓ infer        0.5.4          ✓ tune         0.1.5     
-## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
-## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
-## ✓ purrr        0.3.4          ✓ yardstick    0.0.8
-```
-
-```
-## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-## x purrr::discard() masks scales::discard()
-## x dplyr::filter()  masks stats::filter()
-## x dplyr::lag()     masks stats::lag()
-## x recipes::step()  masks stats::step()
-## • Use tidymodels_prefer() to resolve common conflicts.
-```
-
-```r
 library(ISLR)
 
 Hitters <- as_tibble(Hitters) %>%
@@ -69,112 +36,15 @@ ridge_fit <- fit(ridge_spec, Salary ~ ., data = Hitters)
 tidy(ridge_fit, penalty = 11498)
 ```
 
-```
-## Loading required package: Matrix
-```
-
-```
-## 
-## Attaching package: 'Matrix'
-```
-
-```
-## The following objects are masked from 'package:tidyr':
-## 
-##     expand, pack, unpack
-```
-
-```
-## Loaded glmnet 4.1-1
-```
-
-```
-## # A tibble: 20 x 3
-##    term         estimate penalty
-##    <chr>           <dbl>   <dbl>
-##  1 (Intercept) 407.        11498
-##  2 AtBat         0.0370    11498
-##  3 Hits          0.138     11498
-##  4 HmRun         0.525     11498
-##  5 Runs          0.231     11498
-##  6 RBI           0.240     11498
-##  7 Walks         0.290     11498
-##  8 Years         1.11      11498
-##  9 CAtBat        0.00314   11498
-## 10 CHits         0.0117    11498
-## 11 CHmRun        0.0876    11498
-## 12 CRuns         0.0234    11498
-## 13 CRBI          0.0242    11498
-## 14 CWalks        0.0250    11498
-## 15 LeagueN       0.0866    11498
-## 16 DivisionW    -6.23      11498
-## 17 PutOuts       0.0165    11498
-## 18 Assists       0.00262   11498
-## 19 Errors       -0.0206    11498
-## 20 NewLeagueN    0.303     11498
-```
-
 
 
 ```r
 tidy(ridge_fit, penalty = 705)
 ```
 
-```
-## # A tibble: 20 x 3
-##    term        estimate penalty
-##    <chr>          <dbl>   <dbl>
-##  1 (Intercept)  54.4        705
-##  2 AtBat         0.112      705
-##  3 Hits          0.656      705
-##  4 HmRun         1.18       705
-##  5 Runs          0.937      705
-##  6 RBI           0.847      705
-##  7 Walks         1.32       705
-##  8 Years         2.58       705
-##  9 CAtBat        0.0108     705
-## 10 CHits         0.0468     705
-## 11 CHmRun        0.338      705
-## 12 CRuns         0.0937     705
-## 13 CRBI          0.0979     705
-## 14 CWalks        0.0718     705
-## 15 LeagueN      13.7        705
-## 16 DivisionW   -54.7        705
-## 17 PutOuts       0.119      705
-## 18 Assists       0.0161     705
-## 19 Errors       -0.704      705
-## 20 NewLeagueN    8.61       705
-```
-
 
 ```r
 tidy(ridge_fit, penalty = 50)
-```
-
-```
-## # A tibble: 20 x 3
-##    term          estimate penalty
-##    <chr>            <dbl>   <dbl>
-##  1 (Intercept)   48.2          50
-##  2 AtBat         -0.354        50
-##  3 Hits           1.95         50
-##  4 HmRun         -1.29         50
-##  5 Runs           1.16         50
-##  6 RBI            0.809        50
-##  7 Walks          2.71         50
-##  8 Years         -6.20         50
-##  9 CAtBat         0.00609      50
-## 10 CHits          0.107        50
-## 11 CHmRun         0.629        50
-## 12 CRuns          0.217        50
-## 13 CRBI           0.215        50
-## 14 CWalks        -0.149        50
-## 15 LeagueN       45.9          50
-## 16 DivisionW   -118.           50
-## 17 PutOuts        0.250        50
-## 18 Assists        0.121        50
-## 19 Errors        -3.28         50
-## 20 NewLeagueN    -9.42         50
 ```
 
 
@@ -183,20 +53,7 @@ predict(ridge_fit, new_data = Hitters, penalty = 50)
 ```
 
 ```
-## # A tibble: 263 x 1
-##     .pred
-##     <dbl>
-##  1  469. 
-##  2  663. 
-##  3 1023. 
-##  4  505. 
-##  5  550. 
-##  6  200. 
-##  7   79.4
-##  8  105. 
-##  9  836. 
-## 10  865. 
-## # … with 253 more rows
+## Error in predict(ridge_fit, new_data = Hitters, penalty = 50): object 'ridge_fit' not found
 ```
 
 
@@ -240,8 +97,6 @@ tune_res <- tune_grid(
 autoplot(tune_res)
 ```
 
-<img src="06-regularization_files/figure-html/unnamed-chunk-9-1.png" width="672" />
-
 
 ```r
 best_penalty <- select_best(tune_res, metric = "rsq")
@@ -254,32 +109,6 @@ ridge_final <- finalize_workflow(ridge_workflow, best_penalty)
 ridge_final_fit <- fit(ridge_final, data = Hitters_train)
 
 tidy(ridge_final_fit)
-```
-
-```
-## # A tibble: 20 x 3
-##    term        estimate penalty
-##    <chr>          <dbl>   <dbl>
-##  1 (Intercept) 533.        356.
-##  2 AtBat        25.0       356.
-##  3 Hits         33.4       356.
-##  4 HmRun        11.5       356.
-##  5 Runs         29.2       356.
-##  6 RBI          31.9       356.
-##  7 Walks        32.3       356.
-##  8 Years        12.5       356.
-##  9 CAtBat       28.5       356.
-## 10 CHits        33.1       356.
-## 11 CHmRun       27.5       356.
-## 12 CRuns        34.8       356.
-## 13 CRBI         33.0       356.
-## 14 CWalks       12.6       356.
-## 15 PutOuts      27.2       356.
-## 16 Assists      -0.762     356.
-## 17 Errors       -7.45      356.
-## 18 League_N     10.8       356.
-## 19 Division_W  -19.8       356.
-## 20 NewLeague_N   0.0189    356.
 ```
 
 ## The Lasso
@@ -314,8 +143,6 @@ tune_res <- tune_grid(
 autoplot(tune_res)
 ```
 
-<img src="06-regularization_files/figure-html/unnamed-chunk-12-1.png" width="672" />
-
 
 ```r
 best_penalty <- select_best(tune_res, metric = "rsq")
@@ -328,32 +155,6 @@ lasso_final <- finalize_workflow(lasso_workflow, best_penalty)
 lasso_final_fit <- fit(lasso_final, data = Hitters_train)
 
 tidy(lasso_final_fit)
-```
-
-```
-## # A tibble: 20 x 3
-##    term        estimate penalty
-##    <chr>          <dbl>   <dbl>
-##  1 (Intercept)    533.     4.09
-##  2 AtBat            0      4.09
-##  3 Hits            59.5    4.09
-##  4 HmRun            0      4.09
-##  5 Runs             0      4.09
-##  6 RBI             46.5    4.09
-##  7 Walks           80.2    4.09
-##  8 Years            0      4.09
-##  9 CAtBat           0      4.09
-## 10 CHits            0      4.09
-## 11 CHmRun           0      4.09
-## 12 CRuns          200.     4.09
-## 13 CRBI            80.0    4.09
-## 14 CWalks         -97.9    4.09
-## 15 PutOuts         41.0    4.09
-## 16 Assists          0      4.09
-## 17 Errors         -19.0    4.09
-## 18 League_N        24.3    4.09
-## 19 Division_W     -32.7    4.09
-## 20 NewLeague_N    -10.8    4.09
 ```
 ## Principal Components Regression
 
@@ -386,11 +187,7 @@ tune_res <- tune_grid(
 )
 
 autoplot(tune_res)
-```
 
-<img src="06-regularization_files/figure-html/unnamed-chunk-15-1.png" width="672" />
-
-```r
 best_threshold <- select_best(tune_res, metric = "rmse")
 ```
 
@@ -401,15 +198,6 @@ pca_final <- finalize_workflow(pca_workflow, best_threshold)
 pca_final_fit <- fit(pca_final, data = Hitters_train)
 
 tidy(pca_final_fit)
-```
-
-```
-## # A tibble: 3 x 5
-##   term        estimate std.error statistic  p.value
-##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
-## 1 (Intercept)    533.      20.7      25.7  1.32e-64
-## 2 PC1            107.       7.80     13.7  1.68e-30
-## 3 PC2            -28.8     10.1      -2.87 4.63e- 3
 ```
 
 ## Partial Least Squares
@@ -443,11 +231,7 @@ tune_res <- tune_grid(
 )
 
 autoplot(tune_res)
-```
 
-<img src="06-regularization_files/figure-html/unnamed-chunk-17-1.png" width="672" />
-
-```r
 best_threshold <- select_best(tune_res, metric = "rmse")
 ```
 
@@ -458,12 +242,4 @@ pls_final <- finalize_workflow(pls_workflow, best_threshold)
 pls_final_fit <- fit(pls_final, data = Hitters_train)
 
 tidy(pls_final_fit)
-```
-
-```
-## # A tibble: 2 x 5
-##   term        estimate std.error statistic  p.value
-##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
-## 1 (Intercept)     533.     20.6       25.9 2.93e-65
-## 2 PLS1            111.      7.80      14.2 5.51e-32
 ```

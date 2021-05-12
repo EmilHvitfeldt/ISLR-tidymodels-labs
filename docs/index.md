@@ -1,7 +1,7 @@
 --- 
 title: "ISLR tidymodels Labs"
 author: "Emil Hvitfeldt"
-date: "2021-05-02"
+date: "2021-05-12"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -28,7 +28,7 @@ This version of the book was built with R version 4.0.2 (2020-06-22) and the fol
 |broom        |0.7.6      |CRAN (R 4.0.2)                       |
 |corrr        |0.4.2      |CRAN (R 4.0.2)                       |
 |dials        |0.0.9      |CRAN (R 4.0.2)                       |
-|dplyr        |1.0.5      |CRAN (R 4.0.2)                       |
+|dplyr        |1.0.6      |CRAN (R 4.0.2)                       |
 |factoextra   |1.0.7      |CRAN (R 4.0.2)                       |
 |ggplot2      |3.3.3      |CRAN (R 4.0.2)                       |
 |glmnet       |4.1-1      |CRAN (R 4.0.2)                       |
@@ -41,7 +41,7 @@ This version of the book was built with R version 4.0.2 (2020-06-22) and the fol
 |mclust       |5.4.6      |CRAN (R 4.0.0)                       |
 |modeldata    |0.1.0      |CRAN (R 4.0.2)                       |
 |paletteer    |1.3.0      |CRAN (R 4.0.2)                       |
-|parsnip      |0.1.5.9002 |Github (tidymodels/parsnip\@639fe1a) |
+|parsnip      |0.1.5.9002 |Github (tidymodels/parsnip\@bc125e9) |
 |patchwork    |1.0.1      |CRAN (R 4.0.0)                       |
 |proxy        |0.4-25     |CRAN (R 4.0.2)                       |
 |purrr        |0.3.4      |CRAN (R 4.0.0)                       |
@@ -55,7 +55,7 @@ This version of the book was built with R version 4.0.2 (2020-06-22) and the fol
 |tibble       |3.1.1      |CRAN (R 4.0.2)                       |
 |tidymodels   |0.1.3      |CRAN (R 4.0.2)                       |
 |tidyr        |1.1.3      |CRAN (R 4.0.2)                       |
-|tidyverse    |1.3.0      |CRAN (R 4.0.0)                       |
+|tidyverse    |1.3.1      |CRAN (R 4.0.2)                       |
 |tune         |0.1.5      |CRAN (R 4.0.2)                       |
 |vip          |0.3.2      |CRAN (R 4.0.2)                       |
 |workflows    |0.2.2      |CRAN (R 4.0.2)                       |

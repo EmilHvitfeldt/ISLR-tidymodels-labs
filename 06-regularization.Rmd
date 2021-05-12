@@ -1,6 +1,6 @@
 # Linear Model Selection and Regularization
 
-```{r}
+```{r, eval=FALSE}
 library(tidymodels)
 library(ISLR)
 
@@ -19,25 +19,25 @@ tidymodels does not currently support forward and backward stepwise selection me
 
 ## Ridge Regression
 
-```{r}
+```{r, eval=FALSE}
 ridge_spec <- linear_reg(mixture = 0) %>%
   set_engine("glmnet")
 ```
 
-```{r}
+```{r, eval=FALSE}
 ridge_fit <- fit(ridge_spec, Salary ~ ., data = Hitters)
 ```
 
-```{r}
+```{r, eval=FALSE}
 tidy(ridge_fit, penalty = 11498)
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 tidy(ridge_fit, penalty = 705)
 ```
 
-```{r}
+```{r, eval=FALSE}
 tidy(ridge_fit, penalty = 50)
 ```
 
@@ -45,7 +45,7 @@ tidy(ridge_fit, penalty = 50)
 predict(ridge_fit, new_data = Hitters, penalty = 50)
 ```
 
-```{r}
+```{r, eval=FALSE}
 Hitters_split <- initial_split(Hitters)
 
 Hitters_train <- training(Hitters_split)
@@ -55,7 +55,7 @@ Hitters_fold <- vfold_cv(Hitters_train, v = 10)
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 ridge_recipe <- 
   recipe(formula = Salary ~ ., data = Hitters_train) %>% 
   step_novel(all_nominal(), -all_outcomes()) %>% 
@@ -84,11 +84,11 @@ tune_res <- tune_grid(
 autoplot(tune_res)
 ```
 
-```{r}
+```{r, eval=FALSE}
 best_penalty <- select_best(tune_res, metric = "rsq")
 ```
 
-```{r}
+```{r, eval=FALSE}
 ridge_final <- finalize_workflow(ridge_workflow, best_penalty)
 
 ridge_final_fit <- fit(ridge_final, data = Hitters_train)
@@ -98,7 +98,7 @@ tidy(ridge_final_fit)
 
 ## The Lasso
 
-```{r}
+```{r, eval=FALSE}
 lasso_recipe <- 
   recipe(formula = Salary ~ ., data = Hitters_train) %>% 
   step_novel(all_nominal(), -all_outcomes()) %>% 
@@ -127,11 +127,11 @@ tune_res <- tune_grid(
 autoplot(tune_res)
 ```
 
-```{r}
+```{r, eval=FALSE}
 best_penalty <- select_best(tune_res, metric = "rsq")
 ```
 
-```{r}
+```{r, eval=FALSE}
 lasso_final <- finalize_workflow(lasso_workflow, best_penalty)
 
 lasso_final_fit <- fit(lasso_final, data = Hitters_train)
@@ -140,7 +140,7 @@ tidy(lasso_final_fit)
 ```
 ## Principal Components Regression
 
-```{r}
+```{r, eval=FALSE}
 pca_recipe <- 
   recipe(formula = Salary ~ ., data = Hitters_train) %>% 
   step_novel(all_nominal(), -all_outcomes()) %>% 
@@ -172,7 +172,7 @@ autoplot(tune_res)
 best_threshold <- select_best(tune_res, metric = "rmse")
 ```
 
-```{r}
+```{r, eval=FALSE}
 pca_final <- finalize_workflow(pca_workflow, best_threshold)
 
 pca_final_fit <- fit(pca_final, data = Hitters_train)
@@ -182,7 +182,7 @@ tidy(pca_final_fit)
 
 ## Partial Least Squares
 
-```{r}
+```{r, eval=FALSE}
 pls_recipe <- 
   recipe(formula = Salary ~ ., data = Hitters_train) %>% 
   step_novel(all_nominal(), -all_outcomes()) %>% 
@@ -214,7 +214,7 @@ autoplot(tune_res)
 best_threshold <- select_best(tune_res, metric = "rmse")
 ```
 
-```{r}
+```{r, eval=FALSE}
 pls_final <- finalize_workflow(pls_workflow, best_threshold)
 
 pls_final_fit <- fit(pls_final, data = Hitters_train)

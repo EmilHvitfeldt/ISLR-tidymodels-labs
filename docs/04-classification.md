@@ -20,7 +20,7 @@ library(tidymodels)
 ```
 ## ✓ broom        0.7.6          ✓ recipes      0.1.16    
 ## ✓ dials        0.0.9          ✓ rsample      0.0.9     
-## ✓ dplyr        1.0.5          ✓ tibble       3.1.1     
+## ✓ dplyr        1.0.6          ✓ tibble       3.1.1     
 ## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
 ## ✓ infer        0.5.4          ✓ tune         0.1.5     
 ## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
@@ -105,7 +105,7 @@ lr_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  9ms 
+## Fit time:  10ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -378,7 +378,7 @@ lda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -483,7 +483,7 @@ qda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  42ms 
+## Fit time:  39ms 
 ## Call: 
 ## rda(formula = Direction ~ Lag1 + Lag2, data = data, lambda = ~0, 
 ##     gamma = ~0)
@@ -542,7 +542,7 @@ knn_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  36ms 
+## Fit time:  37ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))

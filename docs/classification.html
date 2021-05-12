@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 4 Classification | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.12/header-attrs.js"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.13/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9002/tabs.js"></script><script src="libs/bs3compat-0.2.4.9002/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9003/tabs.js"></script><script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -56,7 +56,7 @@
 <h2>
 <span class="header-section-number">4.1</span> The Stock Market Data<a class="anchor" aria-label="anchor" href="#the-stock-market-data"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## Registered S3 method overwritten by 'tune':
 ##   method                   from   
@@ -64,7 +64,7 @@
 <pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──</code></pre>
 <pre><code>## ✓ broom        0.7.6          ✓ recipes      0.1.16    
 ## ✓ dials        0.0.9          ✓ rsample      0.0.9     
-## ✓ dplyr        1.0.5          ✓ tibble       3.1.1     
+## ✓ dplyr        1.0.6          ✓ tibble       3.1.1     
 ## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
 ## ✓ infer        0.5.4          ✓ tune         0.1.5     
 ## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
@@ -76,22 +76,22 @@
 ## x dplyr::lag()     masks stats::lag()
 ## x recipes::step()  masks stats::step()
 ## • Use tidymodels_prefer() to resolve common conflicts.</code></pre>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
 
 <span class="va">Smarket</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Smarket</span><span class="op">)</span>
 <span class="va">Caravan</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Caravan</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/corrr">corrr</a></span><span class="op">)</span>
 <span class="va">cor_Smarket</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/corrr/man/correlate.html">correlate</a></span><span class="op">(</span><span class="va">Smarket</span><span class="op">[</span><span class="op">-</span><span class="fl">9</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ## Correlation method: 'pearson'
 ## Missing treated using: 'pairwise.complete.obs'</code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/corrr/man/rplot.html">rplot</a></span><span class="op">(</span><span class="va">cor_Smarket</span>, colours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"indianred2"</span>, <span class="st">"black"</span>, <span class="st">"skyblue1"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Don't know how to automatically pick scale for object of type noquote. Defaulting to continuous.</code></pre>
 <div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-2-1.png" width="672"></div>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EmilHvitfeldt/paletteer">paletteer</a></span><span class="op">)</span>
 <span class="va">cor_Smarket</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/corrr/man/stretch.html">stretch</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -106,11 +106,11 @@
 <h2>
 <span class="header-section-number">4.2</span> Logistic Regression<a class="anchor" aria-label="anchor" href="#logistic-regression"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_spec</span> <span class="op">&lt;-</span> <span class="fu">logistic_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_fit</span> <span class="op">&lt;-</span> <span class="va">lr_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span>
     <span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span> <span class="op">+</span> <span class="va">Lag3</span> <span class="op">+</span> <span class="va">Lag4</span> <span class="op">+</span> <span class="va">Lag5</span> <span class="op">+</span> <span class="va">Volume</span>,
@@ -120,7 +120,7 @@
 <span class="va">lr_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  9ms 
+## Fit time:  10ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -134,7 +134,7 @@
 ## Degrees of Freedom: 1249 Total (i.e. Null);  1243 Residual
 ## Null Deviance:       1731 
 ## Residual Deviance: 1728  AIC: 1742</code></pre>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">lr_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ## Call:
@@ -162,7 +162,7 @@
 ## AIC: 1741.6
 ## 
 ## Number of Fisher Scoring iterations: 3</code></pre>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lr_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 5
 ##   term        estimate std.error statistic p.value
@@ -174,7 +174,7 @@
 ## 5 Lag4         0.00936    0.0500     0.187   0.851
 ## 6 Lag5         0.0103     0.0495     0.208   0.835
 ## 7 Volume       0.135      0.158      0.855   0.392</code></pre>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1,250 x 1
 ##    .pred_class
@@ -190,7 +190,7 @@
 ##  9 Up         
 ## 10 Down       
 ## # … with 1,240 more rows</code></pre>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1,250 x 2
 ##    .pred_Down .pred_Up
@@ -206,72 +206,72 @@
 ##  9      0.482    0.518
 ## 10      0.511    0.489
 ## # … with 1,240 more rows</code></pre>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down  Up
 ##       Down  145 141
 ##       Up    457 507</code></pre>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">autoplot</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric  .estimator .estimate
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary         0.522</code></pre>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Smarket_train</span> <span class="op">&lt;-</span> <span class="va">Smarket</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">!=</span> <span class="fl">2005</span><span class="op">)</span>
 
 <span class="va">Smarket_test</span> <span class="op">&lt;-</span> <span class="va">Smarket</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">==</span> <span class="fl">2005</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_fit</span> <span class="op">&lt;-</span> <span class="va">lr_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span>
     <span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span> <span class="op">+</span> <span class="va">Lag3</span> <span class="op">+</span> <span class="va">Lag4</span> <span class="op">+</span> <span class="va">Lag5</span> <span class="op">+</span> <span class="va">Volume</span>,
     data <span class="op">=</span> <span class="va">Smarket_train</span>
     <span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down Up
 ##       Down   77 97
 ##       Up     34 44</code></pre>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric  .estimator .estimate
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary         0.480</code></pre>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_fit</span> <span class="op">&lt;-</span> <span class="va">lr_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span>
     <span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span>,
     data <span class="op">=</span> <span class="va">Smarket_train</span>
     <span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down  Up
 ##       Down   35  35
 ##       Up     76 106</code></pre>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric  .estimator .estimate
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary         0.560</code></pre>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>
   <span class="va">lr_fit</span>,
   new_data <span class="op">=</span> <span class="fu">tibble</span><span class="op">(</span>Lag1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.2</span>, <span class="fl">1.5</span><span class="op">)</span>, Lag2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="op">-</span><span class="fl">0.8</span><span class="op">)</span><span class="op">)</span>, 
@@ -287,14 +287,14 @@
 <h2>
 <span class="header-section-number">4.3</span> Linear Discriminant Analysis<a class="anchor" aria-label="anchor" href="#linear-discriminant-analysis"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://discrim.tidymodels.org">discrim</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ## Attaching package: 'discrim'</code></pre>
 <pre><code>## The following object is masked from 'package:dials':
 ## 
 ##     smoothness</code></pre>
-<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lda_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://discrim.tidymodels.org/reference/discrim_linear.html">discrim_linear</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"MASS"</span><span class="op">)</span>
 
@@ -304,7 +304,7 @@
 <span class="va">lda_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -321,7 +321,7 @@
 ##             LD1
 ## Lag1 -0.6420190
 ## Lag2 -0.5135293</code></pre>
-<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 252 x 1
 ##    .pred_class
@@ -337,7 +337,7 @@
 ##  9 Up         
 ## 10 Up         
 ## # … with 242 more rows</code></pre>
-<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 252 x 2
 ##    .pred_Down .pred_Up
@@ -353,14 +353,14 @@
 ##  9      0.491    0.509
 ## 10      0.484    0.516
 ## # … with 242 more rows</code></pre>
-<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down  Up
 ##       Down   35  35
 ##       Up     76 106</code></pre>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -372,7 +372,7 @@
 <h2>
 <span class="header-section-number">4.4</span> Quadratic Discriminant Analysis<a class="anchor" aria-label="anchor" href="#quadratic-discriminant-analysis"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://discrim.tidymodels.org">discrim</a></span><span class="op">)</span>
 <span class="va">qda_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://discrim.tidymodels.org/reference/discrim_regularized.html">discrim_regularized</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_args</span><span class="op">(</span>frac_common_cov <span class="op">=</span> <span class="fl">0</span>, frac_identity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -384,7 +384,7 @@
 <span class="va">qda_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  42ms 
+## Fit time:  39ms 
 ## Call: 
 ## rda(formula = Direction ~ Lag1 + Lag2, data = data, lambda = ~0, 
 ##     gamma = ~0)
@@ -399,14 +399,14 @@
 ## 
 ## Misclassification rate: 
 ##        apparent: 48.597 %</code></pre>
-<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">qda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down  Up
 ##       Down   30  20
 ##       Up     81 121</code></pre>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">qda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -418,7 +418,7 @@
 <h2>
 <span class="header-section-number">4.5</span> K-Nearest Neighbors<a class="anchor" aria-label="anchor" href="#k-nearest-neighbors"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn_spec</span> <span class="op">&lt;-</span> <span class="fu">nearest_neighbor</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"kknn"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span>
@@ -429,7 +429,7 @@
 <span class="va">knn_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  36ms 
+## Fit time:  37ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))
@@ -438,14 +438,14 @@
 ## Minimal misclassification: 0.492986
 ## Best kernel: optimal
 ## Best k: 3</code></pre>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down Up
 ##       Down   43 58
 ##       Up     68 83</code></pre>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -457,56 +457,56 @@
 <h2>
 <span class="header-section-number">4.6</span> An Application to Caravan Insurance Data<a class="anchor" aria-label="anchor" href="#an-application-to-caravan-insurance-data"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Caravan_test</span> <span class="op">&lt;-</span> <span class="va">Caravan</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>, <span class="op">]</span>
 <span class="va">Caravan_train</span> <span class="op">&lt;-</span> <span class="va">Caravan</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
-<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Purchase</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Caravan_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn_spec</span> <span class="op">&lt;-</span> <span class="fu">nearest_neighbor</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"kknn"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn1_wf</span> <span class="op">&lt;-</span> <span class="va">Caravan_wf</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">knn_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn1_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn1_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn1_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction  No Yes
 ##        No  874  50
 ##        Yes  67   9</code></pre>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn1_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric  .estimator .estimate
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary         0.883</code></pre>
-<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn3_wf</span> <span class="op">&lt;-</span> <span class="va">Caravan_wf</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">knn_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">knn3_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn3_wf</span>, <span class="va">Caravan_train</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn3_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction  No Yes
 ##        No  875  50
 ##        Yes  66   9</code></pre>
-<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn5_wf</span> <span class="op">&lt;-</span> <span class="va">Caravan_wf</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">knn_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">knn5_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn5_wf</span>, <span class="va">Caravan_train</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn5_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
@@ -545,7 +545,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-02.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-12.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

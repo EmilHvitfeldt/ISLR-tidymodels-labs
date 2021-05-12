@@ -113,7 +113,7 @@ bind_cols(
 You can get the same results using the `augment()` function to same you a little bit of typing
 
 ```{r}
-augment(lm_fit, new_data = Boston) %>%
+augment(lm_fit, new_data = Boston) %>% 
   select(medv, .pred)
 ```
 
@@ -153,66 +153,96 @@ For more formula syntax look at `?formula`.
 
 ## Interaction terms
 
+Adding interaction terms are quite easy to do using formula expressions. However, the syntax used to describe them isn't accepted by all engines so we will go over how to include interaction terms using recipes as well.
+
+There are two ways on including an interaction term; `x:y` and `x * y`
+
+- `x:y` will include the interaction between `x` and `y`,
+- `x * y` will include the interaction between `x` and `y`, `x`, and `y`, e.i. it is short for `x:y + x + y`.
+
+with that out of the way let expand `lm_fit2` by adding an interaction term
+
 ```{r}
-lm_fit <- lm_spec %>%
+lm_fit4 <- lm_spec %>%
   fit(medv ~ lstat * age, data = Boston)
 
-lm_fit
+lm_fit4
 ```
+
+note that the interaction term is named `lstat:age`.
+
+Sometimes we want to perform transformations, and we want those transformations to be applied, as part of the model fit as a pre-processing step. We will use the recipes package for this task.
+
+We use the `step_interact()` to specify the interaction term. Next, we create a workflow object to combine the linear regression model specification `lm_spec` with the pre-processing specification `rec_spec_interact` which can then be fitted much like a parsnip model specification.
 
 ```{r}
-rec_spec <- recipe(medv ~ lstat + age, data = Boston) %>%
+rec_spec_interact <- recipe(medv ~ lstat + age, data = Boston) %>%
   step_interact(~ lstat:age)
 
-lm_wf <- workflow() %>%
+lm_wf_interact <- workflow() %>%
   add_model(lm_spec) %>%
-  add_recipe(rec_spec)
+  add_recipe(rec_spec_interact)
 
-lm_wf %>% fit(Boston)
+lm_wf_interact %>% fit(Boston)
 ```
+
+Notice that since we specified the variables in the recipe we don't need to specify them when fitting the workflow object. Furthermore, take note of the name of the interaction term. `step_interact()` tries to avoid special characters in variables.
 
 ## Non-linear transformations of the predictors
 
-```{r}
-lm_fit <- lm_spec %>%
-  fit(medv ~ lstat + I(lstat ^ 2), data = Boston)
+Much like we could use recipes to create interaction terms between values are we able to apply transformations to individual variables as well. If you are familiar with the dplyr package then you know how to `mutate()` which works in much the same way using `step_mutate()`.
 
-lm_fit
-```
+You would want to keep as much of the pre-processing inside recipes such that the transformation will be applied consistently to new data.
 
 ```{r}
-rec_spec <- recipe(medv ~ lstat, data = Boston) %>%
+rec_spec_pow2 <- recipe(medv ~ lstat, data = Boston) %>%
   step_mutate(lstat2 = lstat ^ 2)
 
-lm_wf <- workflow() %>%
+lm_wf_pow2 <- workflow() %>%
   add_model(lm_spec) %>%
-  add_recipe(rec_spec)
+  add_recipe(rec_spec_pow2)
 
-lm_fit2 <- lm_wf %>% fit(Boston)
+lm_wf_pow2 %>% fit(Boston)
 ```
 
+you don't have to hand-craft every type of linear transformation since recipes have a bunch created already [here](https://recipes.tidymodels.org/reference/index.html#section-step-functions-individual-transformations) such as `step_log()` to take logarithms of variables.
+
 ```{r}
-rec_spec <- recipe(medv ~ lstat, data = Boston) %>%
+rec_spec_log <- recipe(medv ~ lstat, data = Boston) %>%
   step_log(lstat)
 
-lm_wf <- workflow() %>%
+lm_wf_log <- workflow() %>%
   add_model(lm_spec) %>%
-  add_recipe(rec_spec)
+  add_recipe(rec_spec_log)
 
-lm_wf %>% fit(Boston)
+lm_wf_log %>% fit(Boston)
 ```
 
 ## Qualitative predictors
 
+We will now turn our attention to the `Carseats` data set. We will attempt to predict `Sales` of child car seats in 400 locations based on a number of predictors. One of these variables is `ShelveLoc` which is a qualitative predictor that indicates the quality of the shelving location. `ShelveLoc` takes on three possible values
+
+- Bad
+- Medium
+- Good
+
+If you pass such a variable to `lm()` it will read it and generate dummy variables automatically using the following convention.
+
 ```{r}
-Carseats
+Carseats %>%
+  pull(ShelveLoc) %>%
+  contrasts()
 ```
 
+So we have no problems including qualitative predictors when using `lm` as the engine.
 
 ```{r}
 lm_spec %>% 
   fit(Sales ~ . + Income:Advertising + Price:Age, data = Carseats)
 ```
+
+however, as with so many things, we can not always guarantee that the underlying engine knows how to deal with qualitative variables. recipes can be used to handle this as well. The `step_dummy()` will perform the same transformation of turning 1 qualitative with `C` levels into `C-1` indicator variables.
+While this might seem unnecessary right now, some of the engines, later on, do not handle qualitative variables and this step would be necessary. We are also using the `all_nominal_predictors()` selector to select all character and factor predictor variables. This allows us to select by type rather than having to type out the names.
 
 ```{r}
 rec_spec <- recipe(Sales ~ ., data = Carseats) %>%
@@ -227,3 +257,5 @@ lm_wf %>% fit(Carseats)
 ```
 
 ## Writing functions
+
+This book will not talk about how to write functions in R. If you still wants to know how to write functions we recommend the [functions](https://r4ds.had.co.nz/functions.html) of R for Data Science.

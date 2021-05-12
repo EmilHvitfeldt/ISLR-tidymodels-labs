@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 6 Linear Model Selection and Regularization | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.12/header-attrs.js"></script><script src="libs/jquery-3.5.1/jquery-3.5.1.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.13/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9002/tabs.js"></script><script src="libs/bs3compat-0.2.4.9002/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9003/tabs.js"></script><script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -52,28 +52,9 @@
 <h1>
 <span class="header-section-number">6</span> Linear Model Selection and Regularization<a class="anchor" aria-label="anchor" href="#linear-model-selection-and-regularization"><i class="fas fa-link"></i></a>
 </h1>
-<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Registered S3 method overwritten by 'tune':
-##   method                   from   
-##   required_pkgs.model_spec parsnip</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──</code></pre>
-<pre><code>## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.0.9     
-## ✓ dplyr        1.0.5          ✓ tibble       3.1.1     
-## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
-## ✓ infer        0.5.4          ✓ tune         0.1.5     
-## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
-## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
-## ✓ purrr        0.3.4          ✓ yardstick    0.0.8</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-## x purrr::discard() masks scales::discard()
-## x dplyr::filter()  masks stats::filter()
-## x dplyr::lag()     masks stats::lag()
-## x recipes::step()  masks stats::step()
-## • Use tidymodels_prefer() to resolve common conflicts.</code></pre>
-<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
 
 <span class="va">Hitters</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Hitters</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Salary</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -93,117 +74,28 @@
 <h2>
 <span class="header-section-number">6.3</span> Ridge Regression<a class="anchor" aria-label="anchor" href="#ridge-regression"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">ridge_spec</span>, <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">11498</span><span class="op">)</span></code></pre></div>
-<pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## 
-## Attaching package: 'Matrix'</code></pre>
-<pre><code>## The following objects are masked from 'package:tidyr':
-## 
-##     expand, pack, unpack</code></pre>
-<pre><code>## Loaded glmnet 4.1-1</code></pre>
-<pre><code>## # A tibble: 20 x 3
-##    term         estimate penalty
-##    &lt;chr&gt;           &lt;dbl&gt;   &lt;dbl&gt;
-##  1 (Intercept) 407.        11498
-##  2 AtBat         0.0370    11498
-##  3 Hits          0.138     11498
-##  4 HmRun         0.525     11498
-##  5 Runs          0.231     11498
-##  6 RBI           0.240     11498
-##  7 Walks         0.290     11498
-##  8 Years         1.11      11498
-##  9 CAtBat        0.00314   11498
-## 10 CHits         0.0117    11498
-## 11 CHmRun        0.0876    11498
-## 12 CRuns         0.0234    11498
-## 13 CRBI          0.0242    11498
-## 14 CWalks        0.0250    11498
-## 15 LeagueN       0.0866    11498
-## 16 DivisionW    -6.23      11498
-## 17 PutOuts       0.0165    11498
-## 18 Assists       0.00262   11498
-## 19 Errors       -0.0206    11498
-## 20 NewLeagueN    0.303     11498</code></pre>
-<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">705</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 20 x 3
-##    term        estimate penalty
-##    &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
-##  1 (Intercept)  54.4        705
-##  2 AtBat         0.112      705
-##  3 Hits          0.656      705
-##  4 HmRun         1.18       705
-##  5 Runs          0.937      705
-##  6 RBI           0.847      705
-##  7 Walks         1.32       705
-##  8 Years         2.58       705
-##  9 CAtBat        0.0108     705
-## 10 CHits         0.0468     705
-## 11 CHmRun        0.338      705
-## 12 CRuns         0.0937     705
-## 13 CRBI          0.0979     705
-## 14 CWalks        0.0718     705
-## 15 LeagueN      13.7        705
-## 16 DivisionW   -54.7        705
-## 17 PutOuts       0.119      705
-## 18 Assists       0.0161     705
-## 19 Errors       -0.704      705
-## 20 NewLeagueN    8.61       705</code></pre>
-<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 20 x 3
-##    term          estimate penalty
-##    &lt;chr&gt;            &lt;dbl&gt;   &lt;dbl&gt;
-##  1 (Intercept)   48.2          50
-##  2 AtBat         -0.354        50
-##  3 Hits           1.95         50
-##  4 HmRun         -1.29         50
-##  5 Runs           1.16         50
-##  6 RBI            0.809        50
-##  7 Walks          2.71         50
-##  8 Years         -6.20         50
-##  9 CAtBat         0.00609      50
-## 10 CHits          0.107        50
-## 11 CHmRun         0.629        50
-## 12 CRuns          0.217        50
-## 13 CRBI           0.215        50
-## 14 CWalks        -0.149        50
-## 15 LeagueN       45.9          50
-## 16 DivisionW   -118.           50
-## 17 PutOuts        0.250        50
-## 18 Assists        0.121        50
-## 19 Errors        -3.28         50
-## 20 NewLeagueN    -9.42         50</code></pre>
-<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ridge_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters</span>, penalty <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 263 x 1
-##     .pred
-##     &lt;dbl&gt;
-##  1  469. 
-##  2  663. 
-##  3 1023. 
-##  4  505. 
-##  5  550. 
-##  6  200. 
-##  7   79.4
-##  8  105. 
-##  9  836. 
-## 10  865. 
-## # … with 253 more rows</code></pre>
-<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
+<pre><code>## Error in predict(ridge_fit, new_data = Hitters, penalty = 50): object 'ridge_fit' not found</code></pre>
+<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Hitters_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">Hitters</span><span class="op">)</span>
 
 <span class="va">Hitters_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">Hitters_split</span><span class="op">)</span>
 <span class="va">Hitters_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">Hitters_split</span><span class="op">)</span>
 
 <span class="va">Hitters_fold</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">Hitters_train</span>, v <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb186"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_recipe</span> <span class="op">&lt;-</span> 
   <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal</span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span><span class="fu">all_outcomes</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -230,44 +122,20 @@
 <span class="op">)</span>
 
 <span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
-<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_penalty</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">ridge_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span>
 
 <span class="va">ridge_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">ridge_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span>
 
 <span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_final_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 20 x 3
-##    term        estimate penalty
-##    &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
-##  1 (Intercept) 533.        356.
-##  2 AtBat        25.0       356.
-##  3 Hits         33.4       356.
-##  4 HmRun        11.5       356.
-##  5 Runs         29.2       356.
-##  6 RBI          31.9       356.
-##  7 Walks        32.3       356.
-##  8 Years        12.5       356.
-##  9 CAtBat       28.5       356.
-## 10 CHits        33.1       356.
-## 11 CHmRun       27.5       356.
-## 12 CRuns        34.8       356.
-## 13 CRBI         33.0       356.
-## 14 CWalks       12.6       356.
-## 15 PutOuts      27.2       356.
-## 16 Assists      -0.762     356.
-## 17 Errors       -7.45      356.
-## 18 League_N     10.8       356.
-## 19 Division_W  -19.8       356.
-## 20 NewLeague_N   0.0189    356.</code></pre>
 </div>
 <div id="the-lasso" class="section level2" number="6.4">
 <h2>
 <span class="header-section-number">6.4</span> The Lasso<a class="anchor" aria-label="anchor" href="#the-lasso"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb190"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lasso_recipe</span> <span class="op">&lt;-</span> 
   <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal</span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span><span class="fu">all_outcomes</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -294,44 +162,20 @@
 <span class="op">)</span>
 
 <span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-12-1.png" width="672"></div>
-<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_penalty</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb192"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lasso_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">lasso_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span>
 
 <span class="va">lasso_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">lasso_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span>
 
 <span class="fu">tidy</span><span class="op">(</span><span class="va">lasso_final_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 20 x 3
-##    term        estimate penalty
-##    &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
-##  1 (Intercept)    533.     4.09
-##  2 AtBat            0      4.09
-##  3 Hits            59.5    4.09
-##  4 HmRun            0      4.09
-##  5 Runs             0      4.09
-##  6 RBI             46.5    4.09
-##  7 Walks           80.2    4.09
-##  8 Years            0      4.09
-##  9 CAtBat           0      4.09
-## 10 CHits            0      4.09
-## 11 CHmRun           0      4.09
-## 12 CRuns          200.     4.09
-## 13 CRBI            80.0    4.09
-## 14 CWalks         -97.9    4.09
-## 15 PutOuts         41.0    4.09
-## 16 Assists          0      4.09
-## 17 Errors         -19.0    4.09
-## 18 League_N        24.3    4.09
-## 19 Division_W     -32.7    4.09
-## 20 NewLeague_N    -10.8    4.09</code></pre>
 </div>
 <div id="principal-components-regression" class="section level2" number="6.5">
 <h2>
 <span class="header-section-number">6.5</span> Principal Components Regression<a class="anchor" aria-label="anchor" href="#principal-components-regression"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pca_recipe</span> <span class="op">&lt;-</span> 
   <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal</span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span><span class="fu">all_outcomes</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -358,28 +202,21 @@
   grid <span class="op">=</span> <span class="va">threshold_grid</span>
 <span class="op">)</span>
 
-<span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-15-1.png" width="672"></div>
-<div class="sourceCode" id="cb195"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">best_threshold</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb196"><pre class="downlit sourceCode r">
+<span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span>
+
+<span class="va">best_threshold</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pca_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">pca_workflow</span>, <span class="va">best_threshold</span><span class="op">)</span>
 
 <span class="va">pca_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">pca_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span>
 
 <span class="fu">tidy</span><span class="op">(</span><span class="va">pca_final_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 3 x 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    533.      20.7      25.7  1.32e-64
-## 2 PC1            107.       7.80     13.7  1.68e-30
-## 3 PC2            -28.8     10.1      -2.87 4.63e- 3</code></pre>
 </div>
 <div id="partial-least-squares" class="section level2" number="6.6">
 <h2>
 <span class="header-section-number">6.6</span> Partial Least Squares<a class="anchor" aria-label="anchor" href="#partial-least-squares"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb198"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pls_recipe</span> <span class="op">&lt;-</span> 
   <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal</span><span class="op">(</span><span class="op">)</span>, <span class="op">-</span><span class="fu">all_outcomes</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -406,21 +243,15 @@
   grid <span class="op">=</span> <span class="va">num_comp_grid</span>
 <span class="op">)</span>
 
-<span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-17-1.png" width="672"></div>
-<div class="sourceCode" id="cb199"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">best_threshold</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb200"><pre class="downlit sourceCode r">
+<span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span>
+
+<span class="va">best_threshold</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pls_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">pls_workflow</span>, <span class="va">best_threshold</span><span class="op">)</span>
 
 <span class="va">pls_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">pls_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span>
 
 <span class="fu">tidy</span><span class="op">(</span><span class="va">pls_final_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)     533.     20.6       25.9 2.93e-65
-## 2 PLS1            111.      7.80      14.2 5.51e-32</code></pre>
 
 </div>
 </div>
@@ -453,7 +284,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-02.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-12.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
