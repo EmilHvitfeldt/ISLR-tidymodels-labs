@@ -1,20 +1,32 @@
 # Classification
 
+This lab will be our first experience with classification models. These models differ from the regression model we saw in the last chapter by the fact that the response variable is a qualitative variable instead of a continuous variable.
+This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
+
 ## The Stock Market Data
 
 ```{r}
 library(tidymodels)
 library(ISLR)
-
-Smarket <- as_tibble(Smarket)
-Caravan <- as_tibble(Caravan)
 ```
+
+We will be examining the `Smarket` data set for this lab. It contains a number of numeric variables plus a variable called `Direction` which has the two labels `"Up"` and `"Down"`. Before we do on to modeling, let us take a look at the correlation between the variables.
+
+To look at the correlation, we will use the [corrr](https://corrr.tidymodels.org/) package. The `correlate()` function will calculate the correlation matrix between all the variables that it is being fed. We will therefore remove `Direction` as it is not numeric.
+Then we pass that to `rplot()` to quickly visualize the correlation matrix. I have also changed the `colours` argument to better see what is going on.
 
 ```{r}
 library(corrr)
-cor_Smarket <- correlate(Smarket[-9])
+cor_Smarket <- Smarket %>%
+  select(-Direction) %>%
+  correlate()
+
 rplot(cor_Smarket, colours = c("indianred2", "black", "skyblue1"))
 ```
+
+And we see that these variables are more or less uncorrelated with each other. The other pair is `Year` and `Volume` that is a little correlated.
+
+If you want to create heatmap styled correlation chart you can also create it manually.
 
 ```{r}
 library(paletteer)
@@ -27,15 +39,27 @@ cor_Smarket %>%
   theme_minimal()
 ```
 
+If we plot `Year` against `Volume` we see that there is an upwards trend in `Volume` with time.
 
+```{r}
+ggplot(Smarket, aes(Year, Volume)) +
+  geom_jitter(height = 0)
+```
 
 ## Logistic Regression
+
+Now we will fit a logistic regression model. We will again use the parsnip package, and we will use `logistic_reg()` to create a logistic regression model specification.
 
 ```{r}
 lr_spec <- logistic_reg() %>%
   set_engine("glm") %>%
   set_mode("classification")
 ```
+
+Notice that while I did set the engine and mode, they are just restating the defaults.
+
+We can now fit the model like normal. We want to model the `Direction` of the stock market based on the percentage return from the 5 previous days plus the volume of shares traded.
+When fitting a classification with parsnip requires that the response variable is a factor. This is the case for the `Smarket` data set so we don't need to do adjustments.
 
 ```{r}
 lr_fit <- lr_spec %>%
@@ -47,26 +71,46 @@ lr_fit <- lr_spec %>%
 lr_fit
 ```
 
+this fit is done using the `glm()` function, and it comes with a very handy `summary()` method as well.
+
 ```{r}
-summary(lr_fit$fit)
+lr_fit %>%
+  pluck("fit") %>%
+  summary()
 ```
 
+This lets us see a couple of different things such as; parameter estimates, standard errors, p-values, and model fit statistics. we can use the `tidy()` function to extract some of these model attributes for further analysis or presentation.
+ 
 ```{r}
 tidy(lr_fit)
 ```
+
+Predictions are done much the same way. Here we use the model to predict on the data it was trained on.
 
 ```{r}
 predict(lr_fit, new_data = Smarket)
 ```
 
+The result is a tibble with a single column `.pred_class` which will be a factor variable of the same labels as the original training data set.
+
+We can also get back probability predictions, by specifying `type = "prob"`.
+
 ```{r}
 predict(lr_fit, new_data = Smarket, type = "prob")
 ```
+
+note that we get back a column for each of the classes. This is a little reductive since we could easily calculate the inverse, but once we get to multi-classification models it becomes quite handy.
+
+Using `augment()` we can add the predictions to the data.frame and then use that to look at model performance metrics. before we calculate the metrics directly, I find it useful to look at the [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix). This will show you how well your predictive model is performing by given a table of predicted values against the true value.
 
 ```{r}
 augment(lr_fit, new_data = Smarket) %>%
   conf_mat(truth = Direction, estimate = .pred_class)
 ```
+
+A good performing model would ideally have high numbers along the diagonal (up-left to down-right) with small numbers on the off-diagonal. We see here that the model isn't great, as it tends to predict `"Down"` as `"Up"` more often than it should.
+
+if you want a more visual representation of the confusion matrix you can pipe the result of `conf_mat()` into `autoplot()` to generate a ggplot2 chart.
 
 ```{r}
 augment(lr_fit, new_data = Smarket) %>%
@@ -74,10 +118,16 @@ augment(lr_fit, new_data = Smarket) %>%
   autoplot(type = "heatmap")
 ```
 
+We can also calculate various performance metrics. One of the most common metrics is accuracy, which is how often the model predicted correctly as a percentage.
+
 ```{r}
 augment(lr_fit, new_data = Smarket) %>%
   accuracy(truth = Direction, estimate = .pred_class)
 ```
+
+and we see that the accuracy isn't great either which is obvious already looking at the confusion matrix.
+
+We just fit a model and evaluated it on the same data. This doesn't give us that much information about the model performance. Let us instead split up the data, train it on some of it and then evaluate it on the other part of the data. Since we are working with some data that has a time component, it is natural to fit the model using the first year's worth of data and evaluate it on the last year. This would more closely match how such a model would be used in real life.
 
 ```{r}
 Smarket_train <- Smarket %>%
@@ -87,46 +137,66 @@ Smarket_test <- Smarket %>%
   filter(Year == 2005)
 ```
 
+Now that we have split the data into `Smarket_train` and `Smarket_test` we can fit a logistic regression model to `Smarket_train` and evaluate it on `Smarket_test` to see how well the model generalizes.
+
 ```{r}
-lr_fit <- lr_spec %>%
+lr_fit2 <- lr_spec %>%
   fit(
     Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume,
     data = Smarket_train
     )
 ```
 
+And we will evaluate on the testing data set.
+
 ```{r}
-augment(lr_fit, new_data = Smarket_test) %>%
+augment(lr_fit2, new_data = Smarket_test) %>%
   conf_mat(truth = Direction, estimate = .pred_class) 
 
-augment(lr_fit, new_data = Smarket_test) %>%
+augment(lr_fit2, new_data = Smarket_test) %>%
   accuracy(truth = Direction, estimate = .pred_class) 
 ```
 
+We see that this model is not more likely to predict `"Down"` rather than `"Up"`. Also, note how the model performs worse than the last model. This is expected since we are evaluating on new data.
+
+We recall that the logistic regression model had underwhelming p-values. Let us see what happens if we remove some of the variables that appear not to be helpful we might achieve a more predictive model since the variables that do not have a relationship with the response will cause an increase in variance without a decrease in bias.
+
 ```{r}
-lr_fit <- lr_spec %>%
+lr_fit3 <- lr_spec %>%
   fit(
     Direction ~ Lag1 + Lag2,
     data = Smarket_train
     )
-```
 
-```{r}
-augment(lr_fit, new_data = Smarket_test) %>%
+augment(lr_fit3, new_data = Smarket_test) %>%
   conf_mat(truth = Direction, estimate = .pred_class) 
 
-augment(lr_fit, new_data = Smarket_test) %>%
+augment(lr_fit3, new_data = Smarket_test) %>%
   accuracy(truth = Direction, estimate = .pred_class) 
 ```
 
+And we see an increase in performance. The model is still not perfect but it is starting to perform better.
+
+Suppose that we want to predict the returns associated with particular values of `Lag1` and `Lag2`. In particular, we want to predict `Direction` on a day when `Lag1` and `Lag2` equal 1.2 and 1.1, respectively, and on a day when they equal 1.5 and −0.8.
+
+For this we start by creating a tibble corresponding to the scenarios we want to predict for
+
 ```{r}
-predict(
-  lr_fit,
-  new_data = tibble(Lag1 = c(1.2, 1.5), Lag2 = c(1.1, -0.8)), 
-  type = "prob"
+Smarket_new <- tibble(
+  Lag1 = c(1.2, 1.5), 
+  Lag2 = c(1.1, -0.8)
 )
 ```
 
+And then we will use `predict()`
+
+```{r}
+predict(
+  lr_fit3,
+  new_data = Smarket_new, 
+  type = "prob"
+)
+```
 
 ## Linear Discriminant Analysis
 
