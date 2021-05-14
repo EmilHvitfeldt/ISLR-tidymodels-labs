@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Chapter 5 Extra - comparing multiple models | ISLR tidymodels Labs</title>
+
+    <meta name="author" content="Emil Hvitfeldt" />
+  
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script>
+  <script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script>
+    <script src="libs/header-attrs-2.7.13/header-attrs.js"></script>
+    <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
+    <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
+    <script src="libs/bs3compat-0.2.4.9003/tabs.js"></script>
+    <script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script>
+    <link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet" />
+    <script src="libs/bs4_book-1.0.0/bs4_book.js"></script>
+    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script>
+
+  <!-- CSS -->
+    
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">ISLR tidymodels Labs</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+      </form>
+
+      <nav aria-label="Table of contents">
+        <h2>Table of contents</h2>
+        <div id="book-toc"></div>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="#">View book source <i class="fab fa-github"></i></a></li></p>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="col-sm-12 col-md-9 col-lg-7" id="content">
+<div id="extra---comparing-multiple-models" class="section level1" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Extra - comparing multiple models</h1>
+<p>This section is new and not part of ISLR. We have fitted a lot of different models in this lab. And we were able to calculate the performance metrics one by one, but it is not ideal if we want to compare the different models. Below is an example of how you can more conveniently calculate performance metrics for multiple models at the same time.</p>
+<p>Start of by creating a named list of the fitted models you want to evaluate. I have made sure only to include models that were fitted on the same parameters to make it easier to compare them.</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="extra-comparing-multiple-models.html#cb123-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;logistic regression&quot;</span> <span class="ot">=</span> lr_fit3,</span>
+<span id="cb123-2"><a href="extra-comparing-multiple-models.html#cb123-2" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;LDA&quot;</span> <span class="ot">=</span> lda_fit,</span>
+<span id="cb123-3"><a href="extra-comparing-multiple-models.html#cb123-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;QDA&quot;</span> <span class="ot">=</span> qda_fit,</span>
+<span id="cb123-4"><a href="extra-comparing-multiple-models.html#cb123-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;KNN&quot;</span> <span class="ot">=</span> knn_fit)</span></code></pre></div>
+<p>Next use <code>imap_dfr()</code> from the <a href="https://purrr.tidyverse.org/">purrr</a> package to apply <code>augment()</code> to each of the models using the testing data set. <code>.id = "model"</code> creates a column named <code>"model"</code> that is added to the resulting tibble using the names of <code>models</code>.</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="extra-comparing-multiple-models.html#cb124-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">imap_dfr</span>(models, augment, </span>
+<span id="cb124-2"><a href="extra-comparing-multiple-models.html#cb124-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">new_data =</span> Smarket_test, <span class="at">.id =</span> <span class="st">&quot;model&quot;</span>)</span>
+<span id="cb124-3"><a href="extra-comparing-multiple-models.html#cb124-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-4"><a href="extra-comparing-multiple-models.html#cb124-4" aria-hidden="true" tabindex="-1"></a>preds <span class="sc">%&gt;%</span></span>
+<span id="cb124-5"><a href="extra-comparing-multiple-models.html#cb124-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(model, Direction, .pred_class, .pred_Down, .pred_Up)</span></code></pre></div>
+<pre><code>## # A tibble: 1,008 x 5
+##    model               Direction .pred_class .pred_Down .pred_Up
+##    &lt;chr&gt;               &lt;fct&gt;     &lt;fct&gt;            &lt;dbl&gt;    &lt;dbl&gt;
+##  1 logistic regression Down      Up               0.490    0.510
+##  2 logistic regression Down      Up               0.479    0.521
+##  3 logistic regression Down      Up               0.467    0.533
+##  4 logistic regression Up        Up               0.474    0.526
+##  5 logistic regression Down      Up               0.493    0.507
+##  6 logistic regression Up        Up               0.494    0.506
+##  7 logistic regression Down      Up               0.495    0.505
+##  8 logistic regression Up        Up               0.487    0.513
+##  9 logistic regression Down      Up               0.491    0.509
+## 10 logistic regression Up        Up               0.484    0.516
+## # … with 998 more rows</code></pre>
+<p>we have seen how to use <code>accuracy()</code> a lot of times by now, but it is not the only metric to use for classification, and yardstick provides <a href="https://yardstick.tidymodels.org/reference/index.html#section-classification-metrics">many more</a>.
+You can combine multiple different metrics together with <code>metric_set()</code></p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="extra-comparing-multiple-models.html#cb126-1" aria-hidden="true" tabindex="-1"></a>multi_metric <span class="ot">&lt;-</span> <span class="fu">metric_set</span>(accuracy, sensitivity, specificity)</span></code></pre></div>
+<p>and then the resulting function can be applied to calculate multiple metrics at the same time. All of the yardstick works with grouped tibbles so by calling <code>group_by(model)</code> we can calculate the metrics for each of the models in one go.</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="extra-comparing-multiple-models.html#cb127-1" aria-hidden="true" tabindex="-1"></a>preds <span class="sc">%&gt;%</span></span>
+<span id="cb127-2"><a href="extra-comparing-multiple-models.html#cb127-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(model) <span class="sc">%&gt;%</span></span>
+<span id="cb127-3"><a href="extra-comparing-multiple-models.html#cb127-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">multi_metric</span>(<span class="at">truth =</span> Direction, <span class="at">estimate =</span> .pred_class)</span></code></pre></div>
+<pre><code>## # A tibble: 12 x 4
+##    model               .metric  .estimator .estimate
+##    &lt;chr&gt;               &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+##  1 KNN                 accuracy binary         0.5  
+##  2 LDA                 accuracy binary         0.560
+##  3 logistic regression accuracy binary         0.560
+##  4 QDA                 accuracy binary         0.599
+##  5 KNN                 sens     binary         0.387
+##  6 LDA                 sens     binary         0.315
+##  7 logistic regression sens     binary         0.315
+##  8 QDA                 sens     binary         0.270
+##  9 KNN                 spec     binary         0.589
+## 10 LDA                 spec     binary         0.752
+## 11 logistic regression spec     binary         0.752
+## 12 QDA                 spec     binary         0.858</code></pre>
+<p>The same technique can be used to create ROC curves.</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="extra-comparing-multiple-models.html#cb129-1" aria-hidden="true" tabindex="-1"></a>preds <span class="sc">%&gt;%</span></span>
+<span id="cb129-2"><a href="extra-comparing-multiple-models.html#cb129-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(model) <span class="sc">%&gt;%</span></span>
+<span id="cb129-3"><a href="extra-comparing-multiple-models.html#cb129-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_curve</span>(Direction, .pred_Down) <span class="sc">%&gt;%</span></span>
+<span id="cb129-4"><a href="extra-comparing-multiple-models.html#cb129-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code></pre></div>
+<p><img src="04-classification_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p>Here you can’t see the LDA because it lies perfectly under the logistic regression.</p>
+
+</div>
+  </main>
+
+  <div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page">
+      <h2>On this page</h2>
+      <div id="book-on-this-page"></div>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          <li><a id="book-source" href="#">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="#">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5">
+  <div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-14.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+
+
+</body>
+
+</html>

@@ -17,7 +17,7 @@ library(tidymodels)
 
 ```
 ## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.0.9     
+## ✓ dials        0.0.9          ✓ rsample      0.1.0.9000
 ## ✓ dplyr        1.0.6          ✓ tibble       3.1.1     
 ## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
 ## ✓ infer        0.5.4          ✓ tune         0.1.5     
@@ -76,7 +76,7 @@ augment(lm_fit, new_data = Auto_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        5.11
+## 1 rmse    standard        4.93
 ```
 
 
@@ -95,7 +95,7 @@ augment(poly_fit, new_data = Auto_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        4.54
+## 1 rmse    standard        4.25
 ```
 
 
@@ -120,7 +120,7 @@ augment(poly_fit, new_data = Auto_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        4.54
+## 1 rmse    standard        4.25
 ```
 
 
@@ -144,7 +144,7 @@ augment(poly_fit, new_data = Auto_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        4.66
+## 1 rmse    standard        4.35
 ```
 
 ## Leave-One-Out Cross-Validation
@@ -197,26 +197,26 @@ collect_metrics(tune_res)
 ## # A tibble: 20 x 7
 ##    degree .metric .estimator  mean     n std_err .config              
 ##     <dbl> <chr>   <chr>      <dbl> <int>   <dbl> <chr>                
-##  1      1 rmse    standard   4.84     10  0.194  Preprocessor01_Model1
-##  2      1 rsq     standard   0.635    10  0.0209 Preprocessor01_Model1
-##  3      2 rmse    standard   4.29     10  0.155  Preprocessor02_Model1
-##  4      2 rsq     standard   0.709    10  0.0224 Preprocessor02_Model1
-##  5      3 rmse    standard   4.31     10  0.154  Preprocessor03_Model1
-##  6      3 rsq     standard   0.707    10  0.0219 Preprocessor03_Model1
-##  7      4 rmse    standard   4.33     10  0.152  Preprocessor04_Model1
-##  8      4 rsq     standard   0.706    10  0.0217 Preprocessor04_Model1
-##  9      5 rmse    standard   4.30     10  0.149  Preprocessor05_Model1
-## 10      5 rsq     standard   0.710    10  0.0208 Preprocessor05_Model1
-## 11      6 rmse    standard   4.32     10  0.149  Preprocessor06_Model1
-## 12      6 rsq     standard   0.708    10  0.0203 Preprocessor06_Model1
-## 13      7 rmse    standard   4.34     10  0.152  Preprocessor07_Model1
-## 14      7 rsq     standard   0.705    10  0.0203 Preprocessor07_Model1
-## 15      8 rmse    standard   4.37     10  0.151  Preprocessor08_Model1
-## 16      8 rsq     standard   0.704    10  0.0212 Preprocessor08_Model1
-## 17      9 rmse    standard   4.41     10  0.172  Preprocessor09_Model1
-## 18      9 rsq     standard   0.702    10  0.0226 Preprocessor09_Model1
-## 19     10 rmse    standard   4.56     10  0.158  Preprocessor10_Model1
-## 20     10 rsq     standard   0.689    10  0.0198 Preprocessor10_Model1
+##  1      1 rmse    standard   4.81     10  0.172  Preprocessor01_Model1
+##  2      1 rsq     standard   0.621    10  0.0316 Preprocessor01_Model1
+##  3      2 rmse    standard   4.37     10  0.209  Preprocessor02_Model1
+##  4      2 rsq     standard   0.677    10  0.0436 Preprocessor02_Model1
+##  5      3 rmse    standard   4.40     10  0.217  Preprocessor03_Model1
+##  6      3 rsq     standard   0.675    10  0.0446 Preprocessor03_Model1
+##  7      4 rmse    standard   4.43     10  0.218  Preprocessor04_Model1
+##  8      4 rsq     standard   0.670    10  0.0453 Preprocessor04_Model1
+##  9      5 rmse    standard   4.42     10  0.203  Preprocessor05_Model1
+## 10      5 rsq     standard   0.674    10  0.0436 Preprocessor05_Model1
+## 11      6 rmse    standard   4.41     10  0.189  Preprocessor06_Model1
+## 12      6 rsq     standard   0.670    10  0.0423 Preprocessor06_Model1
+## 13      7 rmse    standard   4.40     10  0.176  Preprocessor07_Model1
+## 14      7 rsq     standard   0.670    10  0.0420 Preprocessor07_Model1
+## 15      8 rmse    standard   4.41     10  0.175  Preprocessor08_Model1
+## 16      8 rsq     standard   0.670    10  0.0420 Preprocessor08_Model1
+## 17      9 rmse    standard   4.47     10  0.207  Preprocessor09_Model1
+## 18      9 rsq     standard   0.663    10  0.0445 Preprocessor09_Model1
+## 19     10 rmse    standard   4.50     10  0.227  Preprocessor10_Model1
+## 20     10 rsq     standard   0.658    10  0.0465 Preprocessor10_Model1
 ```
 
 ```r
@@ -227,11 +227,11 @@ show_best(tune_res, metric = "rmse")
 ## # A tibble: 5 x 7
 ##   degree .metric .estimator  mean     n std_err .config              
 ##    <dbl> <chr>   <chr>      <dbl> <int>   <dbl> <chr>                
-## 1      2 rmse    standard    4.29    10   0.155 Preprocessor02_Model1
-## 2      5 rmse    standard    4.30    10   0.149 Preprocessor05_Model1
-## 3      3 rmse    standard    4.31    10   0.154 Preprocessor03_Model1
-## 4      6 rmse    standard    4.32    10   0.149 Preprocessor06_Model1
-## 5      4 rmse    standard    4.33    10   0.152 Preprocessor04_Model1
+## 1      2 rmse    standard    4.37    10   0.209 Preprocessor02_Model1
+## 2      3 rmse    standard    4.40    10   0.217 Preprocessor03_Model1
+## 3      7 rmse    standard    4.40    10   0.176 Preprocessor07_Model1
+## 4      6 rmse    standard    4.41    10   0.189 Preprocessor06_Model1
+## 5      8 rmse    standard    4.41    10   0.175 Preprocessor08_Model1
 ```
 
 
@@ -286,7 +286,7 @@ final_fit
 ## 
 ## Coefficients:
 ##       (Intercept)  horsepower_poly_1  horsepower_poly_2  
-##             23.49            -106.32              38.94
+##             23.34            -104.85              34.39
 ```
 
 ## The Bootstrap
@@ -314,16 +314,16 @@ alpha_res
 ## # A tibble: 1,000 x 3
 ##    splits           id            alpha
 ##    <list>           <chr>         <dbl>
-##  1 <split [100/37]> Bootstrap0001 0.457
-##  2 <split [100/38]> Bootstrap0002 0.522
-##  3 <split [100/33]> Bootstrap0003 0.482
-##  4 <split [100/35]> Bootstrap0004 0.614
-##  5 <split [100/35]> Bootstrap0005 0.598
-##  6 <split [100/38]> Bootstrap0006 0.624
-##  7 <split [100/34]> Bootstrap0007 0.700
-##  8 <split [100/40]> Bootstrap0008 0.416
-##  9 <split [100/34]> Bootstrap0009 0.540
-## 10 <split [100/36]> Bootstrap0010 0.735
+##  1 <split [100/38]> Bootstrap0001 0.674
+##  2 <split [100/41]> Bootstrap0002 0.586
+##  3 <split [100/31]> Bootstrap0003 0.701
+##  4 <split [100/33]> Bootstrap0004 0.572
+##  5 <split [100/35]> Bootstrap0005 0.684
+##  6 <split [100/36]> Bootstrap0006 0.530
+##  7 <split [100/35]> Bootstrap0007 0.609
+##  8 <split [100/37]> Bootstrap0008 0.530
+##  9 <split [100/36]> Bootstrap0009 0.619
+## 10 <split [100/39]> Bootstrap0010 0.475
 ## # … with 990 more rows
 ```
 
@@ -350,6 +350,6 @@ boot_res %>%
 ## # A tibble: 2 x 3
 ##   term          mean      sd
 ##   <chr>        <dbl>   <dbl>
-## 1 (Intercept) 39.8   0.718  
-## 2 horsepower  -0.156 0.00620
+## 1 (Intercept) 39.7   0.691  
+## 2 horsepower  -0.156 0.00614
 ```

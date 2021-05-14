@@ -15,6 +15,7 @@ linear-discriminant-analysis
 quadratic-discriminant-analysis
 k-nearest-neighbors
 an-application-to-caravan-insurance-data
+extra---comparing-multiple-models
 resampling-methods
 the-validation-set-approach
 leave-one-out-cross-validation

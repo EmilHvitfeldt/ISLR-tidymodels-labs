@@ -1,7 +1,7 @@
 --- 
 title: "ISLR tidymodels Labs"
 author: "Emil Hvitfeldt"
-date: "2021-05-12"
+date: "2021-05-14"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -50,7 +50,7 @@ This version of the book was built with R version 4.0.2 (2020-06-22) and the fol
 |recipes      |0.1.16     |CRAN (R 4.0.2)                       |
 |rpart        |4.1-15     |CRAN (R 4.0.2)                       |
 |rpart.plot   |3.0.9      |CRAN (R 4.0.2)                       |
-|rsample      |0.0.9      |CRAN (R 4.0.2)                       |
+|rsample      |0.1.0.9000 |Github (tidymodels/rsample\@1aac816) |
 |scico        |1.2.0      |CRAN (R 4.0.2)                       |
 |tibble       |3.1.1      |CRAN (R 4.0.2)                       |
 |tidymodels   |0.1.3      |CRAN (R 4.0.2)                       |

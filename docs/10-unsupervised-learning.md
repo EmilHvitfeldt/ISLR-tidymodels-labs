@@ -17,7 +17,7 @@ library(tidymodels)
 
 ```
 ## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.0.9     
+## ✓ dials        0.0.9          ✓ rsample      0.1.0.9000
 ## ✓ dplyr        1.0.6          ✓ tibble       3.1.1     
 ## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
 ## ✓ infer        0.5.4          ✓ tune         0.1.5     

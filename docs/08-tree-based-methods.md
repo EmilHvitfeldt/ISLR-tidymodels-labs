@@ -17,7 +17,7 @@ library(tidymodels)
 
 ```
 ## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.0.9     
+## ✓ dials        0.0.9          ✓ rsample      0.1.0.9000
 ## ✓ dplyr        1.0.6          ✓ tibble       3.1.1     
 ## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
 ## ✓ infer        0.5.4          ✓ tune         0.1.5     
@@ -173,8 +173,8 @@ augment(class_tree_fit, new_data = Carseats_train) %>%
 ```
 ##           Truth
 ## Prediction  No Yes
-##        No  154  26
-##        Yes  19 101
+##        No  162  32
+##        Yes  15  91
 ```
 
 
@@ -186,8 +186,8 @@ augment(class_tree_fit, new_data = Carseats_test) %>%
 ```
 ##           Truth
 ## Prediction No Yes
-##        No  51  11
-##        Yes 12  26
+##        No  50  17
+##        Yes  9  24
 ```
 
 
@@ -310,7 +310,7 @@ augment(bagging_fit, new_data = Boston_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        3.85
+## 1 rmse    standard        2.53
 ```
 
 
@@ -367,7 +367,7 @@ augment(rf_fit, new_data = Boston_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        3.72
+## 1 rmse    standard        2.50
 ```
 
 
@@ -412,7 +412,7 @@ augment(boost_fit, new_data = Boston_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        3.73
+## 1 rmse    standard        2.57
 ```
 
 
@@ -447,7 +447,7 @@ augment(boost_fit, new_data = Boston_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        3.57
+## 1 rmse    standard        2.62
 ```
 
 
