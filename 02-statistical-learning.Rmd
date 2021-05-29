@@ -1,4 +1,4 @@
-# Statististical learning
+# Statistical learning
 
 The original labs introduce you to the basics of R. We will not repeat that endeavor here as it was done well. You will notice that the labs in this book will look slightly different since we are following the [tidyverse style guide](https://style.tidyverse.org/).
 
