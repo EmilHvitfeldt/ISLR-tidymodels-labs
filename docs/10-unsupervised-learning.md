@@ -1,5 +1,7 @@
 # Unsupervised Learning
 
+This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. One downside at this moment is that clustering is not well integrated into tidymodels at this time. But we are still able to use some of the features in tidymodels.
+
 
 ```r
 library(tidymodels)
@@ -107,26 +109,6 @@ library(proxy)
 ## The following object is masked from 'package:base':
 ## 
 ##     as.matrix
-```
-
-```r
-library(mclust)
-```
-
-```
-## Package 'mclust' version 5.4.7
-## Type 'citation("mclust")' for citing this R package in publications.
-```
-
-```
-## 
-## Attaching package: 'mclust'
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     map
 ```
 
 ## Principal Components Analysis
@@ -321,47 +303,69 @@ augment(usarrests_pca)
 
 ## Kmeans Clustering
 
+The `kmeans()` function can be used to perform K-means clustering in R. But before we get to that let us create a synthetic data set that we know has groups.
+
 
 ```r
 set.seed(2)
-x <- matrix(rnorm(50 * 2), ncol = 2)
-x[1:25, 1] <- x[1:25, 1] + 3
-x[1:25, 2] <- x[1:25, 2] - 4
 
-colnames(x) <- c("V1", "V2")
-x_df <- as_tibble(x)
-x_df
+x_df <- tibble(
+  V1 = rnorm(n = 50, mean = rep(c(0, 3), each = 25)),
+  V2 = rnorm(n = 50, mean = rep(c(0, -4), each = 25))
+)
 ```
 
-```
-## # A tibble: 50 x 2
-##       V1    V2
-##    <dbl> <dbl>
-##  1  2.10 -4.84
-##  2  3.18 -1.93
-##  3  4.59 -4.56
-##  4  1.87 -2.72
-##  5  2.92 -5.05
-##  6  3.13 -5.97
-##  7  3.71 -4.32
-##  8  2.76 -3.06
-##  9  4.98 -2.86
-## 10  2.86 -2.33
-## # … with 40 more rows
-```
+And we can plot it with ggplot2 to see that the groups are really there. Note that we didn't include this grouping information in `x_df` as we are trying to emulate a situation where we don't know of the possible underlying clusters.
 
 
 ```r
+x_df %>%
+  ggplot(aes(V1, V2, color = rep(c("A", "B"), each = 25))) +
+  geom_point()
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+
+the `kmeans()` functions takes a matrix or data.frame and `centers` which is the number of clusters we want `kmeans()` to find. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
+
+
+```r
+set.seed(1234)
 res_kmeans <- kmeans(x_df, centers = 3, nstart = 20)
-glance(res_kmeans)
+```
+
+This fitted model has a lot of different kinds of information.
+
+
+```r
+res_kmeans
 ```
 
 ```
-## # A tibble: 1 x 4
-##   totss tot.withinss betweenss  iter
-##   <dbl>        <dbl>     <dbl> <int>
-## 1  474.         98.0      376.     2
+## K-means clustering with 3 clusters of sizes 11, 23, 16
+## 
+## Cluster means:
+##          V1          V2
+## 1 2.5355362 -2.48605364
+## 2 0.2339095  0.04414551
+## 3 2.8241300 -5.01221675
+## 
+## Clustering vector:
+##  [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 2 2 2 1 2 2 2 2 3 1 1 1 3 1 3 3 3 3 1 3 3
+## [39] 3 1 1 1 3 3 3 3 1 3 3 3
+## 
+## Within cluster sum of squares by cluster:
+## [1] 14.56698 54.84869 26.98215
+##  (between_SS / total_SS =  76.8 %)
+## 
+## Available components:
+## 
+## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+## [6] "betweenss"    "size"         "iter"         "ifault"
 ```
+
+And we can use [broom](https://broom.tidymodels.org/) functions to extract information in tidy formats. The `tidy()` function returns information for each cluster, including their position, size and within-cluster sum-of-squares.
+
 
 ```r
 tidy(res_kmeans)
@@ -369,12 +373,29 @@ tidy(res_kmeans)
 
 ```
 ## # A tibble: 3 x 5
-##       V1      V2  size withinss cluster
-##    <dbl>   <dbl> <int>    <dbl> <fct>  
-## 1  3.78  -4.56      17     25.7 1      
-## 2 -0.382 -0.0874    23     52.7 2      
-## 3  2.30  -2.70      10     19.6 3
+##      V1      V2  size withinss cluster
+##   <dbl>   <dbl> <int>    <dbl> <fct>  
+## 1 2.54  -2.49      11     14.6 1      
+## 2 0.234  0.0441    23     54.8 2      
+## 3 2.82  -5.01      16     27.0 3
 ```
+
+The `glance()` function returns model wise metrics. One of these is `tot.withinss` which is the total within-cluster sum-of-squares that we seek to minimize when we perform K-means clustering.
+
+
+```r
+glance(res_kmeans)
+```
+
+```
+## # A tibble: 1 x 4
+##   totss tot.withinss betweenss  iter
+##   <dbl>        <dbl>     <dbl> <int>
+## 1  416.         96.4      320.     2
+```
+
+Lastly, we can see what cluster each observation belongs to by using `augment()` which "predict" which cluster a given observation belongs to.
+
 
 ```r
 augment(res_kmeans, data = x_df)
@@ -382,22 +403,98 @@ augment(res_kmeans, data = x_df)
 
 ```
 ## # A tibble: 50 x 3
-##       V1    V2 .cluster
-##    <dbl> <dbl> <fct>   
-##  1  2.10 -4.84 1       
-##  2  3.18 -1.93 3       
-##  3  4.59 -4.56 1       
-##  4  1.87 -2.72 3       
-##  5  2.92 -5.05 1       
-##  6  3.13 -5.97 1       
-##  7  3.71 -4.32 1       
-##  8  2.76 -3.06 3       
-##  9  4.98 -2.86 1       
-## 10  2.86 -2.33 3       
+##         V1     V2 .cluster
+##      <dbl>  <dbl> <fct>   
+##  1 -0.897  -0.838 2       
+##  2  0.185   2.07  2       
+##  3  1.59   -0.562 2       
+##  4 -1.13    1.28  2       
+##  5 -0.0803 -1.05  2       
+##  6  0.132  -1.97  2       
+##  7  0.708  -0.323 2       
+##  8 -0.240   0.936 2       
+##  9  1.98    1.14  2       
+## 10 -0.139   1.67  2       
 ## # … with 40 more rows
 ```
 
+we can visualize the result of `augment()` to see how well the clustering performed.
+
+
+```r
+augment(res_kmeans, data = x_df) %>%
+  ggplot(aes(V1, V2, color = .cluster)) +
+  geom_point()
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+
+This is all well and good, but it would be nice if we could try out a number of different clusters and then find the best one. We will use the `mutate()` and `map()` combo to fit multiple models and extract information from them. We remember to set a seed to ensure reproducibility.
+
+
+```r
+set.seed(1234)
+multi_kmeans <- tibble(k = 1:10) %>%
+  mutate(
+    model = purrr::map(k, ~ kmeans(x_df, centers = .x, nstart = 20)),
+    tot.withinss = purrr::map_dbl(model, ~ glance(.x)$tot.withinss)
+  )
+
+multi_kmeans
+```
+
+```
+## # A tibble: 10 x 3
+##        k model    tot.withinss
+##    <int> <list>          <dbl>
+##  1     1 <kmeans>        416. 
+##  2     2 <kmeans>        127. 
+##  3     3 <kmeans>         96.4
+##  4     4 <kmeans>         73.4
+##  5     5 <kmeans>         57.4
+##  6     6 <kmeans>         42.4
+##  7     7 <kmeans>         32.4
+##  8     8 <kmeans>         27.9
+##  9     9 <kmeans>         23.5
+## 10    10 <kmeans>         20.3
+```
+
+Now that we have the total within-cluster sum-of-squares we can plot them against `k` so we can use the [elbow method](https://en.wikipedia.org/wiki/Elbow_method_(clustering)) to find the optimal number of clusters.
+
+
+```r
+multi_kmeans %>%
+  ggplot(aes(k, tot.withinss)) +
+  geom_point() +
+  geom_line()
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+
+We see an elbow at `k = 2` which makes us happy since the data set is specifically created to have 2 clusters. We can now extract the model where `k = 2` from `multi_kmeans`.
+
+
+```r
+final_kmeans <- multi_kmeans %>%
+  filter(k == 2) %>%
+  pull(model) %>%
+  pluck(1)
+```
+
+And we can finish by visualizing the clusters it found.
+
+
+```r
+augment(final_kmeans, data = x_df) %>%
+  ggplot(aes(V1, V2, color = .cluster)) +
+  geom_point()
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+
 ## Hierarchical Clustering
+
+The `hclust()` function is one way to perform hierarchical clustering in R. It only needs one input and that is a dissimilarity structure as produced by `dist()`. Furthermore, we can specify a couple of things, including the agglomeration method. Let us cluster this data in a couple of different ways to see how the choice of agglomeration method changes the clustering. 
 
 
 ```r
@@ -412,20 +509,33 @@ res_hclust_average <- x_df %>%
 res_hclust_single <- x_df %>%
   dist() %>%
   hclust(method = "single")
-
-wrap_plots(
-  fviz_dend(res_hclust_complete, main = "complete", k = 2),
-  fviz_dend(res_hclust_average, main = "average", k = 2),
-  fviz_dend(res_hclust_single, main = "single", k = 2),
-  ncol = 1
-)
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+the [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) provides functions (`fviz_dend()`) to visualize the clustering created using `hclust()`. We use `fviz_dend()` to show the dendrogram.
 
 
 ```r
-# clustering with scaled features
+fviz_dend(res_hclust_complete, main = "complete", k = 2)
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+
+```r
+fviz_dend(res_hclust_average, main = "average", k = 2)
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-18-2.png" width="672" />
+
+```r
+fviz_dend(res_hclust_single, main = "single", k = 2)
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-18-3.png" width="672" />
+
+If we don't know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We can perform scaling by using `scale()` before `dist()`.
+
+
+```r
 x_df %>%
   scale() %>%
   dist() %>%
@@ -433,7 +543,9 @@ x_df %>%
   fviz_dend(k = 2)
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+Another way of calculating distances is based on correlation. This only makes sense if has 3 or more variables.
+
 
 ```r
 # correlation based distance
@@ -446,7 +558,7 @@ x %>%
   fviz_dend()
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-8-2.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 
 ## PCA on the NCI60 Data
 
@@ -557,7 +669,7 @@ wrap_plots(
 )
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-21-1.png" width="672" />
 
 ```r
 summary(nci60_pca)$importance %>%
@@ -580,51 +692,76 @@ summary(nci60_pca)$importance %>%
 ## * `Cumulative Proportion` -> Cumulative.Proportion
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-9-2.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-21-2.png" width="672" />
 
 ## Clustering on nci60 dataset
 
+Let us now see what happens if we perform clustering on the `nci60` data set. Before we start it would be good if we create a scaled version of this data set. We can use the recipes package to perform those transformations. 
+
 
 ```r
-nci60_scaled_mat <- nci60 %>%
-  select(-label) %>%
-  as.matrix() %>%
-  scale()
-rownames(nci60_scaled_mat) <- as.character(nci60$label)
-
-# hierarchical clustering of NIC60 data
-produce_dend <- function(method) {
-  nci60_scaled_mat %>%
-    dist() %>%
-    hclust(method = method) %>%
-    fviz_dend()
-}
-
-wrap_plots(
-  produce_dend("complete"),
-  produce_dend("average"),
-  produce_dend("single"),
-  ncol = 1
-)
+nci60_scaled <- recipe(~ ., data = nci60) %>%
+  step_rm(label) %>%
+  step_normalize(all_predictors()) %>%
+  prep() %>%
+  bake(new_data = NULL)
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+Now we start by fitting multiple hierarchical clustering models using different agglomeration methods.
+
 
 ```r
-res_hclust_complete <- nci60_scaled_mat %>%
-  dist() %>%
-  hclust(method = "complete")
+nci60_complete <- nci60_scaled %>%
+    dist() %>%
+    hclust(method = "complete")
 
-res_hclust_complete %>%
+nci60_average <- nci60_scaled %>%
+    dist() %>%
+    hclust(method = "average")
+
+nci60_single <- nci60_scaled %>%
+    dist() %>%
+    hclust(method = "single")
+```
+
+We then visualize them to see if any of them have some good natural separations.
+
+
+```r
+fviz_dend(nci60_complete, main = "Complete")
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+
+```r
+fviz_dend(nci60_average, main = "Average")
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-24-2.png" width="672" />
+
+```r
+fviz_dend(nci60_single, main = "Single")
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-24-3.png" width="672" />
+
+We now color according to `k = 4` and we get the following separations.
+
+
+```r
+nci60_complete %>%
   fviz_dend(k = 4, main = "hclust(complete) on nci60")
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-10-2.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+
+We now take the clustering id extracted with `cutree` and calculate which Label is the most common within each cluster.
+
 
 ```r
 tibble(
   label = nci60$label,
-  cluster_id = cutree(res_hclust_complete, k = 4)
+  cluster_id = cutree(nci60_complete, k = 4)
 ) %>%
   count(label, cluster_id) %>%
   group_by(cluster_id) %>%
@@ -645,18 +782,16 @@ tibble(
 ## 6 COLON             4     5 0.556
 ```
 
+We can also see what happens if we try to fit a K-means clustering. We liked 4 clusters from earlier so let's stick with that.
+
+
 ```r
 set.seed(2)
-res_kmeans_scaled <- kmeans(nci60_scaled_mat, centers = 4, nstart = 20)
-glance(res_kmeans_scaled)
+res_kmeans_scaled <- kmeans(nci60_scaled, centers = 4, nstart = 50)
 ```
 
-```
-## # A tibble: 1 x 4
-##    totss tot.withinss betweenss  iter
-##    <dbl>        <dbl>     <dbl> <int>
-## 1 430290      344567.    85723.     3
-```
+We can again use `tidy()` to extract cluster information, note that we only look at `cluster`, `size`, and `withinss` as there are thousands of other variables denoting the location of the cluster.
+
 
 ```r
 tidy(res_kmeans_scaled) %>%
@@ -673,53 +808,43 @@ tidy(res_kmeans_scaled) %>%
 ## 4 4           8   44071.
 ```
 
+lastly, let us see how the two different methods we used compare against each other. Let us save the cluster ids in `cluster_kmeans` and `cluster_hclust` and then use `conf_mat()` in a different way to quickly generate a heatmap between the two methods.
+
+
 ```r
 cluster_kmeans <- res_kmeans_scaled$cluster
-cluster_hclust <- cutree(res_hclust_complete, k = 4)
+cluster_hclust <- cutree(nci60_complete, k = 4)
 
 tibble(
   kmeans = factor(cluster_kmeans),
   hclust = factor(cluster_hclust)
 ) %>%
-  conf_mat(kmeans, hclust)
+  conf_mat(kmeans, hclust) %>%
+  autoplot(type = "heatmap")
 ```
 
-```
-##           Truth
-## Prediction  1  2  3  4
-##          1 11 20  9  0
-##          2  0  7  0  0
-##          3  0  0  0  8
-##          4  9  0  0  0
-```
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-29-1.png" width="672" />
 
-```r
-adjustedRandIndex(cluster_kmeans, cluster_hclust)
-```
+There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).
 
-```
-## [1] 0.2238347
-```
+One last thing that is sometimes useful is to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of `nci60` and keep the 5 first components. (we could have started with `nci60` too if we added `step_rm()` and `step_normalize()`).
+
 
 ```r
-# pick first five PC and observe the clusters from hclust
-nci60_scaled_mat %>%
-  unname() %>%
-  prcomp() %>%
-  tidy() %>%
-  filter(PC <= 5) %>%
-  pivot_wider(
-    id_cols = row,
-    names_from = PC,
-    values_from = value,
-    names_prefix = "PC_"
-  ) %>%
-  select(-row) %>%
-  as.matrix() %>%
-  set_rownames(nci60$label) %>%
+nci60_pca <- recipe(~., nci60_scaled) %>%
+  step_pca(all_predictors(), num_comp = 5) %>%
+  prep() %>%
+  bake(new_data = NULL)
+```
+
+We can now use `hclust()` on this reduced data set, and sometimes we get quite good results since the clustering method doesn't have to work in high dimensions.
+
+
+```r
+nci60_pca %>%
   dist() %>%
   hclust() %>%
   fviz_dend(k = 4, main = "hclust on first five PCs")
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-10-3.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-31-1.png" width="672" />

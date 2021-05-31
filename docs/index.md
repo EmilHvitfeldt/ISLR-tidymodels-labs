@@ -1,7 +1,7 @@
 --- 
 title: "ISLR tidymodels Labs"
 author: "Emil Hvitfeldt"
-date: "2021-05-30"
+date: "2021-05-31"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]

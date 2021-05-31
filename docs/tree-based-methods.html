@@ -156,15 +156,15 @@
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">High</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction  No Yes
-##        No  148  19
-##        Yes  23 110</code></pre>
+##        No  150  24
+##        Yes  21 105</code></pre>
 <div class="sourceCode" id="cb267"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">class_tree_fit</span>, new_data <span class="op">=</span> <span class="va">Carseats_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">High</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction No Yes
-##        No  45   7
-##        Yes 20  28</code></pre>
+##        No  50  13
+##        Yes 15  22</code></pre>
 <div class="sourceCode" id="cb269"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">class_tree_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">class_tree_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>cost_complexity <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -369,7 +369,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-30.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-31.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -173,8 +173,8 @@ augment(class_tree_fit, new_data = Carseats_train) %>%
 ```
 ##           Truth
 ## Prediction  No Yes
-##        No  148  19
-##        Yes  23 110
+##        No  150  24
+##        Yes  21 105
 ```
 
 
@@ -186,8 +186,8 @@ augment(class_tree_fit, new_data = Carseats_test) %>%
 ```
 ##           Truth
 ## Prediction No Yes
-##        No  45   7
-##        Yes 20  28
+##        No  50  13
+##        Yes 15  22
 ```
 
 
