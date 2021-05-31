@@ -123,52 +123,110 @@ Leave-One-Out Cross-Validation is not integrated into the broader tidymodels fra
 
 ## k-Fold Cross-Validation
 
+Earlier we set `degree = 2` to create a second-degree polynomial regression model. But suppose we want to find the best value of `degree` that yields the "closest" fit. This is known as hyperparameter tuning and it is a case where we can use k-Fold Cross-Validation. To use k-Fold Cross-Validation we will be using the `tune` package, and we need 3 things to get it working:
+
+- A parsnip/workflow object with one or more arguments marked for tuning,
+- A `vfold_cv` rsample object of the cross-validation resamples,
+- A tibble denoting the values of hyperparameter values to be explored.
+
+we are doing the hyperparameter tuning on just one parameter, namely the `degree` argument in `step_poly()`. Creating a new recipe with `degree = tune()` indicated that we intend for `degree` to be tuned.
+
 ```{r}
-poly_rec <- recipe(mpg ~ horsepower, data = Auto_train) %>%
+poly_tuned_rec <- recipe(mpg ~ horsepower, data = Auto_train) %>%
   step_poly(horsepower, degree = tune())
+
+poly_tuned_wf <- workflow() %>%
+  add_recipe(poly_tuned_rec) %>%
+  add_model(lm_spec)
 ```
 
+This means that would not be able to fit this workflow right now as the value of `degree` is unspecified, and if we try we get an error:
+
+```{r, warning=FALSE}
+fit(poly_tuned_wf, data = Auto_train)
+```
+
+The next thing we need to create is the k-Fold data set. This can be done using the `vfold_cv()` function. Note that the function uses `v` instead of *k* which is the terminology of ISLR. we set `v = 10` as a common choice for *k*.
+
 ```{r}
-lm_spec <- linear_reg() %>%
-  set_engine("lm")
-
-poly_wf <- workflow() %>%
-  add_recipe(poly_rec) %>%
-  add_model(lm_spec)
-
 Auto_folds <- vfold_cv(Auto_train, v = 10)
+Auto_folds
+```
 
+The result is a tibble of `vfold_split`s which is quite similar to the `rsplit` object we saw earlier.
+
+The last thing we need is a tibble of possible values we want to explore. Each of the tunable parameters in tidymodels has an associated function in the [dials package](https://dials.tidymodels.org/reference/index.html). We need to use the `degree()` function here, and we extend the range to have a max of 10. This dials function is then passed to `grid_regular()` to create a regular grid of values.
+
+```{r}
 degree_grid <- grid_regular(degree(range = c(1, 10)), levels = 10)
+```
 
+Using `grid_regular()` is a little overkill for this application since the following code would provide the same result. But once you have multiple parameters you want to tune it makes sure that everything is in check and properly named.
+
+```{r}
+degree_grid <- tibble(degree = seq(1, 10))
+```
+
+Now that all the necessary objects have been created we can pass them to `tune_grid()` which will fit the models within each fold for each value specified in `degree_grid`.
+
+```{r}
 tune_res <- tune_grid(
-  object = poly_wf, 
+  object = poly_tuned_wf, 
   resamples = Auto_folds, 
   grid = degree_grid
 )
 ```
 
-It can be helpful to add `control = control_grid(verbose = TRUE)` 
+It can be helpful to add `control = control_grid(verbose = TRUE)`, this will print out the progress. Especially helpful when the models take a while to fit. `tune_res` by itself isn't easily readable. Luckily `tune` provides a handful of helper functions.
+
+`autoplot()` gives a visual overview of the performance of different hyperparameter pairs.
 
 ```{r}
 autoplot(tune_res)
 ```
 
+It appears that the biggest jump in performance comes from going to `degree = 2`. Afterward, there might be a little bit of improvement but it isn't as obvious.
+
+The number used for plotting can be extracted directly with `collect_metrics()`. We also get an estimate of the standard error of the performance metric. We get this since we have 10 different estimates, one for each fold.
+
 ```{r}
 collect_metrics(tune_res)
 ```
+
+You can also use `show_best()` to only show the best performing models.
+
 ```{r}
 show_best(tune_res, metric = "rmse")
 ```
 
+We did see that the performance plateaued after `degree = 2`. There are a couple of function to select models by more sophisticated rules. `select_by_one_std_err()` and `select_by_pct_loss()`.  Here we use `select_by_one_std_err()` which selects the most simple model that is within one standard error of the numerically optimal results. We need to specify `degree` to tell `select_by_one_std_err()` which direction is more simple.
+
+You want to
+
+- use `desc(you_model_parameter)` if larger values lead to a simpler model
+- use `you_model_parameter` if smaller values lead to a simpler model
+
+lower polynomials models are simpler so we ditch `desc()`.
+
 ```{r}
-best_degree <- select_best(tune_res, metric = "rmse")
+select_by_one_std_err(tune_res, degree, metric = "rmse")
 ```
+
+This selected `degree = 2`. And we will use this value since we simpler models sometimes can be very beneficial. Especially if we want to explain what happens in it.
+
+```{r}
+best_degree <- select_by_one_std_err(tune_res, degree, metric = "rmse")
+```
+
+This selected value can be now be used to specify the previous unspecified `degree` argument in `poly_wf` using `finalize_workflow()`.
 
 ```{r}
 final_wf <- finalize_workflow(poly_wf, best_degree)
 
 final_wf
 ```
+
+This workflow can now be fitted. And we want to make sure we fit it on the full training data set.
 
 ```{r}
 final_fit <- fit(final_wf, Auto_train)
