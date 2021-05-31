@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 5 Resampling Methods | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.7.13/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9003/tabs.js"></script><script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -52,20 +52,22 @@
 <h1>
 <span class="header-section-number">5</span> Resampling Methods<a class="anchor" aria-label="anchor" href="#resampling-methods"><i class="fas fa-link"></i></a>
 </h1>
+<p>This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter introduces a lot of new packages.
+This chapter will bring <a href="https://www.tidymodels.org/start/resampling/">rsample</a> into view for creating resampled data frames as well as <a href="https://yardstick.tidymodels.org/">yardstick</a> to calculate performance metrics. Lastly, will we also use <a href="https://tune.tidymodels.org/">tune</a> to fit out models within said resamples. We also see a use of <a href="https://dials.tidymodels.org/">dials</a> which are used together with tune to select hyperparameter tuning values.</p>
 <div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## Registered S3 method overwritten by 'tune':
 ##   method                   from   
 ##   required_pkgs.model_spec parsnip</code></pre>
 <pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──</code></pre>
-<pre><code>## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.1.0.9000
-## ✓ dplyr        1.0.6          ✓ tibble       3.1.1     
-## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
-## ✓ infer        0.5.4          ✓ tune         0.1.5     
-## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
-## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
-## ✓ purrr        0.3.4          ✓ yardstick    0.0.8</code></pre>
+<pre><code>## ✓ broom        0.7.6           ✓ recipes      0.1.16.9000
+## ✓ dials        0.0.9           ✓ rsample      0.1.0      
+## ✓ dplyr        1.0.6           ✓ tibble       3.1.2      
+## ✓ ggplot2      3.3.3           ✓ tidyr        1.1.3      
+## ✓ infer        0.5.4           ✓ tune         0.1.5      
+## ✓ modeldata    0.1.0           ✓ workflows    0.2.2      
+## ✓ parsnip      0.1.6           ✓ workflowsets 0.0.2      
+## ✓ purrr        0.3.4           ✓ yardstick    0.0.8</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 ## x purrr::discard() masks scales::discard()
 ## x dplyr::filter()  masks stats::filter()
@@ -75,42 +77,88 @@
 <div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
 
-<span class="va">Auto</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Auto</span><span class="op">)</span>
-<span class="va">Portfolio</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Portfolio</span><span class="op">)</span></code></pre></div>
+<span class="va">Auto</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span><span class="va">Auto</span><span class="op">)</span></code></pre></div>
 <div id="the-validation-set-approach" class="section level2" number="5.1">
 <h2>
 <span class="header-section-number">5.1</span> The Validation Set Approach<a class="anchor" aria-label="anchor" href="#the-validation-set-approach"><i class="fas fa-link"></i></a>
 </h2>
+<p>When fitting a model it is often desired to be able to calculate a performance metric to quantify how well the model fits the data. If a model is evaluated on the data it was fit on you are quite likely to get over-optimistic results. It is therefore we split our data into testing and training. This way we can fit the model to data and evaluate it on some other that that is similar.</p>
+<p>Splitting of the data is done using random sampling, so it is advised to set a seed before splitting to assure we can reproduce the results.
+The <code>inintial_split()</code> function takes a data.frame and returns a <code>rsplit</code> object. This object contains information about which observations belong to which data set, testing, and training. This is where you would normally set a proportion of data that is used for training and how much is used for evaluation. This is set using the <code>prop</code> argument which I set to <code>0.5</code> to closely match what happened in ISLR. I’m also setting the <code>strata</code> argument. This argument makes sure that both sides of the split have roughly the same distribution for each value of <code>strata</code>. If a numeric variable is passed to <code>strata</code> then it is binned and distributions are matched within bins.</p>
 <div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">Auto_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">Auto</span><span class="op">)</span>
-
-<span class="va">Auto_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span>
-<span class="va">Auto_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></code></pre></div>
+<span class="va">Auto_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">Auto</span>, strata <span class="op">=</span> <span class="va">mpg</span>, prop <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="va">Auto_split</span></code></pre></div>
+<pre><code>## &lt;Analysis/Assess/Total&gt;
+## &lt;194/198/392&gt;</code></pre>
+<p>The testing and training data sets can be materialized using the <code>testing()</code> and <code>training()</code> functions respectively.</p>
 <div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Auto_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span>
+<span class="va">Auto_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span></code></pre></div>
+<p>And by looking at <code>Auto_train</code> and <code>Auto_test</code> we see that the lengths match what we expect.</p>
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Auto_train</span></code></pre></div>
+<pre><code>## # A tibble: 194 x 9
+##      mpg cylinders displacement horsepower weight acceleration  year origin
+##    &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1    15         8          350        165   3693         11.5    70      1
+##  2    16         8          304        150   3433         12      70      1
+##  3    14         8          440        215   4312          8.5    70      1
+##  4    14         8          455        225   4425         10      70      1
+##  5    10         8          307        200   4376         15      70      1
+##  6    17         6          250        100   3329         15.5    71      1
+##  7    14         8          400        175   4464         11.5    71      1
+##  8    14         8          351        153   4154         13.5    71      1
+##  9    14         8          318        150   4096         13      71      1
+## 10    13         8          400        170   4746         12      71      1
+## # … with 184 more rows, and 1 more variable: name &lt;fct&gt;</code></pre>
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Auto_test</span></code></pre></div>
+<pre><code>## # A tibble: 198 x 9
+##      mpg cylinders displacement horsepower weight acceleration  year origin
+##    &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1    18         8          318        150   3436         11      70      1
+##  2    17         8          302        140   3449         10.5    70      1
+##  3    15         8          429        198   4341         10      70      1
+##  4    14         8          454        220   4354          9      70      1
+##  5    15         8          390        190   3850          8.5    70      1
+##  6    15         8          383        170   3563         10      70      1
+##  7    14         8          340        160   3609          8      70      1
+##  8    15         8          400        150   3761          9.5    70      1
+##  9    14         8          455        225   3086         10      70      1
+## 10    22         6          198         95   2833         15.5    70      1
+## # … with 188 more rows, and 1 more variable: name &lt;fct&gt;</code></pre>
+<p>Now that we have a train-test split let us fit some models and evaluate their performance. Before we move on it is important to reiterate that you should only use the testing data set once! Once you have looked at the performance on the testing data set you should not modify your models. If you do you might overfit the model due to data leakage.</p>
+<p>Our modeling goal is to predict <code>mpg</code> by <code>horsepower</code> using a simple linear regression model, and a polynomial regression model.
+First, we set up a linear regression specification.</p>
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></code></pre></div>
+<p>And we fit it like normal. Note that we are fitting it using <code>Auto_train</code>.</p>
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> 
   <span class="fu">fit</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">horsepower</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<p>We can now use the <code>augment()</code> function to extract the prediction and <code>rmse()</code> to calculate the root mean squared error. This will be the testing RMSE since we are evaluating on <code>Auto_test</code>.</p>
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Auto_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard        4.93</code></pre>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">poly_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> 
-  <span class="fu">fit</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">horsepower</span>, <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">Auto_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
+## 1 rmse    standard        5.06</code></pre>
+<p>and we get a RMSE of 5.0583165. This particular value is going to vary depending on what seed number you picked since the random sampling used in splitting the data set will be slightly different.</p>
+<p>Using this framework makes it easy for us to calculate the training RMSE</p>
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard        4.25</code></pre>
-<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
+## 1 rmse    standard        4.74</code></pre>
+<p>Comparing these two values can give us a look into how generalizable the model is to data it hasn’t seen before. We do expect that the training RMSE to be lower than the testing RMSE but if you see a large difference there is an indication of overfitting or a shift between the training data set and testing data set. We don’t expect a shift here since the data sets were created with random sampling.</p>
+<p>Next we will fit a polynomial regression model. We can use the linear model specification <code>lm_spec</code> to add a preprocessing unit with <code>recipe()</code> and <code>step_poly()</code> to create the polynomial expansion of <code>horsepower</code>. we can combine these two with <code>workflow()</code> to create a workflow object.</p>
+<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">poly_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">horsepower</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_poly</span><span class="op">(</span><span class="va">horsepower</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 
@@ -118,22 +166,41 @@
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">poly_rec</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span>
 
-<span class="va">poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">poly_wf</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<span class="va">poly_wf</span></code></pre></div>
+<pre><code>## ══ Workflow ════════════════════════════════════════════════════════════════════
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## ── Preprocessor ────────────────────────────────────────────────────────────────
+## 1 Recipe Step
+## 
+## • step_poly()
+## 
+## ── Model ───────────────────────────────────────────────────────────────────────
+## Linear Regression Model Specification (regression)
+## 
+## Computational engine: lm</code></pre>
+<p>We can now fit this model. Again remember to fit it on the training data set <code>Auto_train</code>.</p>
+<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">poly_wf</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span></code></pre></div>
+<p>The testing RMSE is then calculated as</p>
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">Auto_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard        4.25</code></pre>
-<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+## 1 rmse    standard        4.37</code></pre>
+<p>Which is a little bit lower. So it would appear just from this, that the polynomial regression model has a better fit. Note that we are making decisions using the testing performance metrics, not the training performance metrics.</p>
+<p>Lastly, we show below how changing the seed results in a slightly different estimate.</p>
+<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="va">Auto_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">Auto</span><span class="op">)</span>
 
 <span class="va">Auto_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span>
-<span class="va">Auto_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">poly_wf</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span>
+<span class="va">Auto_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span>
+
+<span class="va">poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">poly_wf</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span>
 
 <span class="fu">augment</span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">Auto_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
@@ -152,10 +219,10 @@
 <h2>
 <span class="header-section-number">5.3</span> k-Fold Cross-Validation<a class="anchor" aria-label="anchor" href="#k-fold-cross-validation"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">poly_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">horsepower</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_poly</span><span class="op">(</span><span class="va">horsepower</span>, degree <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span>
 
@@ -173,10 +240,10 @@
   grid <span class="op">=</span> <span class="va">degree_grid</span>
 <span class="op">)</span></code></pre></div>
 <p>It can be helpful to add <code>control = control_grid(verbose = TRUE)</code></p>
-<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="05-resampling-methods_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
-<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="05-resampling-methods_files/figure-html/unnamed-chunk-15-1.png" width="672"></div>
+<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 20 x 7
 ##    degree .metric .estimator  mean     n std_err .config              
@@ -201,7 +268,7 @@
 ## 18      9 rsq     standard   0.663    10  0.0445 Preprocessor09_Model1
 ## 19     10 rmse    standard   4.50     10  0.227  Preprocessor10_Model1
 ## 20     10 rsq     standard   0.658    10  0.0465 Preprocessor10_Model1</code></pre>
-<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">show_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 5 x 7
 ##   degree .metric .estimator  mean     n std_err .config              
@@ -211,9 +278,9 @@
 ## 3      7 rmse    standard    4.40    10   0.176 Preprocessor07_Model1
 ## 4      6 rmse    standard    4.41    10   0.189 Preprocessor06_Model1
 ## 5      8 rmse    standard    4.41    10   0.175 Preprocessor08_Model1</code></pre>
-<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_degree</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">final_wf</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">poly_wf</span>, <span class="va">best_degree</span><span class="op">)</span>
 
 <span class="va">final_wf</span></code></pre></div>
@@ -230,7 +297,7 @@
 ## Linear Regression Model Specification (regression)
 ## 
 ## Computational engine: lm</code></pre>
-<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">final_wf</span>, <span class="va">Auto_train</span><span class="op">)</span>
 
 <span class="va">final_fit</span></code></pre></div>
@@ -256,7 +323,7 @@
 <h2>
 <span class="header-section-number">5.4</span> The Bootstrap<a class="anchor" aria-label="anchor" href="#the-bootstrap"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Portfolio_boots</span> <span class="op">&lt;-</span> <span class="fu">bootstraps</span><span class="op">(</span><span class="va">Portfolio</span>, times <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
 
 <span class="va">alpha.fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">split</span><span class="op">)</span> <span class="op">{</span>
@@ -286,7 +353,7 @@
 ##  9 &lt;split [100/36]&gt; Bootstrap0009 0.619
 ## 10 &lt;split [100/39]&gt; Bootstrap0010 0.475
 ## # … with 990 more rows</code></pre>
-<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Auto_boots</span> <span class="op">&lt;-</span> <span class="fu">bootstraps</span><span class="op">(</span><span class="va">Auto</span><span class="op">)</span>
 
 <span class="va">boot.fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">split</span><span class="op">)</span> <span class="op">{</span>
@@ -337,7 +404,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-14.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-30.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

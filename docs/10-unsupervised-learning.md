@@ -16,14 +16,14 @@ library(tidymodels)
 ```
 
 ```
-## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.1.0.9000
-## ✓ dplyr        1.0.6          ✓ tibble       3.1.1     
-## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
-## ✓ infer        0.5.4          ✓ tune         0.1.5     
-## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
-## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
-## ✓ purrr        0.3.4          ✓ yardstick    0.0.8
+## ✓ broom        0.7.6           ✓ recipes      0.1.16.9000
+## ✓ dials        0.0.9           ✓ rsample      0.1.0      
+## ✓ dplyr        1.0.6           ✓ tibble       3.1.2      
+## ✓ ggplot2      3.3.3           ✓ tidyr        1.1.3      
+## ✓ infer        0.5.4           ✓ tune         0.1.5      
+## ✓ modeldata    0.1.0           ✓ workflows    0.2.2      
+## ✓ parsnip      0.1.6           ✓ workflowsets 0.0.2      
+## ✓ purrr        0.3.4           ✓ yardstick    0.0.8
 ```
 
 ```
@@ -114,7 +114,7 @@ library(mclust)
 ```
 
 ```
-## Package 'mclust' version 5.4.6
+## Package 'mclust' version 5.4.7
 ## Type 'citation("mclust")' for citing this R package in publications.
 ```
 

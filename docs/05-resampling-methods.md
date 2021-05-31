@@ -1,5 +1,8 @@
 # Resampling Methods
 
+This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter introduces a lot of new packages.
+This chapter will bring [rsample](https://www.tidymodels.org/start/resampling/) into view for creating resampled data frames as well as [yardstick](https://yardstick.tidymodels.org/) to calculate performance metrics. Lastly, will we also use [tune](https://tune.tidymodels.org/) to fit out models within said resamples. We also see a use of [dials](https://dials.tidymodels.org/) which are used together with tune to select hyperparameter tuning values.
+
 
 ```r
 library(tidymodels)
@@ -16,14 +19,14 @@ library(tidymodels)
 ```
 
 ```
-## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.1.0.9000
-## ✓ dplyr        1.0.6          ✓ tibble       3.1.1     
-## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
-## ✓ infer        0.5.4          ✓ tune         0.1.5     
-## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
-## ✓ parsnip      0.1.5.9002     ✓ workflowsets 0.0.2     
-## ✓ purrr        0.3.4          ✓ yardstick    0.0.8
+## ✓ broom        0.7.6           ✓ recipes      0.1.16.9000
+## ✓ dials        0.0.9           ✓ rsample      0.1.0      
+## ✓ dplyr        1.0.6           ✓ tibble       3.1.2      
+## ✓ ggplot2      3.3.3           ✓ tidyr        1.1.3      
+## ✓ infer        0.5.4           ✓ tune         0.1.5      
+## ✓ modeldata    0.1.0           ✓ workflows    0.2.2      
+## ✓ parsnip      0.1.6           ✓ workflowsets 0.0.2      
+## ✓ purrr        0.3.4           ✓ yardstick    0.0.8
 ```
 
 ```
@@ -38,33 +41,102 @@ library(tidymodels)
 ```r
 library(ISLR)
 
-Auto <- as_tibble(Auto)
-Portfolio <- as_tibble(Portfolio)
+Auto <- tibble(Auto)
 ```
 
-
 ## The Validation Set Approach
+
+When fitting a model it is often desired to be able to calculate a performance metric to quantify how well the model fits the data. If a model is evaluated on the data it was fit on you are quite likely to get over-optimistic results. It is therefore we split our data into testing and training. This way we can fit the model to data and evaluate it on some other that that is similar.
+
+Splitting of the data is done using random sampling, so it is advised to set a seed before splitting to assure we can reproduce the results.
+The `inintial_split()` function takes a data.frame and returns a `rsplit` object. This object contains information about which observations belong to which data set, testing, and training. This is where you would normally set a proportion of data that is used for training and how much is used for evaluation. This is set using the `prop` argument which I set to `0.5` to closely match what happened in ISLR. I'm also setting the `strata` argument. This argument makes sure that both sides of the split have roughly the same distribution for each value of `strata`. If a numeric variable is passed to `strata` then it is binned and distributions are matched within bins.
 
 
 ```r
 set.seed(1)
-Auto_split <- initial_split(Auto)
+Auto_split <- initial_split(Auto, strata = mpg, prop = 0.5)
+Auto_split
+```
 
+```
+## <Analysis/Assess/Total>
+## <194/198/392>
+```
+
+The testing and training data sets can be materialized using the `testing()` and `training()` functions respectively.
+
+
+```r
 Auto_train <- training(Auto_split)
 Auto_test <- testing(Auto_split)
 ```
 
+And by looking at `Auto_train` and `Auto_test` we see that the lengths match what we expect.
+
+
+```r
+Auto_train
+```
+
+```
+## # A tibble: 194 x 9
+##      mpg cylinders displacement horsepower weight acceleration  year origin
+##    <dbl>     <dbl>        <dbl>      <dbl>  <dbl>        <dbl> <dbl>  <dbl>
+##  1    15         8          350        165   3693         11.5    70      1
+##  2    16         8          304        150   3433         12      70      1
+##  3    14         8          440        215   4312          8.5    70      1
+##  4    14         8          455        225   4425         10      70      1
+##  5    10         8          307        200   4376         15      70      1
+##  6    17         6          250        100   3329         15.5    71      1
+##  7    14         8          400        175   4464         11.5    71      1
+##  8    14         8          351        153   4154         13.5    71      1
+##  9    14         8          318        150   4096         13      71      1
+## 10    13         8          400        170   4746         12      71      1
+## # … with 184 more rows, and 1 more variable: name <fct>
+```
+
+```r
+Auto_test
+```
+
+```
+## # A tibble: 198 x 9
+##      mpg cylinders displacement horsepower weight acceleration  year origin
+##    <dbl>     <dbl>        <dbl>      <dbl>  <dbl>        <dbl> <dbl>  <dbl>
+##  1    18         8          318        150   3436         11      70      1
+##  2    17         8          302        140   3449         10.5    70      1
+##  3    15         8          429        198   4341         10      70      1
+##  4    14         8          454        220   4354          9      70      1
+##  5    15         8          390        190   3850          8.5    70      1
+##  6    15         8          383        170   3563         10      70      1
+##  7    14         8          340        160   3609          8      70      1
+##  8    15         8          400        150   3761          9.5    70      1
+##  9    14         8          455        225   3086         10      70      1
+## 10    22         6          198         95   2833         15.5    70      1
+## # … with 188 more rows, and 1 more variable: name <fct>
+```
+
+Now that we have a train-test split let us fit some models and evaluate their performance. Before we move on it is important to reiterate that you should only use the testing data set once! Once you have looked at the performance on the testing data set you should not modify your models. If you do you might overfit the model due to data leakage.
+
+Our modeling goal is to predict `mpg` by `horsepower` using a simple linear regression model, and a polynomial regression model. 
+First, we set up a linear regression specification.
+
 
 ```r
 lm_spec <- linear_reg() %>%
+  set_mode("regression") %>%
   set_engine("lm")
 ```
+
+And we fit it like normal. Note that we are fitting it using `Auto_train`.
 
 
 ```r
 lm_fit <- lm_spec %>% 
   fit(mpg ~ horsepower, data = Auto_train)
 ```
+
+We can now use the `augment()` function to extract the prediction and `rmse()` to calculate the root mean squared error. This will be the testing RMSE since we are evaluating on `Auto_test`.
 
 
 ```r
@@ -76,18 +148,16 @@ augment(lm_fit, new_data = Auto_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        4.93
+## 1 rmse    standard        5.06
 ```
+
+and we get a RMSE of 5.0583165. This particular value is going to vary depending on what seed number you picked since the random sampling used in splitting the data set will be slightly different.
+
+Using this framework makes it easy for us to calculate the training RMSE
 
 
 ```r
-poly_fit <- lm_spec %>% 
-  fit(mpg ~ poly(horsepower, 2), data = Auto_train)
-```
-
-
-```r
-augment(poly_fit, new_data = Auto_test) %>%
+augment(lm_fit, new_data = Auto_train) %>%
   rmse(truth = mpg, estimate = .pred)
 ```
 
@@ -95,8 +165,12 @@ augment(poly_fit, new_data = Auto_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        4.25
+## 1 rmse    standard        4.74
 ```
+
+Comparing these two values can give us a look into how generalizable the model is to data it hasn't seen before. We do expect that the training RMSE to be lower than the testing RMSE but if you see a large difference there is an indication of overfitting or a shift between the training data set and testing data set. We don't expect a shift here since the data sets were created with random sampling.
+
+Next we will fit a polynomial regression model. We can use the linear model specification `lm_spec` to add a preprocessing unit with `recipe()` and `step_poly()` to create the polynomial expansion of `horsepower`. we can combine these two with `workflow()` to create a workflow object.
 
 
 ```r
@@ -107,8 +181,33 @@ poly_wf <- workflow() %>%
   add_recipe(poly_rec) %>%
   add_model(lm_spec)
 
+poly_wf
+```
+
+```
+## ══ Workflow ════════════════════════════════════════════════════════════════════
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## ── Preprocessor ────────────────────────────────────────────────────────────────
+## 1 Recipe Step
+## 
+## • step_poly()
+## 
+## ── Model ───────────────────────────────────────────────────────────────────────
+## Linear Regression Model Specification (regression)
+## 
+## Computational engine: lm
+```
+
+We can now fit this model. Again remember to fit it on the training data set `Auto_train`.
+
+
+```r
 poly_fit <- fit(poly_wf, data = Auto_train)
 ```
+
+The testing RMSE is then calculated as
 
 
 ```r
@@ -120,8 +219,12 @@ augment(poly_fit, new_data = Auto_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        4.25
+## 1 rmse    standard        4.37
 ```
+
+Which is a little bit lower. So it would appear just from this, that the polynomial regression model has a better fit. Note that we are making decisions using the testing performance metrics, not the training performance metrics.
+
+Lastly, we show below how changing the seed results in a slightly different estimate.
 
 
 ```r
@@ -130,10 +233,7 @@ Auto_split <- initial_split(Auto)
 
 Auto_train <- training(Auto_split)
 Auto_test <- testing(Auto_split)
-```
 
-
-```r
 poly_fit <- fit(poly_wf, data = Auto_train)
 
 augment(poly_fit, new_data = Auto_test) %>%
@@ -186,7 +286,7 @@ It can be helpful to add `control = control_grid(verbose = TRUE)`
 autoplot(tune_res)
 ```
 
-<img src="05-resampling-methods_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="05-resampling-methods_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 
 
 ```r
