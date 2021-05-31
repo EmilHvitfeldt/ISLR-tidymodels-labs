@@ -8,6 +8,7 @@ library(tidymodels)
 library(ISLR)
 
 Auto <- tibble(Auto)
+Portfolio <- tibble(Portfolio)
 ```
 
 ## The Validation Set Approach
@@ -142,7 +143,7 @@ poly_tuned_wf <- workflow() %>%
 
 This means that would not be able to fit this workflow right now as the value of `degree` is unspecified, and if we try we get an error:
 
-```{r, warning=FALSE}
+```{r, error=TRUE}
 fit(poly_tuned_wf, data = Auto_train)
 ```
 
@@ -236,9 +237,21 @@ final_fit
 
 ## The Bootstrap
 
+
+This section illustrates the use of the bootstrap in the simple Section 5.2  of ISLR, as well as on an example involving estimating the accuracy of the linear regression model on the `Auto` data set.
+
+First, we want to look at the accuracy of a statistic of interest. This statistic is justified in ISLR. We want to calculate the metric within many different bootstraps. We start by calculating 1000 bootstraps of the `Portfolio` data set.
+
 ```{r}
 Portfolio_boots <- bootstraps(Portfolio, times = 1000)
+Portfolio_boots
+```
 
+The result is a tibble of `boot_split` objects. The rsample has constructed these splits in such a way that these 1000 bootstraps take up way less than 1000 times the space as `Portfolio`.
+
+Next, we create a function that takes a `boot_split` object and returns the calculated metric.
+
+```{r}
 alpha.fn <- function(split) {
   data <- analysis(split)
   X <- data$X
@@ -246,12 +259,20 @@ alpha.fn <- function(split) {
   
   (var(Y) - cov(X, Y)) / (var(X) + var(Y) - 2 * cov(X, Y))
 }
+```
 
+Now we can use `mutate()` and `map_dbl()` from [dplyr](https://dplyr.tidyverse.org/) and [purrr](https://purrr.tidyverse.org/) respectively to apply `alpha.fn` to each of the bootstraps.
+
+```{r}
 alpha_res <- Portfolio_boots %>%
   mutate(alpha = map_dbl(splits, alpha.fn))
 
 alpha_res
 ```
+
+and now we have all the bootstrap sample values. These can now further be analyzed.
+
+In the next example do we want to study the variability of the slope and intercept estimate of the linear regression model. And it follows the same structure. First, we create some bootstraps of the data. Then we create a function that takes a split and returns some values. This function will return a tibble for each bootstrap.
 
 ```{r}
 Auto_boots <- bootstraps(Auto)
@@ -260,10 +281,18 @@ boot.fn <- function(split) {
   lm_fit <- lm_spec %>% fit(mpg ~ horsepower, data = analysis(split))
   tidy(lm_fit)
 }
+```
 
+then we use `mutate()` and `map()` to apply the function to each of the bootstraps.
+
+```{r}
 boot_res <- Auto_boots %>%
   mutate(models = map(splits, boot.fn))
+```
 
+And we can now `unnest()` and use `group_by()` and `summarise()` to get an estimate of the variability of the slope and intercept in this linear regression model.
+
+```{r}
 boot_res %>%
   unnest(cols = c(models)) %>%
   group_by(term) %>%

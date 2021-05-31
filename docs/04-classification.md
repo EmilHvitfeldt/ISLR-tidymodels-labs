@@ -612,7 +612,7 @@ knn_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  38ms 
+## Fit time:  37ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))

@@ -42,6 +42,7 @@ library(tidymodels)
 library(ISLR)
 
 Auto <- tibble(Auto)
+Portfolio <- tibble(Portfolio)
 ```
 
 ## The Validation Set Approach
@@ -253,40 +254,101 @@ Leave-One-Out Cross-Validation is not integrated into the broader tidymodels fra
 
 ## k-Fold Cross-Validation
 
+Earlier we set `degree = 2` to create a second-degree polynomial regression model. But suppose we want to find the best value of `degree` that yields the "closest" fit. This is known as hyperparameter tuning and it is a case where we can use k-Fold Cross-Validation. To use k-Fold Cross-Validation we will be using the `tune` package, and we need 3 things to get it working:
+
+- A parsnip/workflow object with one or more arguments marked for tuning,
+- A `vfold_cv` rsample object of the cross-validation resamples,
+- A tibble denoting the values of hyperparameter values to be explored.
+
+we are doing the hyperparameter tuning on just one parameter, namely the `degree` argument in `step_poly()`. Creating a new recipe with `degree = tune()` indicated that we intend for `degree` to be tuned.
+
 
 ```r
-poly_rec <- recipe(mpg ~ horsepower, data = Auto_train) %>%
+poly_tuned_rec <- recipe(mpg ~ horsepower, data = Auto_train) %>%
   step_poly(horsepower, degree = tune())
+
+poly_tuned_wf <- workflow() %>%
+  add_recipe(poly_tuned_rec) %>%
+  add_model(lm_spec)
 ```
 
+This means that would not be able to fit this workflow right now as the value of `degree` is unspecified, and if we try we get an error:
+
 
 ```r
-lm_spec <- linear_reg() %>%
-  set_engine("lm")
+fit(poly_tuned_wf, data = Auto_train)
+```
 
-poly_wf <- workflow() %>%
-  add_recipe(poly_rec) %>%
-  add_model(lm_spec)
+```
+## Error: You cannot `prep()` a tuneable recipe. Argument(s) with `tune()`: 'degree'. Do you want to use a tuning function such as `tune_grid()`?
+```
 
+The next thing we need to create is the k-Fold data set. This can be done using the `vfold_cv()` function. Note that the function uses `v` instead of *k* which is the terminology of ISLR. we set `v = 10` as a common choice for *k*.
+
+
+```r
 Auto_folds <- vfold_cv(Auto_train, v = 10)
+Auto_folds
+```
 
+```
+## #  10-fold cross-validation 
+## # A tibble: 10 x 2
+##    splits           id    
+##    <list>           <chr> 
+##  1 <split [264/30]> Fold01
+##  2 <split [264/30]> Fold02
+##  3 <split [264/30]> Fold03
+##  4 <split [264/30]> Fold04
+##  5 <split [265/29]> Fold05
+##  6 <split [265/29]> Fold06
+##  7 <split [265/29]> Fold07
+##  8 <split [265/29]> Fold08
+##  9 <split [265/29]> Fold09
+## 10 <split [265/29]> Fold10
+```
+
+The result is a tibble of `vfold_split`s which is quite similar to the `rsplit` object we saw earlier.
+
+The last thing we need is a tibble of possible values we want to explore. Each of the tunable parameters in tidymodels has an associated function in the [dials package](https://dials.tidymodels.org/reference/index.html). We need to use the `degree()` function here, and we extend the range to have a max of 10. This dials function is then passed to `grid_regular()` to create a regular grid of values.
+
+
+```r
 degree_grid <- grid_regular(degree(range = c(1, 10)), levels = 10)
+```
 
+Using `grid_regular()` is a little overkill for this application since the following code would provide the same result. But once you have multiple parameters you want to tune it makes sure that everything is in check and properly named.
+
+
+```r
+degree_grid <- tibble(degree = seq(1, 10))
+```
+
+Now that all the necessary objects have been created we can pass them to `tune_grid()` which will fit the models within each fold for each value specified in `degree_grid`.
+
+
+```r
 tune_res <- tune_grid(
-  object = poly_wf, 
+  object = poly_tuned_wf, 
   resamples = Auto_folds, 
   grid = degree_grid
 )
 ```
 
-It can be helpful to add `control = control_grid(verbose = TRUE)` 
+It can be helpful to add `control = control_grid(verbose = TRUE)`, this will print out the progress. Especially helpful when the models take a while to fit. `tune_res` by itself isn't easily readable. Luckily `tune` provides a handful of helper functions.
+
+`autoplot()` gives a visual overview of the performance of different hyperparameter pairs.
 
 
 ```r
 autoplot(tune_res)
 ```
 
-<img src="05-resampling-methods_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="05-resampling-methods_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+
+It appears that the biggest jump in performance comes from going to `degree = 2`. Afterward, there might be a little bit of improvement but it isn't as obvious.
+
+The number used for plotting can be extracted directly with `collect_metrics()`. We also get an estimate of the standard error of the performance metric. We get this since we have 10 different estimates, one for each fold.
 
 
 ```r
@@ -296,7 +358,7 @@ collect_metrics(tune_res)
 ```
 ## # A tibble: 20 x 7
 ##    degree .metric .estimator  mean     n std_err .config              
-##     <dbl> <chr>   <chr>      <dbl> <int>   <dbl> <chr>                
+##     <int> <chr>   <chr>      <dbl> <int>   <dbl> <chr>                
 ##  1      1 rmse    standard   4.81     10  0.172  Preprocessor01_Model1
 ##  2      1 rsq     standard   0.621    10  0.0316 Preprocessor01_Model1
 ##  3      2 rmse    standard   4.37     10  0.209  Preprocessor02_Model1
@@ -319,6 +381,9 @@ collect_metrics(tune_res)
 ## 20     10 rsq     standard   0.658    10  0.0465 Preprocessor10_Model1
 ```
 
+You can also use `show_best()` to only show the best performing models.
+
+
 ```r
 show_best(tune_res, metric = "rmse")
 ```
@@ -326,7 +391,7 @@ show_best(tune_res, metric = "rmse")
 ```
 ## # A tibble: 5 x 7
 ##   degree .metric .estimator  mean     n std_err .config              
-##    <dbl> <chr>   <chr>      <dbl> <int>   <dbl> <chr>                
+##    <int> <chr>   <chr>      <dbl> <int>   <dbl> <chr>                
 ## 1      2 rmse    standard    4.37    10   0.209 Preprocessor02_Model1
 ## 2      3 rmse    standard    4.40    10   0.217 Preprocessor03_Model1
 ## 3      7 rmse    standard    4.40    10   0.176 Preprocessor07_Model1
@@ -334,10 +399,35 @@ show_best(tune_res, metric = "rmse")
 ## 5      8 rmse    standard    4.41    10   0.175 Preprocessor08_Model1
 ```
 
+We did see that the performance plateaued after `degree = 2`. There are a couple of function to select models by more sophisticated rules. `select_by_one_std_err()` and `select_by_pct_loss()`.  Here we use `select_by_one_std_err()` which selects the most simple model that is within one standard error of the numerically optimal results. We need to specify `degree` to tell `select_by_one_std_err()` which direction is more simple.
+
+You want to
+
+- use `desc(you_model_parameter)` if larger values lead to a simpler model
+- use `you_model_parameter` if smaller values lead to a simpler model
+
+lower polynomials models are simpler so we ditch `desc()`.
+
 
 ```r
-best_degree <- select_best(tune_res, metric = "rmse")
+select_by_one_std_err(tune_res, degree, metric = "rmse")
 ```
+
+```
+## # A tibble: 1 x 9
+##   degree .metric .estimator  mean     n std_err .config             .best .bound
+##    <int> <chr>   <chr>      <dbl> <int>   <dbl> <chr>               <dbl>  <dbl>
+## 1      2 rmse    standard    4.37    10   0.209 Preprocessor02_Mod…  4.37   4.58
+```
+
+This selected `degree = 2`. And we will use this value since we simpler models sometimes can be very beneficial. Especially if we want to explain what happens in it.
+
+
+```r
+best_degree <- select_by_one_std_err(tune_res, degree, metric = "rmse")
+```
+
+This selected value can be now be used to specify the previous unspecified `degree` argument in `poly_wf` using `finalize_workflow()`.
 
 
 ```r
@@ -361,6 +451,8 @@ final_wf
 ## 
 ## Computational engine: lm
 ```
+
+This workflow can now be fitted. And we want to make sure we fit it on the full training data set.
 
 
 ```r
@@ -392,9 +484,40 @@ final_fit
 ## The Bootstrap
 
 
+This section illustrates the use of the bootstrap in the simple Section 5.2  of ISLR, as well as on an example involving estimating the accuracy of the linear regression model on the `Auto` data set.
+
+First, we want to look at the accuracy of a statistic of interest. This statistic is justified in ISLR. We want to calculate the metric within many different bootstraps. We start by calculating 1000 bootstraps of the `Portfolio` data set.
+
+
 ```r
 Portfolio_boots <- bootstraps(Portfolio, times = 1000)
+Portfolio_boots
+```
 
+```
+## # Bootstrap sampling 
+## # A tibble: 1,000 x 2
+##    splits           id           
+##    <list>           <chr>        
+##  1 <split [100/38]> Bootstrap0001
+##  2 <split [100/41]> Bootstrap0002
+##  3 <split [100/31]> Bootstrap0003
+##  4 <split [100/33]> Bootstrap0004
+##  5 <split [100/35]> Bootstrap0005
+##  6 <split [100/36]> Bootstrap0006
+##  7 <split [100/35]> Bootstrap0007
+##  8 <split [100/37]> Bootstrap0008
+##  9 <split [100/36]> Bootstrap0009
+## 10 <split [100/39]> Bootstrap0010
+## # … with 990 more rows
+```
+
+The result is a tibble of `boot_split` objects. The rsample has constructed these splits in such a way that these 1000 bootstraps take up way less than 1000 times the space as `Portfolio`.
+
+Next, we create a function that takes a `boot_split` object and returns the calculated metric.
+
+
+```r
 alpha.fn <- function(split) {
   data <- analysis(split)
   X <- data$X
@@ -402,7 +525,12 @@ alpha.fn <- function(split) {
   
   (var(Y) - cov(X, Y)) / (var(X) + var(Y) - 2 * cov(X, Y))
 }
+```
 
+Now we can use `mutate()` and `map_dbl()` from [dplyr](https://dplyr.tidyverse.org/) and [purrr](https://purrr.tidyverse.org/) respectively to apply `alpha.fn` to each of the bootstraps.
+
+
+```r
 alpha_res <- Portfolio_boots %>%
   mutate(alpha = map_dbl(splits, alpha.fn))
 
@@ -427,6 +555,10 @@ alpha_res
 ## # … with 990 more rows
 ```
 
+and now we have all the bootstrap sample values. These can now further be analyzed.
+
+In the next example do we want to study the variability of the slope and intercept estimate of the linear regression model. And it follows the same structure. First, we create some bootstraps of the data. Then we create a function that takes a split and returns some values. This function will return a tibble for each bootstrap.
+
 
 ```r
 Auto_boots <- bootstraps(Auto)
@@ -435,10 +567,20 @@ boot.fn <- function(split) {
   lm_fit <- lm_spec %>% fit(mpg ~ horsepower, data = analysis(split))
   tidy(lm_fit)
 }
+```
 
+then we use `mutate()` and `map()` to apply the function to each of the bootstraps.
+
+
+```r
 boot_res <- Auto_boots %>%
   mutate(models = map(splits, boot.fn))
+```
 
+And we can now `unnest()` and use `group_by()` and `summarise()` to get an estimate of the variability of the slope and intercept in this linear regression model.
+
+
+```r
 boot_res %>%
   unnest(cols = c(models)) %>%
   group_by(term) %>%
