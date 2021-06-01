@@ -5,262 +5,87 @@ This final chapter talks about unsupervised learning. This is broken into two pa
 
 ```r
 library(tidymodels)
-```
-
-```
-## Registered S3 method overwritten by 'tune':
-##   method                   from   
-##   required_pkgs.model_spec parsnip
-```
-
-```
-## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──
-```
-
-```
-## ✓ broom        0.7.6           ✓ recipes      0.1.16.9000
-## ✓ dials        0.0.9           ✓ rsample      0.1.0      
-## ✓ dplyr        1.0.6           ✓ tibble       3.1.2      
-## ✓ ggplot2      3.3.3           ✓ tidyr        1.1.3      
-## ✓ infer        0.5.4           ✓ tune         0.1.5      
-## ✓ modeldata    0.1.0           ✓ workflows    0.2.2      
-## ✓ parsnip      0.1.6           ✓ workflowsets 0.0.2      
-## ✓ purrr        0.3.4           ✓ yardstick    0.0.8
-```
-
-```
-## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-## x purrr::discard() masks scales::discard()
-## x dplyr::filter()  masks stats::filter()
-## x dplyr::lag()     masks stats::lag()
-## x recipes::step()  masks stats::step()
-## • Use tidymodels_prefer() to resolve common conflicts.
-```
-
-```r
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-```
-
-```
-## ✓ readr   1.4.0     ✓ forcats 0.5.1
-## ✓ stringr 1.4.0
-```
-
-```
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x readr::col_factor() masks scales::col_factor()
-## x purrr::discard()    masks scales::discard()
-## x dplyr::filter()     masks stats::filter()
-## x stringr::fixed()    masks recipes::fixed()
-## x dplyr::lag()        masks stats::lag()
-## x readr::spec()       masks yardstick::spec()
-```
-
-```r
 library(magrittr)
-```
-
-```
-## 
-## Attaching package: 'magrittr'
-```
-
-```
-## The following object is masked from 'package:tidyr':
-## 
-##     extract
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     set_names
-```
-
-```r
 library(factoextra)
-```
-
-```
-## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
-```
-
-```r
 library(patchwork)
 library(proxy)
-```
-
-```
-## 
-## Attaching package: 'proxy'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     as.dist, dist
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     as.matrix
+library(ISLR)
 ```
 
 ## Principal Components Analysis
 
-
-```r
-usarrests <- as_tibble(USArrests, rownames = "state")
-glimpse(usarrests)
-```
-
-```
-## Rows: 50
-## Columns: 5
-## $ state    <chr> "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Co…
-## $ Murder   <dbl> 13.2, 10.0, 8.1, 8.8, 9.0, 7.9, 3.3, 5.9, 15.4, 17.4, 5.3, 2.…
-## $ Assault  <int> 236, 263, 294, 190, 276, 204, 110, 238, 335, 211, 46, 120, 24…
-## $ UrbanPop <int> 58, 48, 80, 50, 91, 78, 77, 72, 80, 60, 83, 54, 83, 65, 57, 6…
-## $ Rape     <dbl> 21.2, 44.5, 31.0, 19.5, 40.6, 38.7, 11.1, 15.8, 31.9, 25.8, 2…
-```
+This section will be used to explore the `USArrests` data set using PCA. Before we move on, let is turn `USArrests` into a tibble and move the rownames into a column.
 
 
 ```r
-# scale before applyig PCA
-set.seed(1)
-pca_recipe <- recipe(~., data = usarrests) %>%
-  step_scale(all_numeric()) %>%
-  step_pca(all_numeric(), id = "pca") %>%
-  prep()
-
-usarrests %>%
-  column_to_rownames("state") %>%
-  prcomp(scale = TRUE) %>%
-  fviz_pca_biplot(title = "Biplot PCA on usarrests")
-```
-
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-3-1.png" width="672" />
-
-```r
-# loadings
-tidy(pca_recipe, type = "coef", id = "pca")
+USArrests <- as_tibble(USArrests, rownames = "state")
+USArrests
 ```
 
 ```
-## # A tibble: 16 x 4
-##    terms      value component id   
-##    <chr>      <dbl> <chr>     <chr>
-##  1 Murder   -0.319  PC1       pca  
-##  2 Assault  -0.368  PC1       pca  
-##  3 UrbanPop -0.774  PC1       pca  
-##  4 Rape     -0.405  PC1       pca  
-##  5 Murder   -0.579  PC2       pca  
-##  6 Assault  -0.484  PC2       pca  
-##  7 UrbanPop  0.603  PC2       pca  
-##  8 Rape     -0.258  PC2       pca  
-##  9 Murder    0.418  PC3       pca  
-## 10 Assault   0.197  PC3       pca  
-## 11 UrbanPop  0.188  PC3       pca  
-## 12 Rape     -0.867  PC3       pca  
-## 13 Murder   -0.624  PC4       pca  
-## 14 Assault   0.769  PC4       pca  
-## 15 UrbanPop -0.0381 PC4       pca  
-## 16 Rape     -0.134  PC4       pca
+## # A tibble: 50 x 5
+##    state       Murder Assault UrbanPop  Rape
+##    <chr>        <dbl>   <int>    <int> <dbl>
+##  1 Alabama       13.2     236       58  21.2
+##  2 Alaska        10       263       48  44.5
+##  3 Arizona        8.1     294       80  31  
+##  4 Arkansas       8.8     190       50  19.5
+##  5 California     9       276       91  40.6
+##  6 Colorado       7.9     204       78  38.7
+##  7 Connecticut    3.3     110       77  11.1
+##  8 Delaware       5.9     238       72  15.8
+##  9 Florida       15.4     335       80  31.9
+## 10 Georgia       17.4     211       60  25.8
+## # … with 40 more rows
 ```
 
-```r
-tidy(pca_recipe, type = "coef", id = "pca") %>%
-  pivot_wider(
-    id_cols = "terms",
-    names_from = "component",
-    values_from = "value"
-  )
-```
-
-```
-## # A tibble: 4 x 5
-##   terms       PC1    PC2    PC3     PC4
-##   <chr>     <dbl>  <dbl>  <dbl>   <dbl>
-## 1 Murder   -0.319 -0.579  0.418 -0.624 
-## 2 Assault  -0.368 -0.484  0.197  0.769 
-## 3 UrbanPop -0.774  0.603  0.188 -0.0381
-## 4 Rape     -0.405 -0.258 -0.867 -0.134
-```
-
-```r
-# variance
-tidy(pca_recipe, type = "variance", id = "pca")
-```
-
-```
-## # A tibble: 16 x 4
-##    terms                         value component id   
-##    <chr>                         <dbl>     <int> <chr>
-##  1 variance                     35.7           1 pca  
-##  2 variance                      1.47          2 pca  
-##  3 variance                      0.394         3 pca  
-##  4 variance                      0.180         4 pca  
-##  5 cumulative variance          35.7           1 pca  
-##  6 cumulative variance          37.1           2 pca  
-##  7 cumulative variance          37.5           3 pca  
-##  8 cumulative variance          37.7           4 pca  
-##  9 percent variance             94.6           1 pca  
-## 10 percent variance              3.90          2 pca  
-## 11 percent variance              1.05          3 pca  
-## 12 percent variance              0.478         4 pca  
-## 13 cumulative percent variance  94.6           1 pca  
-## 14 cumulative percent variance  98.5           2 pca  
-## 15 cumulative percent variance  99.5           3 pca  
-## 16 cumulative percent variance 100             4 pca
-```
-
-```r
-tidy(pca_recipe, type = "variance", id = "pca") %>%
-  pivot_wider(
-    id_cols = "terms",
-    names_from = "component",
-    names_prefix = "PC_",
-    values_from = "value"
-  )
-```
-
-```
-## # A tibble: 4 x 5
-##   terms                        PC_1  PC_2   PC_3    PC_4
-##   <chr>                       <dbl> <dbl>  <dbl>   <dbl>
-## 1 variance                     35.7  1.47  0.394   0.180
-## 2 cumulative variance          35.7 37.1  37.5    37.7  
-## 3 percent variance             94.6  3.90  1.05    0.478
-## 4 cumulative percent variance  94.6 98.5  99.5   100
-```
-
-```r
-# cumulative varianvce plot
-tidy(pca_recipe, type = "variance", id = "pca") %>%
-  filter(terms == "cumulative variance") %>%
-  ggplot(aes(component, value)) +
-  geom_point() +
-  geom_line() +
-  ylim(c(0, 100)) +
-  ylab("Cumulative variance")
-```
-
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-3-2.png" width="672" />
-
+Notice how the mean of each of the variables is quite different. if we were to apply PCA directly to the data set then `Murder` would have a very small influence.
 
 
 ```r
-# on the direct PCA object
-usarrests_pca <- usarrests %>%
+USArrests %>%
+  select(-state) %>%
+  map_dfr(mean)
+```
+
+```
+## # A tibble: 1 x 4
+##   Murder Assault UrbanPop  Rape
+##    <dbl>   <dbl>    <dbl> <dbl>
+## 1   7.79    171.     65.5  21.2
+```
+
+We will show how to perform PCA in two different ways in this section. First, by using `prcomp()` directly, using `broom` to extract the information we need, and secondly by using recipes.
+`prcomp()` Takes 1 required argument `x` which much be a fully numeric data.frame or matrix. Then we pass that to `prcomp()`. We also set `scale = TRUE` in `prcomp()` which will perform the scaling we need.
+
+
+```r
+USArrests_pca <- USArrests %>%
   select(-state) %>%
   prcomp(scale = TRUE)
 
-tidy(usarrests_pca)
+USArrests_pca
+```
+
+```
+## Standard deviations (1, .., p=4):
+## [1] 1.5748783 0.9948694 0.5971291 0.4164494
+## 
+## Rotation (n x k) = (4 x 4):
+##                 PC1        PC2        PC3         PC4
+## Murder   -0.5358995  0.4181809 -0.3412327  0.64922780
+## Assault  -0.5831836  0.1879856 -0.2681484 -0.74340748
+## UrbanPop -0.2781909 -0.8728062 -0.3780158  0.13387773
+## Rape     -0.5434321 -0.1673186  0.8177779  0.08902432
+```
+
+now we can use our favorite broom function to extract information from this `prcomp` object. 
+We start with `tidy()`. `tidy()` can be used to extract a couple of different things, see `?broom:::tidy.prcomp()` for more information. `tidy()` will by default extract the scores of a PCA object in long tidy format. The score of is the location of the observation in PCA space. So we can 
+
+
+```r
+tidy(USArrests_pca)
 ```
 
 ```
@@ -280,8 +105,104 @@ tidy(usarrests_pca)
 ## # … with 190 more rows
 ```
 
+We can also explicitly say we want the scores by setting `matrix = "scores"`.
+
+
 ```r
-augment(usarrests_pca)
+tidy(USArrests_pca, matrix = "scores")
+```
+
+```
+## # A tibble: 200 x 3
+##      row    PC  value
+##    <int> <dbl>  <dbl>
+##  1     1     1 -0.976
+##  2     1     2  1.12 
+##  3     1     3 -0.440
+##  4     1     4  0.155
+##  5     2     1 -1.93 
+##  6     2     2  1.06 
+##  7     2     3  2.02 
+##  8     2     4 -0.434
+##  9     3     1 -1.75 
+## 10     3     2 -0.738
+## # … with 190 more rows
+```
+
+Next, we can get the loadings of the PCA.
+
+
+```r
+tidy(USArrests_pca, matrix = "loadings")
+```
+
+```
+## # A tibble: 16 x 3
+##    column      PC   value
+##    <chr>    <dbl>   <dbl>
+##  1 Murder       1 -0.536 
+##  2 Murder       2  0.418 
+##  3 Murder       3 -0.341 
+##  4 Murder       4  0.649 
+##  5 Assault      1 -0.583 
+##  6 Assault      2  0.188 
+##  7 Assault      3 -0.268 
+##  8 Assault      4 -0.743 
+##  9 UrbanPop     1 -0.278 
+## 10 UrbanPop     2 -0.873 
+## 11 UrbanPop     3 -0.378 
+## 12 UrbanPop     4  0.134 
+## 13 Rape         1 -0.543 
+## 14 Rape         2 -0.167 
+## 15 Rape         3  0.818 
+## 16 Rape         4  0.0890
+```
+
+This information tells us how each variable contributes to each principal component. If you don't have too many principal components you can visualize the contribution without filtering
+
+
+```r
+tidy(USArrests_pca, matrix = "loadings") %>%
+  ggplot(aes(value, column)) +
+  facet_wrap(~ PC) +
+  geom_col()
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+
+Lastly, we can set `matrix = "eigenvalues"` and get back the explained standard deviation for each PC including as a percent and cumulative which is quite handy for plotting.
+
+
+```r
+tidy(USArrests_pca, matrix = "eigenvalues")
+```
+
+```
+## # A tibble: 4 x 4
+##      PC std.dev percent cumulative
+##   <dbl>   <dbl>   <dbl>      <dbl>
+## 1     1   1.57   0.620       0.620
+## 2     2   0.995  0.247       0.868
+## 3     3   0.597  0.0891      0.957
+## 4     4   0.416  0.0434      1
+```
+
+If we want to see how the percent standard deviation explained drops off for each PC we can easily get that by using `tidy()` with `matrix = "eigenvalues"`.
+
+
+```r
+tidy(USArrests_pca, matrix = "eigenvalues") %>%
+  ggplot(aes(PC, percent)) +
+  geom_col()
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+
+Lastly, we have the `augment()` function which will give you back the fitted PC transformation if you apply it to the `prcomp()` object directly
+
+
+```r
+augment(USArrests_pca)
 ```
 
 ```
@@ -298,6 +219,196 @@ augment(usarrests_pca)
 ##  8 8            -0.0472    -0.322     -0.711    -0.873  
 ##  9 9            -2.98       0.0388    -0.571    -0.0953 
 ## 10 10           -1.62       1.27      -0.339     1.07   
+## # … with 40 more rows
+```
+
+and will apply this transformation to new data by passing the new data to `newdata`
+
+
+```r
+augment(USArrests_pca, newdata = USArrests[1:5, ])
+```
+
+```
+## # A tibble: 5 x 10
+##   .rownames state Murder Assault UrbanPop  Rape .fittedPC1 .fittedPC2 .fittedPC3
+##   <chr>     <chr>  <dbl>   <int>    <int> <dbl>      <dbl>      <dbl>      <dbl>
+## 1 1         Alab…   13.2     236       58  21.2     -0.976      1.12     -0.440 
+## 2 2         Alas…   10       263       48  44.5     -1.93       1.06      2.02  
+## 3 3         Ariz…    8.1     294       80  31       -1.75      -0.738     0.0542
+## 4 4         Arka…    8.8     190       50  19.5      0.140      1.11      0.113 
+## 5 5         Cali…    9       276       91  40.6     -2.50      -1.53      0.593 
+## # … with 1 more variable: .fittedPC4 <dbl>
+```
+
+If you are using PCA as a preprocessing method I recommend you use recipes to apply the PCA transformation. This is a good way of doing it since recipe will correctly apply the same transformation to new data that the recipe is used on.
+
+We `step_normalize()` to make sure all the variables are on the same scale. By using `all_numeric()` we are able to apply PCA on the variables we want without having to remove `state`. We are also setting an `id` for `step_pca()` to make it easier to `tidy()` later.
+
+
+```r
+pca_rec <- recipe(~., data = USArrests) %>%
+  step_normalize(all_numeric()) %>%
+  step_pca(all_numeric(), id = "pca") %>%
+  prep()
+```
+
+By calling `bake(new_data = NULL)` we can get the fitted PC transformation of our numerical variables
+
+
+```r
+pca_rec %>%
+  bake(new_data = NULL)
+```
+
+```
+## # A tibble: 50 x 5
+##    state           PC1     PC2     PC3      PC4
+##    <fct>         <dbl>   <dbl>   <dbl>    <dbl>
+##  1 Alabama     -0.976   1.12   -0.440   0.155  
+##  2 Alaska      -1.93    1.06    2.02   -0.434  
+##  3 Arizona     -1.75   -0.738   0.0542 -0.826  
+##  4 Arkansas     0.140   1.11    0.113  -0.181  
+##  5 California  -2.50   -1.53    0.593  -0.339  
+##  6 Colorado    -1.50   -0.978   1.08    0.00145
+##  7 Connecticut  1.34   -1.08   -0.637  -0.117  
+##  8 Delaware    -0.0472 -0.322  -0.711  -0.873  
+##  9 Florida     -2.98    0.0388 -0.571  -0.0953 
+## 10 Georgia     -1.62    1.27   -0.339   1.07   
+## # … with 40 more rows
+```
+
+but we can also supply our own data to `new_data`.
+
+
+```r
+pca_rec %>%
+  bake(new_data = USArrests[40:45, ])
+```
+
+```
+## # A tibble: 6 x 5
+##   state             PC1    PC2    PC3     PC4
+##   <fct>           <dbl>  <dbl>  <dbl>   <dbl>
+## 1 South Carolina -1.31   1.91  -0.298 -0.130 
+## 2 South Dakota    1.97   0.815  0.385 -0.108 
+## 3 Tennessee      -0.990  0.852  0.186  0.646 
+## 4 Texas          -1.34  -0.408 -0.487  0.637 
+## 5 Utah            0.545 -1.46   0.291 -0.0815
+## 6 Vermont         2.77   1.39   0.833 -0.143
+```
+
+We can get back the same information as we could for `prcomp()` but we have to specify the slightly different inside `tidy()`. Here `id = "pca"` refers to the second step of `pca_rec`. We get the `scores` with `type = "coef"`
+
+
+```r
+tidy(pca_rec, id = "pca", type = "coef")
+```
+
+```
+## # A tibble: 16 x 4
+##    terms      value component id   
+##    <chr>      <dbl> <chr>     <chr>
+##  1 Murder   -0.536  PC1       pca  
+##  2 Assault  -0.583  PC1       pca  
+##  3 UrbanPop -0.278  PC1       pca  
+##  4 Rape     -0.543  PC1       pca  
+##  5 Murder    0.418  PC2       pca  
+##  6 Assault   0.188  PC2       pca  
+##  7 UrbanPop -0.873  PC2       pca  
+##  8 Rape     -0.167  PC2       pca  
+##  9 Murder   -0.341  PC3       pca  
+## 10 Assault  -0.268  PC3       pca  
+## 11 UrbanPop -0.378  PC3       pca  
+## 12 Rape      0.818  PC3       pca  
+## 13 Murder    0.649  PC4       pca  
+## 14 Assault  -0.743  PC4       pca  
+## 15 UrbanPop  0.134  PC4       pca  
+## 16 Rape      0.0890 PC4       pca
+```
+
+And the eigenvalues with `type = "variance"`.
+
+
+```r
+tidy(pca_rec, id = "pca", type = "variance")
+```
+
+```
+## # A tibble: 16 x 4
+##    terms                         value component id   
+##    <chr>                         <dbl>     <int> <chr>
+##  1 variance                      2.48          1 pca  
+##  2 variance                      0.990         2 pca  
+##  3 variance                      0.357         3 pca  
+##  4 variance                      0.173         4 pca  
+##  5 cumulative variance           2.48          1 pca  
+##  6 cumulative variance           3.47          2 pca  
+##  7 cumulative variance           3.83          3 pca  
+##  8 cumulative variance           4             4 pca  
+##  9 percent variance             62.0           1 pca  
+## 10 percent variance             24.7           2 pca  
+## 11 percent variance              8.91          3 pca  
+## 12 percent variance              4.34          4 pca  
+## 13 cumulative percent variance  62.0           1 pca  
+## 14 cumulative percent variance  86.8           2 pca  
+## 15 cumulative percent variance  95.7           3 pca  
+## 16 cumulative percent variance 100             4 pca
+```
+
+Sometimes you don't want to get back all the principal components of the data. We can either specify how many components we want with `num_comp` (or `rank.` in `prcomp()`)
+
+
+```r
+recipe(~., data = USArrests) %>%
+  step_normalize(all_numeric()) %>%
+  step_pca(all_numeric(), num_comp = 3) %>%
+  prep() %>%
+  bake(new_data = NULL)
+```
+
+```
+## # A tibble: 50 x 4
+##    state           PC1     PC2     PC3
+##    <fct>         <dbl>   <dbl>   <dbl>
+##  1 Alabama     -0.976   1.12   -0.440 
+##  2 Alaska      -1.93    1.06    2.02  
+##  3 Arizona     -1.75   -0.738   0.0542
+##  4 Arkansas     0.140   1.11    0.113 
+##  5 California  -2.50   -1.53    0.593 
+##  6 Colorado    -1.50   -0.978   1.08  
+##  7 Connecticut  1.34   -1.08   -0.637 
+##  8 Delaware    -0.0472 -0.322  -0.711 
+##  9 Florida     -2.98    0.0388 -0.571 
+## 10 Georgia     -1.62    1.27   -0.339 
+## # … with 40 more rows
+```
+
+or using a `threshold` to specify how many components to keep by the variance explained. So by setting `threshold = 0.7` `step_pca()` will generate enough principal components to explain 70% of the variance.
+
+
+```r
+recipe(~., data = USArrests) %>%
+  step_normalize(all_numeric()) %>%
+  step_pca(all_numeric(), threshold = 0.7) %>%
+  prep() %>%
+  bake(new_data = NULL)
+```
+
+```
+## # A tibble: 50 x 3
+##    state           PC1     PC2
+##    <fct>         <dbl>   <dbl>
+##  1 Alabama     -0.976   1.12  
+##  2 Alaska      -1.93    1.06  
+##  3 Arizona     -1.75   -0.738 
+##  4 Arkansas     0.140   1.11  
+##  5 California  -2.50   -1.53  
+##  6 Colorado    -1.50   -0.978 
+##  7 Connecticut  1.34   -1.08  
+##  8 Delaware    -0.0472 -0.322 
+##  9 Florida     -2.98    0.0388
+## 10 Georgia     -1.62    1.27  
 ## # … with 40 more rows
 ```
 
@@ -324,7 +435,7 @@ x_df %>%
   geom_point()
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-21-1.png" width="672" />
 
 the `kmeans()` functions takes a matrix or data.frame and `centers` which is the number of clusters we want `kmeans()` to find. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
 
@@ -427,7 +538,7 @@ augment(res_kmeans, data = x_df) %>%
   geom_point()
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-27-1.png" width="672" />
 
 This is all well and good, but it would be nice if we could try out a number of different clusters and then find the best one. We will use the `mutate()` and `map()` combo to fit multiple models and extract information from them. We remember to set a seed to ensure reproducibility.
 
@@ -469,7 +580,7 @@ multi_kmeans %>%
   geom_line()
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-29-1.png" width="672" />
 
 We see an elbow at `k = 2` which makes us happy since the data set is specifically created to have 2 clusters. We can now extract the model where `k = 2` from `multi_kmeans`.
 
@@ -490,7 +601,7 @@ augment(final_kmeans, data = x_df) %>%
   geom_point()
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-31-1.png" width="672" />
 
 ## Hierarchical Clustering
 
@@ -518,19 +629,19 @@ the [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) provides fun
 fviz_dend(res_hclust_complete, main = "complete", k = 2)
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-33-1.png" width="672" />
 
 ```r
 fviz_dend(res_hclust_average, main = "average", k = 2)
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-18-2.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-33-2.png" width="672" />
 
 ```r
 fviz_dend(res_hclust_single, main = "single", k = 2)
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-18-3.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-33-3.png" width="672" />
 
 If we don't know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We can perform scaling by using `scale()` before `dist()`.
 
@@ -543,7 +654,7 @@ x_df %>%
   fviz_dend(k = 2)
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-34-1.png" width="672" />
 Another way of calculating distances is based on correlation. This only makes sense if has 3 or more variables.
 
 
@@ -558,9 +669,11 @@ x %>%
   fviz_dend()
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-35-1.png" width="672" />
 
 ## PCA on the NCI60 Data
+
+We will now explore the `NCI60` data set. It is genomic data set, containing cancer cell line microarray data, which consists of 6830 gene expression measurements on 64 cancer cell lines. The data comes as a list containing a matrix and its labels. We do a little work to turn the data into a tibble we will use for the rest of the chapter.
 
 
 ```r
@@ -570,129 +683,85 @@ nci60 <- NCI60$data %>%
   set_colnames(., paste0("V_", 1:ncol(.))) %>%
   mutate(label = factor(NCI60$labs)) %>%
   relocate(label)
-
-nci60 %>%
-  count(label, sort = TRUE)
 ```
 
-```
-## # A tibble: 14 x 2
-##    label           n
-##    <fct>       <int>
-##  1 NSCLC           9
-##  2 RENAL           9
-##  3 MELANOMA        8
-##  4 BREAST          7
-##  5 COLON           7
-##  6 LEUKEMIA        6
-##  7 OVARIAN         6
-##  8 CNS             5
-##  9 PROSTATE        2
-## 10 K562A-repro     1
-## 11 K562B-repro     1
-## 12 MCF7A-repro     1
-## 13 MCF7D-repro     1
-## 14 UNKNOWN         1
-```
+We do not expect to use the `label` variable doing the analysis since we are emulating an unsupervised analysis. Since we are an exploratory task we will be fine with using `prcomp()` since we don't need to apply these transformations to anything else. We remove `label` and remember to set `scale = TRUE` to perform scaling of all the variables.
+
 
 ```r
-nci60_pca <- prcomp(nci60 %>% select(-label), scale = TRUE)
-tidy(nci60_pca)
+nci60_pca <- nci60 %>%
+  select(-label) %>%
+  prcomp(scale = TRUE)
 ```
 
-```
-## # A tibble: 4,096 x 3
-##      row    PC   value
-##    <int> <dbl>   <dbl>
-##  1     1     1 -19.7  
-##  2     1     2   3.53 
-##  3     1     3  -9.74 
-##  4     1     4   0.818
-##  5     1     5 -12.5  
-##  6     1     6   7.41 
-##  7     1     7 -14.1  
-##  8     1     8   3.17 
-##  9     1     9 -21.8  
-## 10     1    10  20.2  
-## # … with 4,086 more rows
-```
+For visualization purposes, we will now join up the labels into the result of `augment(nci60_pca)` so we can visualize how close similar labeled points are to each other.
+
 
 ```r
-augment(nci60_pca)
-```
-
-```
-## # A tibble: 64 x 65
-##    .rownames .fittedPC1 .fittedPC2 .fittedPC3 .fittedPC4 .fittedPC5 .fittedPC6
-##    <chr>          <dbl>      <dbl>      <dbl>      <dbl>      <dbl>      <dbl>
-##  1 1              -19.7       3.53     -9.74       0.818     -12.5       7.41 
-##  2 2              -22.9       6.39    -13.4       -5.59       -7.97      3.69 
-##  3 3              -27.2       2.45     -3.51       1.33      -12.5      17.2  
-##  4 4              -42.5      -9.69     -0.883     -3.42      -41.9      27.0  
-##  5 5              -55.0      -5.16    -20.9      -15.7       -10.4      12.9  
-##  6 6              -27.0       6.73    -21.6      -13.7         7.93      0.707
-##  7 7              -31.2       3.83    -30.1      -41.3        10.3     -16.9  
-##  8 8              -22.2      10.3     -18.6       -6.90       -5.48     11.6  
-##  9 9              -14.2      16.0     -19.6       -6.51       -3.77     -7.96 
-## 10 10             -29.5      23.8      -5.84       9.94        3.42     11.6  
-## # … with 54 more rows, and 58 more variables: .fittedPC7 <dbl>,
-## #   .fittedPC8 <dbl>, .fittedPC9 <dbl>, .fittedPC10 <dbl>, .fittedPC11 <dbl>,
-## #   .fittedPC12 <dbl>, .fittedPC13 <dbl>, .fittedPC14 <dbl>, .fittedPC15 <dbl>,
-## #   .fittedPC16 <dbl>, .fittedPC17 <dbl>, .fittedPC18 <dbl>, .fittedPC19 <dbl>,
-## #   .fittedPC20 <dbl>, .fittedPC21 <dbl>, .fittedPC22 <dbl>, .fittedPC23 <dbl>,
-## #   .fittedPC24 <dbl>, .fittedPC25 <dbl>, .fittedPC26 <dbl>, .fittedPC27 <dbl>,
-## #   .fittedPC28 <dbl>, .fittedPC29 <dbl>, .fittedPC30 <dbl>, .fittedPC31 <dbl>,
-## #   .fittedPC32 <dbl>, .fittedPC33 <dbl>, .fittedPC34 <dbl>, .fittedPC35 <dbl>,
-## #   .fittedPC36 <dbl>, .fittedPC37 <dbl>, .fittedPC38 <dbl>, .fittedPC39 <dbl>,
-## #   .fittedPC40 <dbl>, .fittedPC41 <dbl>, .fittedPC42 <dbl>, .fittedPC43 <dbl>,
-## #   .fittedPC44 <dbl>, .fittedPC45 <dbl>, .fittedPC46 <dbl>, .fittedPC47 <dbl>,
-## #   .fittedPC48 <dbl>, .fittedPC49 <dbl>, .fittedPC50 <dbl>, .fittedPC51 <dbl>,
-## #   .fittedPC52 <dbl>, .fittedPC53 <dbl>, .fittedPC54 <dbl>, .fittedPC55 <dbl>,
-## #   .fittedPC56 <dbl>, .fittedPC57 <dbl>, .fittedPC58 <dbl>, .fittedPC59 <dbl>,
-## #   .fittedPC60 <dbl>, .fittedPC61 <dbl>, .fittedPC62 <dbl>, .fittedPC63 <dbl>,
-## #   .fittedPC64 <dbl>
-```
-
-```r
-pc_first_three <- augment(nci60_pca) %>%
-  select(c(.fittedPC1, .fittedPC2, .fittedPC3)) %>%
-  mutate(label = factor(NCI60$labs))
-
-wrap_plots(
-  pc_first_three %>%
-    ggplot(aes(.fittedPC1, .fittedPC2, color = label)) +
-    geom_point(size = 5, alpha = 0.5) +
-    scale_color_discrete(guide = FALSE),
-  pc_first_three %>%
-    ggplot(aes(.fittedPC1, .fittedPC3, color = label)) +
-    geom_point(size = 5, alpha = 0.5)
+nci60_pcs <- bind_cols(
+  augment(nci60_pca),
+  nci60 %>% select(label)
 )
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+We have 14 different labels, so we will make use of the `"Polychrome 36"` palette to help us better differentiate between the labels.
+
 
 ```r
-summary(nci60_pca)$importance %>%
-  t() %>%
-  as_tibble(.name_repair = "universal") %>%
-  rowid_to_column() %>%
-  select(-Standard.deviation) %>%
-  pivot_longer(cols = -rowid) %>%
-  ggplot(aes(rowid, value)) +
+colors <- unname(palette.colors(n = 14, palette = "Polychrome 36"))
+```
+
+o we can plot the different PCs against each other. It is a good idea to compare the first PCs against each other since they carry the most information. We will just compare the pairs 1-2 and 1-3 but you can do more yourself. It tends to be a good idea to stop once interesting things appear in the plots.
+
+
+```r
+nci60_pcs %>%
+  ggplot(aes(.fittedPC1, .fittedPC2, color = label)) +
   geom_point() +
-  geom_line() +
-  facet_wrap(name ~ ., scales = "free") +
-  xlab("Principal Component")
+  theme_minimal() +
+  scale_color_manual(values = colors)
 ```
 
-```
-## New names:
-## * `Standard deviation` -> Standard.deviation
-## * `Proportion of Variance` -> Proportion.of.Variance
-## * `Cumulative Proportion` -> Cumulative.Proportion
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-40-1.png" width="672" />
+
+We see there is some local clustering of the different cancer types which is promising, it is not perfect but let us see what happens when we compare PC1 against PC3 now. 
+
+
+```r
+nci60_pcs %>%
+  ggplot(aes(.fittedPC1, .fittedPC3, color = label)) +
+  geom_point() +
+  theme_minimal() +
+  scale_color_manual(values = colors)
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-21-2.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-41-1.png" width="672" />
+
+Lastly, we will plot the variance explained of each principal component. We can use `tidy()` with `matrix = "eigenvalues"` to accomplish this easily, so we start with the percentage of each PC
+
+
+```r
+tidy(nci60_pca, matrix = "eigenvalues") %>%
+  ggplot(aes(PC, percent)) +
+  geom_point() +
+  geom_line()
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-42-1.png" width="672" />
+
+with the first PC having a little more than 10% and a fairly fast drop. 
+
+And we can get the cumulative variance explained just the same.
+
+
+```r
+tidy(nci60_pca, matrix = "eigenvalues") %>%
+  ggplot(aes(PC, cumulative)) +
+  geom_point() +
+  geom_line()
+```
+
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-43-1.png" width="672" />
 
 ## Clustering on nci60 dataset
 
@@ -731,19 +800,19 @@ We then visualize them to see if any of them have some good natural separations.
 fviz_dend(nci60_complete, main = "Complete")
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-46-1.png" width="672" />
 
 ```r
 fviz_dend(nci60_average, main = "Average")
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-24-2.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-46-2.png" width="672" />
 
 ```r
 fviz_dend(nci60_single, main = "Single")
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-24-3.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-46-3.png" width="672" />
 
 We now color according to `k = 4` and we get the following separations.
 
@@ -753,7 +822,7 @@ nci60_complete %>%
   fviz_dend(k = 4, main = "hclust(complete) on nci60")
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-25-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-47-1.png" width="672" />
 
 We now take the clustering id extracted with `cutree` and calculate which Label is the most common within each cluster.
 
@@ -823,7 +892,7 @@ tibble(
   autoplot(type = "heatmap")
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-51-1.png" width="672" />
 
 There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).
 
@@ -847,4 +916,4 @@ nci60_pca %>%
   fviz_dend(k = 4, main = "hclust on first five PCs")
 ```
 
-<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-31-1.png" width="672" />
+<img src="10-unsupervised-learning_files/figure-html/unnamed-chunk-53-1.png" width="672" />

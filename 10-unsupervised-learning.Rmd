@@ -2,74 +2,153 @@
 
 This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. One downside at this moment is that clustering is not well integrated into tidymodels at this time. But we are still able to use some of the features in tidymodels.
 
-```{r}
+```{r, message=FALSE}
 library(tidymodels)
 library(tidyverse)
 library(magrittr)
 library(factoextra)
 library(patchwork)
 library(proxy)
+library(ISLR)
 ```
 
 ## Principal Components Analysis
 
+This section will be used to explore the `USArrests` data set using PCA. Before we move on, let is turn `USArrests` into a tibble and move the rownames into a column.
+
 ```{r}
-usarrests <- as_tibble(USArrests, rownames = "state")
-glimpse(usarrests)
+USArrests <- as_tibble(USArrests, rownames = "state")
+USArrests
 ```
 
+Notice how the mean of each of the variables is quite different. if we were to apply PCA directly to the data set then `Murder` would have a very small influence.
+
 ```{r}
-# scale before applyig PCA
-set.seed(1)
-pca_recipe <- recipe(~., data = usarrests) %>%
-  step_scale(all_numeric()) %>%
-  step_pca(all_numeric(), id = "pca") %>%
-  prep()
-
-usarrests %>%
-  column_to_rownames("state") %>%
-  prcomp(scale = TRUE) %>%
-  fviz_pca_biplot(title = "Biplot PCA on usarrests")
-
-# loadings
-tidy(pca_recipe, type = "coef", id = "pca")
-
-tidy(pca_recipe, type = "coef", id = "pca") %>%
-  pivot_wider(
-    id_cols = "terms",
-    names_from = "component",
-    values_from = "value"
-  )
-
-# variance
-tidy(pca_recipe, type = "variance", id = "pca")
-
-tidy(pca_recipe, type = "variance", id = "pca") %>%
-  pivot_wider(
-    id_cols = "terms",
-    names_from = "component",
-    names_prefix = "PC_",
-    values_from = "value"
-  )
-# cumulative varianvce plot
-tidy(pca_recipe, type = "variance", id = "pca") %>%
-  filter(terms == "cumulative variance") %>%
-  ggplot(aes(component, value)) +
-  geom_point() +
-  geom_line() +
-  ylim(c(0, 100)) +
-  ylab("Cumulative variance")
+USArrests %>%
+  select(-state) %>%
+  map_dfr(mean)
 ```
 
+We will show how to perform PCA in two different ways in this section. First, by using `prcomp()` directly, using `broom` to extract the information we need, and secondly by using recipes.
+`prcomp()` Takes 1 required argument `x` which much be a fully numeric data.frame or matrix. Then we pass that to `prcomp()`. We also set `scale = TRUE` in `prcomp()` which will perform the scaling we need.
 
 ```{r}
-# on the direct PCA object
-usarrests_pca <- usarrests %>%
+USArrests_pca <- USArrests %>%
   select(-state) %>%
   prcomp(scale = TRUE)
 
-tidy(usarrests_pca)
-augment(usarrests_pca)
+USArrests_pca
+```
+
+now we can use our favorite broom function to extract information from this `prcomp` object. 
+We start with `tidy()`. `tidy()` can be used to extract a couple of different things, see `?broom:::tidy.prcomp()` for more information. `tidy()` will by default extract the scores of a PCA object in long tidy format. The score of is the location of the observation in PCA space. So we can 
+
+```{r}
+tidy(USArrests_pca)
+```
+
+We can also explicitly say we want the scores by setting `matrix = "scores"`.
+
+```{r}
+tidy(USArrests_pca, matrix = "scores")
+```
+
+Next, we can get the loadings of the PCA.
+
+```{r}
+tidy(USArrests_pca, matrix = "loadings")
+```
+
+This information tells us how each variable contributes to each principal component. If you don't have too many principal components you can visualize the contribution without filtering
+
+```{r}
+tidy(USArrests_pca, matrix = "loadings") %>%
+  ggplot(aes(value, column)) +
+  facet_wrap(~ PC) +
+  geom_col()
+```
+
+Lastly, we can set `matrix = "eigenvalues"` and get back the explained standard deviation for each PC including as a percent and cumulative which is quite handy for plotting.
+
+```{r}
+tidy(USArrests_pca, matrix = "eigenvalues")
+```
+
+If we want to see how the percent standard deviation explained drops off for each PC we can easily get that by using `tidy()` with `matrix = "eigenvalues"`.
+
+```{r}
+tidy(USArrests_pca, matrix = "eigenvalues") %>%
+  ggplot(aes(PC, percent)) +
+  geom_col()
+```
+
+Lastly, we have the `augment()` function which will give you back the fitted PC transformation if you apply it to the `prcomp()` object directly
+
+```{r}
+augment(USArrests_pca)
+```
+
+and will apply this transformation to new data by passing the new data to `newdata`
+
+```{r}
+augment(USArrests_pca, newdata = USArrests[1:5, ])
+```
+
+If you are using PCA as a preprocessing method I recommend you use recipes to apply the PCA transformation. This is a good way of doing it since recipe will correctly apply the same transformation to new data that the recipe is used on.
+
+We `step_normalize()` to make sure all the variables are on the same scale. By using `all_numeric()` we are able to apply PCA on the variables we want without having to remove `state`. We are also setting an `id` for `step_pca()` to make it easier to `tidy()` later.
+
+```{r}
+pca_rec <- recipe(~., data = USArrests) %>%
+  step_normalize(all_numeric()) %>%
+  step_pca(all_numeric(), id = "pca") %>%
+  prep()
+```
+
+By calling `bake(new_data = NULL)` we can get the fitted PC transformation of our numerical variables
+
+```{r}
+pca_rec %>%
+  bake(new_data = NULL)
+```
+
+but we can also supply our own data to `new_data`.
+
+```{r}
+pca_rec %>%
+  bake(new_data = USArrests[40:45, ])
+```
+
+We can get back the same information as we could for `prcomp()` but we have to specify the slightly different inside `tidy()`. Here `id = "pca"` refers to the second step of `pca_rec`. We get the `scores` with `type = "coef"`
+
+```{r}
+tidy(pca_rec, id = "pca", type = "coef")
+```
+
+And the eigenvalues with `type = "variance"`.
+
+```{r}
+tidy(pca_rec, id = "pca", type = "variance")
+```
+
+Sometimes you don't want to get back all the principal components of the data. We can either specify how many components we want with `num_comp` (or `rank.` in `prcomp()`)
+
+```{r}
+recipe(~., data = USArrests) %>%
+  step_normalize(all_numeric()) %>%
+  step_pca(all_numeric(), num_comp = 3) %>%
+  prep() %>%
+  bake(new_data = NULL)
+```
+
+or using a `threshold` to specify how many components to keep by the variance explained. So by setting `threshold = 0.7` `step_pca()` will generate enough principal components to explain 70% of the variance.
+
+```{r}
+recipe(~., data = USArrests) %>%
+  step_normalize(all_numeric()) %>%
+  step_pca(all_numeric(), threshold = 0.7) %>%
+  prep() %>%
+  bake(new_data = NULL)
 ```
 
 ## Kmeans Clustering
@@ -221,6 +300,8 @@ x %>%
 
 ## PCA on the NCI60 Data
 
+We will now explore the `NCI60` data set. It is genomic data set, containing cancer cell line microarray data, which consists of 6830 gene expression measurements on 64 cancer cell lines. The data comes as a list containing a matrix and its labels. We do a little work to turn the data into a tibble we will use for the rest of the chapter.
+
 ```{r}
 data(NCI60, package = "ISLR")
 nci60 <- NCI60$data %>%
@@ -228,39 +309,69 @@ nci60 <- NCI60$data %>%
   set_colnames(., paste0("V_", 1:ncol(.))) %>%
   mutate(label = factor(NCI60$labs)) %>%
   relocate(label)
+```
 
-nci60 %>%
-  count(label, sort = TRUE)
+We do not expect to use the `label` variable doing the analysis since we are emulating an unsupervised analysis. Since we are an exploratory task we will be fine with using `prcomp()` since we don't need to apply these transformations to anything else. We remove `label` and remember to set `scale = TRUE` to perform scaling of all the variables.
 
-nci60_pca <- prcomp(nci60 %>% select(-label), scale = TRUE)
-tidy(nci60_pca)
-augment(nci60_pca)
+```{r}
+nci60_pca <- nci60 %>%
+  select(-label) %>%
+  prcomp(scale = TRUE)
+```
 
-pc_first_three <- augment(nci60_pca) %>%
-  select(c(.fittedPC1, .fittedPC2, .fittedPC3)) %>%
-  mutate(label = factor(NCI60$labs))
+For visualization purposes, we will now join up the labels into the result of `augment(nci60_pca)` so we can visualize how close similar labeled points are to each other.
 
-wrap_plots(
-  pc_first_three %>%
-    ggplot(aes(.fittedPC1, .fittedPC2, color = label)) +
-    geom_point(size = 5, alpha = 0.5) +
-    scale_color_discrete(guide = FALSE),
-  pc_first_three %>%
-    ggplot(aes(.fittedPC1, .fittedPC3, color = label)) +
-    geom_point(size = 5, alpha = 0.5)
+```{r}
+nci60_pcs <- bind_cols(
+  augment(nci60_pca),
+  nci60 %>% select(label)
 )
+```
 
-summary(nci60_pca)$importance %>%
-  t() %>%
-  as_tibble(.name_repair = "universal") %>%
-  rowid_to_column() %>%
-  select(-Standard.deviation) %>%
-  pivot_longer(cols = -rowid) %>%
-  ggplot(aes(rowid, value)) +
+We have 14 different labels, so we will make use of the `"Polychrome 36"` palette to help us better differentiate between the labels.
+
+```{r}
+colors <- unname(palette.colors(n = 14, palette = "Polychrome 36"))
+```
+
+o we can plot the different PCs against each other. It is a good idea to compare the first PCs against each other since they carry the most information. We will just compare the pairs 1-2 and 1-3 but you can do more yourself. It tends to be a good idea to stop once interesting things appear in the plots.
+
+```{r}
+nci60_pcs %>%
+  ggplot(aes(.fittedPC1, .fittedPC2, color = label)) +
   geom_point() +
-  geom_line() +
-  facet_wrap(name ~ ., scales = "free") +
-  xlab("Principal Component")
+  theme_minimal() +
+  scale_color_manual(values = colors)
+```
+
+We see there is some local clustering of the different cancer types which is promising, it is not perfect but let us see what happens when we compare PC1 against PC3 now. 
+
+```{r}
+nci60_pcs %>%
+  ggplot(aes(.fittedPC1, .fittedPC3, color = label)) +
+  geom_point() +
+  theme_minimal() +
+  scale_color_manual(values = colors)
+```
+
+Lastly, we will plot the variance explained of each principal component. We can use `tidy()` with `matrix = "eigenvalues"` to accomplish this easily, so we start with the percentage of each PC
+
+```{r}
+tidy(nci60_pca, matrix = "eigenvalues") %>%
+  ggplot(aes(PC, percent)) +
+  geom_point() +
+  geom_line()
+```
+
+with the first PC having a little more than 10% and a fairly fast drop. 
+
+And we can get the cumulative variance explained just the same.
+
+```{r}
+tidy(nci60_pca, matrix = "eigenvalues") %>%
+  ggplot(aes(PC, cumulative)) +
+  geom_point() +
+  geom_line()
 ```
 
 ## Clustering on nci60 dataset
