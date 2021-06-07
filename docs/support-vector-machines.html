@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 9 Support Vector Machines | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8.3/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9003/tabs.js"></script><script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -52,33 +52,33 @@
 <h1>
 <span class="header-section-number">9</span> Support Vector Machines<a class="anchor" aria-label="anchor" href="#support-vector-machines"><i class="fas fa-link"></i></a>
 </h1>
-<div class="sourceCode" id="cb300"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb339"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## Registered S3 method overwritten by 'tune':
 ##   method                   from   
 ##   required_pkgs.model_spec parsnip</code></pre>
 <pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──</code></pre>
-<pre><code>## ✓ broom        0.7.6          ✓ recipes      0.1.16    
-## ✓ dials        0.0.9          ✓ rsample      0.1.0.9000
-## ✓ dplyr        1.0.6          ✓ tibble       3.1.2     
-## ✓ ggplot2      3.3.3          ✓ tidyr        1.1.3     
-## ✓ infer        0.5.4          ✓ tune         0.1.5.9000
-## ✓ modeldata    0.1.0          ✓ workflows    0.2.2     
-## ✓ parsnip      0.1.6.9000     ✓ workflowsets 0.0.2     
-## ✓ purrr        0.3.4          ✓ yardstick    0.0.8</code></pre>
+<pre><code>## ✓ broom        0.7.6           ✓ recipes      0.1.16.9000
+## ✓ dials        0.0.9           ✓ rsample      0.1.0      
+## ✓ dplyr        1.0.6           ✓ tibble       3.1.2      
+## ✓ ggplot2      3.3.3           ✓ tidyr        1.1.3      
+## ✓ infer        0.5.4           ✓ tune         0.1.5      
+## ✓ modeldata    0.1.0           ✓ workflows    0.2.2      
+## ✓ parsnip      0.1.6           ✓ workflowsets 0.0.2      
+## ✓ purrr        0.3.4           ✓ yardstick    0.0.8</code></pre>
 <pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 ## x purrr::discard() masks scales::discard()
 ## x dplyr::filter()  masks stats::filter()
 ## x dplyr::lag()     masks stats::lag()
 ## x recipes::step()  masks stats::step()
 ## • Use tidymodels_prefer() to resolve common conflicts.</code></pre>
-<div class="sourceCode" id="cb305"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb344"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span></code></pre></div>
 <div id="support-vector-classifier" class="section level2" number="9.1">
 <h2>
 <span class="header-section-number">9.1</span> Support Vector Classifier<a class="anchor" aria-label="anchor" href="#support-vector-classifier"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb306"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb345"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">sim_data</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>
   x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>,
@@ -91,7 +91,7 @@
 <span class="fu">ggplot</span><span class="op">(</span><span class="va">sim_data</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, color <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-2-1.png" width="672"></div>
-<div class="sourceCode" id="cb307"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb346"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">svm_linear_spec</span> <span class="op">&lt;-</span> <span class="fu">svm_poly</span><span class="op">(</span>degree <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"kernlab"</span>, scaled <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
@@ -103,7 +103,7 @@
 <span class="va">svm_linear_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  818ms 
+## Fit time:  806ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -117,7 +117,7 @@
 ## Objective Function Value : -108.1122 
 ## Training error : 0.2 
 ## Probability model included.</code></pre>
-<div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb348"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">kernlab</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ## Attaching package: 'kernlab'</code></pre>
@@ -130,10 +130,10 @@
 <pre><code>## The following object is masked from 'package:scales':
 ## 
 ##     alpha</code></pre>
-<div class="sourceCode" id="cb314"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb353"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">svm_linear_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-3-1.png" width="672"></div>
-<div class="sourceCode" id="cb315"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">svm_linear_fit</span> <span class="op">&lt;-</span> <span class="va">svm_linear_spec</span> <span class="op">%&gt;%</span> 
   <span class="fu">set_args</span><span class="op">(</span>cost <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">sim_data</span><span class="op">)</span>
@@ -141,7 +141,7 @@
 <span class="va">svm_linear_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  27ms 
+## Fit time:  28ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -155,7 +155,7 @@
 ## Objective Function Value : -1.5443 
 ## Training error : 0.2 
 ## Probability model included.</code></pre>
-<div class="sourceCode" id="cb317"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb356"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">svm_linear_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">svm_linear_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>cost <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_formula</span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span>
@@ -173,14 +173,14 @@
 
 <span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-5-1.png" width="672"></div>
-<div class="sourceCode" id="cb318"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb357"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_cost</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"accuracy"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb319"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb358"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">svm_linear_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">svm_linear_wf</span>, <span class="va">best_cost</span><span class="op">)</span>
 
 <span class="va">svm_linear_fit</span> <span class="op">&lt;-</span> <span class="va">svm_linear_final</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb320"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="va">sim_data_test</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>
   x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span>,
@@ -189,7 +189,7 @@
 <span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">y</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">x1</span> <span class="op">+</span> <span class="fl">1</span>, <span class="va">x1</span><span class="op">)</span>,
          x2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">y</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">x2</span> <span class="op">+</span> <span class="fl">1</span>, <span class="va">x2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb321"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb360"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">svm_linear_fit</span>, new_data <span class="op">=</span> <span class="va">sim_data_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">y</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
@@ -247,7 +247,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-05-31.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-07.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
