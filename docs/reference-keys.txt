@@ -1,5 +1,5 @@
 introduction
-statististical-learning
+statistical-learning
 linear-regression
 libraries
 simple-linear-regression

@@ -377,16 +377,16 @@ collect_metrics(tune_res)
 ## # A tibble: 100 x 7
 ##      penalty .metric .estimator    mean     n std_err .config              
 ##        <dbl> <chr>   <chr>        <dbl> <int>   <dbl> <chr>                
-##  1 0.00001   rmse    standard   336.       10 27.3    Preprocessor1_Model01
-##  2 0.00001   rsq     standard     0.452    10  0.0670 Preprocessor1_Model01
-##  3 0.0000160 rmse    standard   336.       10 27.3    Preprocessor1_Model02
-##  4 0.0000160 rsq     standard     0.452    10  0.0670 Preprocessor1_Model02
-##  5 0.0000256 rmse    standard   336.       10 27.3    Preprocessor1_Model03
-##  6 0.0000256 rsq     standard     0.452    10  0.0670 Preprocessor1_Model03
-##  7 0.0000409 rmse    standard   336.       10 27.3    Preprocessor1_Model04
-##  8 0.0000409 rsq     standard     0.452    10  0.0670 Preprocessor1_Model04
-##  9 0.0000655 rmse    standard   336.       10 27.3    Preprocessor1_Model05
-## 10 0.0000655 rsq     standard     0.452    10  0.0670 Preprocessor1_Model05
+##  1 0.00001   rmse    standard   334.       10 29.6    Preprocessor1_Model01
+##  2 0.00001   rsq     standard     0.475    10  0.0722 Preprocessor1_Model01
+##  3 0.0000160 rmse    standard   334.       10 29.6    Preprocessor1_Model02
+##  4 0.0000160 rsq     standard     0.475    10  0.0722 Preprocessor1_Model02
+##  5 0.0000256 rmse    standard   334.       10 29.6    Preprocessor1_Model03
+##  6 0.0000256 rsq     standard     0.475    10  0.0722 Preprocessor1_Model03
+##  7 0.0000409 rmse    standard   334.       10 29.6    Preprocessor1_Model04
+##  8 0.0000409 rsq     standard     0.475    10  0.0722 Preprocessor1_Model04
+##  9 0.0000655 rmse    standard   334.       10 29.6    Preprocessor1_Model05
+## 10 0.0000655 rsq     standard     0.475    10  0.0722 Preprocessor1_Model05
 ## # … with 90 more rows
 ```
 
@@ -402,7 +402,7 @@ best_penalty
 ## # A tibble: 1 x 2
 ##   penalty .config              
 ##     <dbl> <chr>                
-## 1    569. Preprocessor1_Model39
+## 1    222. Preprocessor1_Model37
 ```
 
 This value of `penalty` can then be used with `finalize_workflow()` to update/finalize the recipe by replacing `tune()` with the value of `best_penalty`. Now, this model should be fit again, this time using the whole training data set.
@@ -426,7 +426,7 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.470
+## 1 rsq     standard       0.489
 ```
 
 And it performs fairly well given what we saw earlier.
@@ -511,7 +511,7 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.470
+## 1 rsq     standard       0.489
 ```
 
 ## Principal Components Regression

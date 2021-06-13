@@ -32,7 +32,7 @@
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html"><span class="header-section-number">1</span> Introduction</a></li>
-<li><a class="" href="statististical-learning.html"><span class="header-section-number">2</span> Statististical learning</a></li>
+<li><a class="" href="statistical-learning.html"><span class="header-section-number">2</span> Statistical learning</a></li>
 <li><a class="" href="linear-regression.html"><span class="header-section-number">3</span> Linear Regression</a></li>
 <li><a class="" href="classification.html"><span class="header-section-number">4</span> Classification</a></li>
 <li><a class="" href="resampling-methods.html"><span class="header-section-number">5</span> Resampling Methods</a></li>
@@ -322,16 +322,16 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 100 x 7
 ##      penalty .metric .estimator    mean     n std_err .config              
 ##        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
-##  1 0.00001   rmse    standard   336.       10 27.3    Preprocessor1_Model01
-##  2 0.00001   rsq     standard     0.452    10  0.0670 Preprocessor1_Model01
-##  3 0.0000160 rmse    standard   336.       10 27.3    Preprocessor1_Model02
-##  4 0.0000160 rsq     standard     0.452    10  0.0670 Preprocessor1_Model02
-##  5 0.0000256 rmse    standard   336.       10 27.3    Preprocessor1_Model03
-##  6 0.0000256 rsq     standard     0.452    10  0.0670 Preprocessor1_Model03
-##  7 0.0000409 rmse    standard   336.       10 27.3    Preprocessor1_Model04
-##  8 0.0000409 rsq     standard     0.452    10  0.0670 Preprocessor1_Model04
-##  9 0.0000655 rmse    standard   336.       10 27.3    Preprocessor1_Model05
-## 10 0.0000655 rsq     standard     0.452    10  0.0670 Preprocessor1_Model05
+##  1 0.00001   rmse    standard   334.       10 29.6    Preprocessor1_Model01
+##  2 0.00001   rsq     standard     0.475    10  0.0722 Preprocessor1_Model01
+##  3 0.0000160 rmse    standard   334.       10 29.6    Preprocessor1_Model02
+##  4 0.0000160 rsq     standard     0.475    10  0.0722 Preprocessor1_Model02
+##  5 0.0000256 rmse    standard   334.       10 29.6    Preprocessor1_Model03
+##  6 0.0000256 rsq     standard     0.475    10  0.0722 Preprocessor1_Model03
+##  7 0.0000409 rmse    standard   334.       10 29.6    Preprocessor1_Model04
+##  8 0.0000409 rsq     standard     0.475    10  0.0722 Preprocessor1_Model04
+##  9 0.0000655 rmse    standard   334.       10 29.6    Preprocessor1_Model05
+## 10 0.0000655 rsq     standard     0.475    10  0.0722 Preprocessor1_Model05
 ## # … with 90 more rows</code></pre>
 <p>The “best” values of this can be selected using <code>select_best()</code>, this function requires you to specify a <code>matric</code> that it should select against.</p>
 <div class="sourceCode" id="cb204"><pre class="downlit sourceCode r">
@@ -340,7 +340,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 x 2
 ##   penalty .config              
 ##     &lt;dbl&gt; &lt;chr&gt;                
-## 1    569. Preprocessor1_Model39</code></pre>
+## 1    222. Preprocessor1_Model37</code></pre>
 <p>This value of <code>penalty</code> can then be used with <code>finalize_workflow()</code> to update/finalize the recipe by replacing <code>tune()</code> with the value of <code>best_penalty</code>. Now, this model should be fit again, this time using the whole training data set.</p>
 <div class="sourceCode" id="cb206"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">ridge_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span>
@@ -353,7 +353,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rsq     standard       0.470</code></pre>
+## 1 rsq     standard       0.489</code></pre>
 <p>And it performs fairly well given what we saw earlier.</p>
 </div>
 <div id="the-lasso" class="section level2" number="6.4">
@@ -407,7 +407,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rsq     standard       0.470</code></pre>
+## 1 rsq     standard       0.489</code></pre>
 </div>
 <div id="principal-components-regression" class="section level2" number="6.5">
 <h2>

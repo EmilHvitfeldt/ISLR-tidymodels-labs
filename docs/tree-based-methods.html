@@ -32,7 +32,7 @@
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html"><span class="header-section-number">1</span> Introduction</a></li>
-<li><a class="" href="statististical-learning.html"><span class="header-section-number">2</span> Statististical learning</a></li>
+<li><a class="" href="statistical-learning.html"><span class="header-section-number">2</span> Statistical learning</a></li>
 <li><a class="" href="linear-regression.html"><span class="header-section-number">3</span> Linear Regression</a></li>
 <li><a class="" href="classification.html"><span class="header-section-number">4</span> Classification</a></li>
 <li><a class="" href="resampling-methods.html"><span class="header-section-number">5</span> Resampling Methods</a></li>
@@ -132,15 +132,15 @@
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">High</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction  No Yes
-##        No  138  18
-##        Yes  29 115</code></pre>
+##        No  155  16
+##        Yes  26 103</code></pre>
 <div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">class_tree_fit</span>, new_data <span class="op">=</span> <span class="va">Carseats_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">High</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction No Yes
-##        No  49  10
-##        Yes 20  21</code></pre>
+##        No  44  16
+##        Yes 11  29</code></pre>
 <div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">class_tree_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">class_tree_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>cost_complexity <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>

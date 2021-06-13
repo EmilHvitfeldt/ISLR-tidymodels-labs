@@ -41,7 +41,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  705ms 
+## Fit time:  680ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
