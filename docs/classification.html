@@ -118,7 +118,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lr_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  7ms 
+## Fit time:  9ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -324,7 +324,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lda_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  6ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -438,7 +438,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">knn_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  36ms 
+## Fit time:  38ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))
