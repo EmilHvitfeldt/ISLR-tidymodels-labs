@@ -8,39 +8,6 @@ We will be using the `Hitters` data set from the `ISLR` package. We wish to pred
 
 ```r
 library(tidymodels)
-```
-
-```
-## Registered S3 method overwritten by 'tune':
-##   method                   from   
-##   required_pkgs.model_spec parsnip
-```
-
-```
-## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──
-```
-
-```
-## ✓ broom        0.7.6           ✓ recipes      0.1.16.9000
-## ✓ dials        0.0.9           ✓ rsample      0.1.0      
-## ✓ dplyr        1.0.6           ✓ tibble       3.1.2      
-## ✓ ggplot2      3.3.3           ✓ tidyr        1.1.3      
-## ✓ infer        0.5.4           ✓ tune         0.1.5      
-## ✓ modeldata    0.1.0           ✓ workflows    0.2.2      
-## ✓ parsnip      0.1.6           ✓ workflowsets 0.0.2      
-## ✓ purrr        0.3.4           ✓ yardstick    0.0.8
-```
-
-```
-## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-## x purrr::discard() masks scales::discard()
-## x dplyr::filter()  masks stats::filter()
-## x dplyr::lag()     masks stats::lag()
-## x recipes::step()  masks stats::step()
-## • Use tidymodels_prefer() to resolve common conflicts.
-```
-
-```r
 library(ISLR)
 
 Hitters <- as_tibble(Hitters) %>%
@@ -410,16 +377,16 @@ collect_metrics(tune_res)
 ## # A tibble: 100 x 7
 ##      penalty .metric .estimator    mean     n std_err .config              
 ##        <dbl> <chr>   <chr>        <dbl> <int>   <dbl> <chr>                
-##  1 0.00001   rmse    standard   336.       10 13.1    Preprocessor1_Model01
-##  2 0.00001   rsq     standard     0.517    10  0.0587 Preprocessor1_Model01
-##  3 0.0000160 rmse    standard   336.       10 13.1    Preprocessor1_Model02
-##  4 0.0000160 rsq     standard     0.517    10  0.0587 Preprocessor1_Model02
-##  5 0.0000256 rmse    standard   336.       10 13.1    Preprocessor1_Model03
-##  6 0.0000256 rsq     standard     0.517    10  0.0587 Preprocessor1_Model03
-##  7 0.0000409 rmse    standard   336.       10 13.1    Preprocessor1_Model04
-##  8 0.0000409 rsq     standard     0.517    10  0.0587 Preprocessor1_Model04
-##  9 0.0000655 rmse    standard   336.       10 13.1    Preprocessor1_Model05
-## 10 0.0000655 rsq     standard     0.517    10  0.0587 Preprocessor1_Model05
+##  1 0.00001   rmse    standard   336.       10 27.3    Preprocessor1_Model01
+##  2 0.00001   rsq     standard     0.452    10  0.0670 Preprocessor1_Model01
+##  3 0.0000160 rmse    standard   336.       10 27.3    Preprocessor1_Model02
+##  4 0.0000160 rsq     standard     0.452    10  0.0670 Preprocessor1_Model02
+##  5 0.0000256 rmse    standard   336.       10 27.3    Preprocessor1_Model03
+##  6 0.0000256 rsq     standard     0.452    10  0.0670 Preprocessor1_Model03
+##  7 0.0000409 rmse    standard   336.       10 27.3    Preprocessor1_Model04
+##  8 0.0000409 rsq     standard     0.452    10  0.0670 Preprocessor1_Model04
+##  9 0.0000655 rmse    standard   336.       10 27.3    Preprocessor1_Model05
+## 10 0.0000655 rsq     standard     0.452    10  0.0670 Preprocessor1_Model05
 ## # … with 90 more rows
 ```
 
@@ -459,7 +426,7 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.222
+## 1 rsq     standard       0.470
 ```
 
 And it performs fairly well given what we saw earlier.
@@ -544,7 +511,7 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.222
+## 1 rsq     standard       0.470
 ```
 
 ## Principal Components Regression

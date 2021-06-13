@@ -60,37 +60,13 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 </h2>
 <p>We load the tidymodels for modeling functions, ISlR for data sets, and <a href="https://discrim.tidymodels.org/">discrim</a> to give us access to discriminant analysis models such as LDA and QDA.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Registered S3 method overwritten by 'tune':
-##   method                   from   
-##   required_pkgs.model_spec parsnip</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──</code></pre>
-<pre><code>## ✓ broom        0.7.6           ✓ recipes      0.1.16.9000
-## ✓ dials        0.0.9           ✓ rsample      0.1.0      
-## ✓ dplyr        1.0.6           ✓ tibble       3.1.2      
-## ✓ ggplot2      3.3.3           ✓ tidyr        1.1.3      
-## ✓ infer        0.5.4           ✓ tune         0.1.5      
-## ✓ modeldata    0.1.0           ✓ workflows    0.2.2      
-## ✓ parsnip      0.1.6           ✓ workflowsets 0.0.2      
-## ✓ purrr        0.3.4           ✓ yardstick    0.0.8</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-## x purrr::discard() masks scales::discard()
-## x dplyr::filter()  masks stats::filter()
-## x dplyr::lag()     masks stats::lag()
-## x recipes::step()  masks stats::step()
-## • Use tidymodels_prefer() to resolve common conflicts.</code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://discrim.tidymodels.org">discrim</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-## Attaching package: 'discrim'</code></pre>
-<pre><code>## The following object is masked from 'package:dials':
-## 
-##     smoothness</code></pre>
 <p>We will be examining the <code>Smarket</code> data set for this lab. It contains a number of numeric variables plus a variable called <code>Direction</code> which has the two labels <code>"Up"</code> and <code>"Down"</code>. Before we do on to modeling, let us take a look at the correlation between the variables.</p>
 <p>To look at the correlation, we will use the <a href="https://corrr.tidymodels.org/">corrr</a> package. The <code><a href="https://corrr.tidymodels.org/reference/correlate.html">correlate()</a></code> function will calculate the correlation matrix between all the variables that it is being fed. We will therefore remove <code>Direction</code> as it is not numeric.
 Then we pass that to <code><a href="https://corrr.tidymodels.org/reference/rplot.html">rplot()</a></code> to quickly visualize the correlation matrix. I have also changed the <code>colours</code> argument to better see what is going on.</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/corrr">corrr</a></span><span class="op">)</span>
 <span class="va">cor_Smarket</span> <span class="op">&lt;-</span> <span class="va">Smarket</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Direction</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -98,13 +74,13 @@ Then we pass that to <code><a href="https://corrr.tidymodels.org/reference/rplot
 <pre><code>## 
 ## Correlation method: 'pearson'
 ## Missing treated using: 'pairwise.complete.obs'</code></pre>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://corrr.tidymodels.org/reference/rplot.html">rplot</a></span><span class="op">(</span><span class="va">cor_Smarket</span>, colours <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"indianred2"</span>, <span class="st">"black"</span>, <span class="st">"skyblue1"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Don't know how to automatically pick scale for object of type noquote. Defaulting to continuous.</code></pre>
 <div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-3-1.png" width="672"></div>
 <p>And we see that these variables are more or less uncorrelated with each other. The other pair is <code>Year</code> and <code>Volume</code> that is a little correlated.</p>
 <p>If you want to create heatmap styled correlation chart you can also create it manually.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EmilHvitfeldt/paletteer">paletteer</a></span><span class="op">)</span>
 <span class="va">cor_Smarket</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://corrr.tidymodels.org/reference/stretch.html">stretch</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -115,7 +91,7 @@ Then we pass that to <code><a href="https://corrr.tidymodels.org/reference/rplot
   <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-4-1.png" width="672"></div>
 <p>If we plot <code>Year</code> against <code>Volume</code> we see that there is an upwards trend in <code>Volume</code> with time.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">Smarket</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">Year</span>, <span class="va">Volume</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_jitter</span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-5-1.png" width="672"></div>
@@ -125,14 +101,14 @@ Then we pass that to <code><a href="https://corrr.tidymodels.org/reference/rplot
 <span class="header-section-number">4.2</span> Logistic Regression<a class="anchor" aria-label="anchor" href="#logistic-regression"><i class="fas fa-link"></i></a>
 </h2>
 <p>Now we will fit a logistic regression model. We will again use the parsnip package, and we will use <code>logistic_reg()</code> to create a logistic regression model specification.</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_spec</span> <span class="op">&lt;-</span> <span class="fu">logistic_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glm"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></code></pre></div>
 <p>Notice that while I did set the engine and mode, they are just restating the defaults.</p>
 <p>We can now fit the model like normal. We want to model the <code>Direction</code> of the stock market based on the percentage return from the 5 previous days plus the volume of shares traded.
 When fitting a classification with parsnip requires that the response variable is a factor. This is the case for the <code>Smarket</code> data set so we don’t need to do adjustments.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_fit</span> <span class="op">&lt;-</span> <span class="va">lr_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span>
     <span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span> <span class="op">+</span> <span class="va">Lag3</span> <span class="op">+</span> <span class="va">Lag4</span> <span class="op">+</span> <span class="va">Lag5</span> <span class="op">+</span> <span class="va">Volume</span>,
@@ -142,7 +118,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lr_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  10ms 
+## Fit time:  9ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -157,7 +133,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## Null Deviance:       1731 
 ## Residual Deviance: 1728  AIC: 1742</code></pre>
 <p>this fit is done using the <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> function, and it comes with a very handy <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method as well.</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_fit</span> <span class="op">%&gt;%</span>
   <span class="fu">pluck</span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -188,7 +164,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## 
 ## Number of Fisher Scoring iterations: 3</code></pre>
 <p>This lets us see a couple of different things such as; parameter estimates, standard errors, p-values, and model fit statistics. we can use the <code>tidy()</code> function to extract some of these model attributes for further analysis or presentation.</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lr_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 5
 ##   term        estimate std.error statistic p.value
@@ -201,7 +177,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## 6 Lag5         0.0103     0.0495     0.208   0.835
 ## 7 Volume       0.135      0.158      0.855   0.392</code></pre>
 <p>Predictions are done much the same way. Here we use the model to predict on the data it was trained on.</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1,250 x 1
 ##    .pred_class
@@ -219,7 +195,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## # … with 1,240 more rows</code></pre>
 <p>The result is a tibble with a single column <code>.pred_class</code> which will be a factor variable of the same labels as the original training data set.</p>
 <p>We can also get back probability predictions, by specifying <code>type = "prob"</code>.</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1,250 x 2
 ##    .pred_Down .pred_Up
@@ -237,7 +213,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## # … with 1,240 more rows</code></pre>
 <p>note that we get back a column for each of the classes. This is a little reductive since we could easily calculate the inverse, but once we get to multi-classification models it becomes quite handy.</p>
 <p>Using <code>augment()</code> we can add the predictions to the data.frame and then use that to look at model performance metrics. before we calculate the metrics directly, I find it useful to look at the <a href="https://en.wikipedia.org/wiki/Confusion_matrix">confusion matrix</a>. This will show you how well your predictive model is performing by given a table of predicted values against the true value.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
@@ -246,13 +222,13 @@ When fitting a classification with parsnip requires that the response variable i
 ##       Up    457 507</code></pre>
 <p>A good performing model would ideally have high numbers along the diagonal (up-left to down-right) with small numbers on the off-diagonal. We see here that the model isn’t great, as it tends to predict <code>"Down"</code> as <code>"Up"</code> more often than it should.</p>
 <p>if you want a more visual representation of the confusion matrix you can pipe the result of <code>conf_mat()</code> into <code>autoplot()</code> to generate a ggplot2 chart.</p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">autoplot</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-13-1.png" width="672"></div>
 <p>We can also calculate various performance metrics. One of the most common metrics is accuracy, which is how often the model predicted correctly as a percentage.</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -261,28 +237,28 @@ When fitting a classification with parsnip requires that the response variable i
 ## 1 accuracy binary         0.522</code></pre>
 <p>and we see that the accuracy isn’t great either which is obvious already looking at the confusion matrix.</p>
 <p>We just fit a model and evaluated it on the same data. This doesn’t give us that much information about the model performance. Let us instead split up the data, train it on some of it and then evaluate it on the other part of the data. Since we are working with some data that has a time component, it is natural to fit the model using the first year’s worth of data and evaluate it on the last year. This would more closely match how such a model would be used in real life.</p>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Smarket_train</span> <span class="op">&lt;-</span> <span class="va">Smarket</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">!=</span> <span class="fl">2005</span><span class="op">)</span>
 
 <span class="va">Smarket_test</span> <span class="op">&lt;-</span> <span class="va">Smarket</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">==</span> <span class="fl">2005</span><span class="op">)</span></code></pre></div>
 <p>Now that we have split the data into <code>Smarket_train</code> and <code>Smarket_test</code> we can fit a logistic regression model to <code>Smarket_train</code> and evaluate it on <code>Smarket_test</code> to see how well the model generalizes.</p>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_fit2</span> <span class="op">&lt;-</span> <span class="va">lr_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span>
     <span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span> <span class="op">+</span> <span class="va">Lag3</span> <span class="op">+</span> <span class="va">Lag4</span> <span class="op">+</span> <span class="va">Lag5</span> <span class="op">+</span> <span class="va">Volume</span>,
     data <span class="op">=</span> <span class="va">Smarket_train</span>
     <span class="op">)</span></code></pre></div>
 <p>And we will evaluate on the testing data set.</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit2</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down Up
 ##       Down   77 97
 ##       Up     34 44</code></pre>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit2</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -291,7 +267,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## 1 accuracy binary         0.480</code></pre>
 <p>We see that this model is not more likely to predict <code>"Down"</code> rather than <code>"Up"</code>. Also, note how the model performs worse than the last model. This is expected since we are evaluating on new data.</p>
 <p>We recall that the logistic regression model had underwhelming p-values. Let us see what happens if we remove some of the variables that appear not to be helpful we might achieve a more predictive model since the variables that do not have a relationship with the response will cause an increase in variance without a decrease in bias.</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lr_fit3</span> <span class="op">&lt;-</span> <span class="va">lr_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span>
     <span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span>,
@@ -304,7 +280,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## Prediction Down  Up
 ##       Down   35  35
 ##       Up     76 106</code></pre>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lr_fit3</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -314,13 +290,13 @@ When fitting a classification with parsnip requires that the response variable i
 <p>And we see an increase in performance. The model is still not perfect but it is starting to perform better.</p>
 <p>Suppose that we want to predict the returns associated with particular values of <code>Lag1</code> and <code>Lag2</code>. In particular, we want to predict <code>Direction</code> on a day when <code>Lag1</code> and <code>Lag2</code> equal 1.2 and 1.1, respectively, and on a day when they equal 1.5 and −0.8.</p>
 <p>For this we start by creating a tibble corresponding to the scenarios we want to predict for</p>
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Smarket_new</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>
   Lag1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.2</span>, <span class="fl">1.5</span><span class="op">)</span>, 
   Lag2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="op">-</span><span class="fl">0.8</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p>And then we will use <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code></p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>
   <span class="va">lr_fit3</span>,
   new_data <span class="op">=</span> <span class="va">Smarket_new</span>, 
@@ -337,7 +313,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="header-section-number">4.3</span> Linear Discriminant Analysis<a class="anchor" aria-label="anchor" href="#linear-discriminant-analysis"><i class="fas fa-link"></i></a>
 </h2>
 <p>Now we will perform LDA on the <code>Smarket</code> data. We will use the <code><a href="https://discrim.tidymodels.org/reference/discrim_linear.html">discrim_linear()</a></code> function to create a LDA specification. We will continue to use 2 predictors for easy comparison.</p>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lda_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://discrim.tidymodels.org/reference/discrim_linear.html">discrim_linear</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"MASS"</span><span class="op">)</span>
@@ -348,7 +324,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lda_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -367,7 +343,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## Lag2 -0.5135293</code></pre>
 <p>One of the things to look for in the LDA output is the group means. We see that there is a slight difference between the means of the two groups. These suggest that there is a tendency for the previous 2 days’ returns to be negative on days when the market increases, and a tendency for the previous day’ returns to be positive on days when the market declines.</p>
 <p>Predictions are done just the same as with logistic regression</p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 252 x 1
 ##    .pred_class
@@ -383,7 +359,7 @@ When fitting a classification with parsnip requires that the response variable i
 ##  9 Up         
 ## 10 Up         
 ## # … with 242 more rows</code></pre>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 252 x 2
 ##    .pred_Down .pred_Up
@@ -400,14 +376,14 @@ When fitting a classification with parsnip requires that the response variable i
 ## 10      0.484    0.516
 ## # … with 242 more rows</code></pre>
 <p>And we can take a look at the performance.</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down  Up
 ##       Down   35  35
 ##       Up     76 106</code></pre>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -422,7 +398,7 @@ When fitting a classification with parsnip requires that the response variable i
 </h2>
 <p>We will now fit a QDA model. This is first time we are trying to fit a model that doesn’t have a direct parsnip function. The QDA model is a special case of the regularized discriminant model. So setting <code>frac_common_cov = 0</code> and <code>frac_identity = 0</code> we are able to specify a QDA model.</p>
 <p>Once we have the model specification fitting the model is just like before.</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">qda_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://discrim.tidymodels.org/reference/discrim_regularized.html">discrim_regularized</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_args</span><span class="op">(</span>frac_common_cov <span class="op">=</span> <span class="fl">0</span>, frac_identity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -430,14 +406,14 @@ When fitting a classification with parsnip requires that the response variable i
 
 <span class="va">qda_fit</span> <span class="op">&lt;-</span> <span class="va">qda_spec</span> <span class="op">%&gt;%</span>
   <span class="fu">fit</span><span class="op">(</span><span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span>, data <span class="op">=</span> <span class="va">Smarket_train</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">qda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down  Up
 ##       Down   30  20
 ##       Up     81 121</code></pre>
-<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">qda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -451,7 +427,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="header-section-number">4.5</span> K-Nearest Neighbors<a class="anchor" aria-label="anchor" href="#k-nearest-neighbors"><i class="fas fa-link"></i></a>
 </h2>
 <p>Lastly let us take a look at a K-Nearest Neighbors model. This is the first model we have looked at that has a hyperparameter we need to specify. I have set it to 3 with <code>neighbors = 3</code>. Fitting is done like normal.</p>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn_spec</span> <span class="op">&lt;-</span> <span class="fu">nearest_neighbor</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"kknn"</span><span class="op">)</span>
@@ -472,14 +448,14 @@ When fitting a classification with parsnip requires that the response variable i
 ## Best kernel: optimal
 ## Best k: 3</code></pre>
 <p>And evaluation is done the same way</p>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down Up
 ##       Down   43 58
 ##       Up     68 83</code></pre>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 x 3
@@ -494,24 +470,24 @@ When fitting a classification with parsnip requires that the response variable i
 </h2>
 <p>We will try using a K-nearest neighbors model in an application to caravan insurance data. This data set includes 85 predictors that measure demographic characteristics for 5822 individuals. The response variable is <code>Purchase</code>, which indicates whether or not a given individual purchases a caravan insurance policy. In this data set, only 6% of people purchased caravan insurance.</p>
 <p>We want to build a predictive model that uses the demographic characteristics to predict whether an individual is going to purchase a caravan insurance. Before we go on, we split the data set into a training data set and testing data set. (This is a not the proper way this should be done. See next chapter for the correct way.)</p>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Caravan_test</span> <span class="op">&lt;-</span> <span class="va">Caravan</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>, <span class="op">]</span>
 <span class="va">Caravan_train</span> <span class="op">&lt;-</span> <span class="va">Caravan</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
 <p>Since we are using a K-nearest neighbor model, it is importance that the variables are centered and scaled to make sure that the variables have a uniform influence. We can accomplish this transformation with <code>step_normalize()</code>, which does centering and scaling in one go.</p>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Purchase</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We will be trying different values of K to see how the number of neighbors affect the model performance. A workflow object is created, with just the recipe added.</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Caravan_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec</span><span class="op">)</span></code></pre></div>
 <p>Next we create a general KNN model specification.</p>
-<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn_spec</span> <span class="op">&lt;-</span> <span class="fu">nearest_neighbor</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"kknn"</span><span class="op">)</span></code></pre></div>
 <p>We can then use this model specification along with <code>Caravan_wf</code> to create 3 full workflow objects for <code>K = 1,3,5</code>.</p>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn1_wf</span> <span class="op">&lt;-</span> <span class="va">Caravan_wf</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">knn_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
@@ -521,26 +497,26 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">knn5_wf</span> <span class="op">&lt;-</span> <span class="va">Caravan_wf</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">knn_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>With all these workflow specification we can fit all the models one by one.</p>
-<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn1_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn1_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span>
 <span class="va">knn3_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn3_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span>
 <span class="va">knn5_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn5_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span></code></pre></div>
 <p>And we can calculate all the confusion matricies.</p>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn1_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction  No Yes
 ##        No  874  50
 ##        Yes  67   9</code></pre>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn3_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction  No Yes
 ##        No  875  50
 ##        Yes  66   9</code></pre>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn5_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
@@ -555,13 +531,13 @@ When fitting a classification with parsnip requires that the response variable i
 </h2>
 <p>This section is new and not part of ISLR. We have fitted a lot of different models in this lab. And we were able to calculate the performance metrics one by one, but it is not ideal if we want to compare the different models. Below is an example of how you can more conveniently calculate performance metrics for multiple models at the same time.</p>
 <p>Start of by creating a named list of the fitted models you want to evaluate. I have made sure only to include models that were fitted on the same parameters to make it easier to compare them.</p>
-<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"logistic regression"</span> <span class="op">=</span> <span class="va">lr_fit3</span>,
                <span class="st">"LDA"</span> <span class="op">=</span> <span class="va">lda_fit</span>,
                <span class="st">"QDA"</span> <span class="op">=</span> <span class="va">qda_fit</span>,
                <span class="st">"KNN"</span> <span class="op">=</span> <span class="va">knn_fit</span><span class="op">)</span></code></pre></div>
 <p>Next use <code>imap_dfr()</code> from the <a href="https://purrr.tidyverse.org/">purrr</a> package to apply <code>augment()</code> to each of the models using the testing data set. <code>.id = "model"</code> creates a column named <code>"model"</code> that is added to the resulting tibble using the names of <code>models</code>.</p>
-<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu">imap_dfr</span><span class="op">(</span><span class="va">models</span>, <span class="va">augment</span>, 
                   new_data <span class="op">=</span> <span class="va">Smarket_test</span>, .id <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span>
 
@@ -583,10 +559,10 @@ When fitting a classification with parsnip requires that the response variable i
 ## # … with 998 more rows</code></pre>
 <p>we have seen how to use <code>accuracy()</code> a lot of times by now, but it is not the only metric to use for classification, and yardstick provides <a href="https://yardstick.tidymodels.org/reference/index.html#section-classification-metrics">many more</a>.
 You can combine multiple different metrics together with <code>metric_set()</code></p>
-<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">multi_metric</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">accuracy</span>, <span class="va">sensitivity</span>, <span class="va">specificity</span><span class="op">)</span></code></pre></div>
 <p>and then the resulting function can be applied to calculate multiple metrics at the same time. All of the yardstick works with grouped tibbles so by calling <code>group_by(model)</code> we can calculate the metrics for each of the models in one go.</p>
-<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">preds</span> <span class="op">%&gt;%</span>
   <span class="fu">group_by</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">multi_metric</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
@@ -606,7 +582,7 @@ You can combine multiple different metrics together with <code>metric_set()</cod
 ## 11 logistic regression spec     binary         0.752
 ## 12 QDA                 spec     binary         0.858</code></pre>
 <p>The same technique can be used to create ROC curves.</p>
-<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">preds</span> <span class="op">%&gt;%</span>
   <span class="fu">group_by</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">roc_curve</span><span class="op">(</span><span class="va">Direction</span>, <span class="va">.pred_Down</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -646,7 +622,7 @@ You can combine multiple different metrics together with <code>metric_set()</cod
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-07.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-12.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

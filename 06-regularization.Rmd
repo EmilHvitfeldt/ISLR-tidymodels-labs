@@ -5,7 +5,7 @@ This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for mo
 
 We will be using the `Hitters` data set from the `ISLR` package. We wish to predict the baseball players `Salary` based on several different characteristics which are included in the data set. Since we wish to predict `Salary`, then we need to remove any missing data from that column. Otherwise, we won't be able to run the models.
 
-```{r}
+```{r, message=FALSE}
 library(tidymodels)
 library(ISLR)
 

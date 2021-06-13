@@ -7,7 +7,7 @@ This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for mo
 
 We load the tidymodels for modeling functions, ISlR for data sets, and [discrim](https://discrim.tidymodels.org/) to give us access to discriminant analysis models such as LDA and QDA.
 
-```{r}
+```{r, message=FALSE}
 library(tidymodels)
 library(ISLR)
 library(discrim)

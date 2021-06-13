@@ -1,6 +1,6 @@
 # Tree-Based Methods
 
-```{r}
+```{r, message=FALSE}
 library(tidymodels)
 library(ISLR)
 library(MASS)

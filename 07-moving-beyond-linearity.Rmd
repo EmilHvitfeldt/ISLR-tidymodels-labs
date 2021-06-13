@@ -1,6 +1,6 @@
 # Moving Beyond Linearity
 
-```{r}
+```{r, message=FALSE}
 library(tidymodels)
 library(ISLR)
 

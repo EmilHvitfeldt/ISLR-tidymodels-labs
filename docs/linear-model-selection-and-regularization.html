@@ -55,28 +55,9 @@
 <p>This lab will take a look at regularization models and hyperparameter tuning. These models are related to the models we saw in chapter 3 and 4, with the difference that they contain a regularization term.
 This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip</a> for model fitting and <a href="https://www.tidymodels.org/start/recipes/">recipes and workflows</a> to perform the transformations, and <a href="https://www.tidymodels.org/start/tuning/">tune and dials</a> to tune the hyperparameters of the model.</p>
 <p>We will be using the <code>Hitters</code> data set from the <code>ISLR</code> package. We wish to predict the baseball players <code>Salary</code> based on several different characteristics which are included in the data set. Since we wish to predict <code>Salary</code>, then we need to remove any missing data from that column. Otherwise, we won’t be able to run the models.</p>
-<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Registered S3 method overwritten by 'tune':
-##   method                   from   
-##   required_pkgs.model_spec parsnip</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────── tidymodels 0.1.3 ──</code></pre>
-<pre><code>## ✓ broom        0.7.6           ✓ recipes      0.1.16.9000
-## ✓ dials        0.0.9           ✓ rsample      0.1.0      
-## ✓ dplyr        1.0.6           ✓ tibble       3.1.2      
-## ✓ ggplot2      3.3.3           ✓ tidyr        1.1.3      
-## ✓ infer        0.5.4           ✓ tune         0.1.5      
-## ✓ modeldata    0.1.0           ✓ workflows    0.2.2      
-## ✓ parsnip      0.1.6           ✓ workflowsets 0.0.2      
-## ✓ purrr        0.3.4           ✓ yardstick    0.0.8</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-## x purrr::discard() masks scales::discard()
-## x dplyr::filter()  masks stats::filter()
-## x dplyr::lag()     masks stats::lag()
-## x recipes::step()  masks stats::step()
-## • Use tidymodels_prefer() to resolve common conflicts.</code></pre>
-<div class="sourceCode" id="cb190"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
 
 <span class="va">Hitters</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Hitters</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Salary</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -97,15 +78,15 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <span class="header-section-number">6.3</span> Ridge Regression<a class="anchor" aria-label="anchor" href="#ridge-regression"><i class="fas fa-link"></i></a>
 </h2>
 <p>We will use the <code>glmnet</code> package to perform ridge regression. <code>parsnip</code> does not have a dedicated function to create a ridge regression model specification. You need to use <code>linear_reg()</code> and set <code>mixture = 0</code> to specify a ridge model. The <code>mixture</code> argument specifies the amount of different types of regularization, <code>mixture = 0</code> specifies only ridge regularization and <code>mixture = 1</code> specifies only lasso regularization. Setting <code>mixture</code> to a value between 0 and 1 lets us use both. When using the <code>glmnet</code> engine we also need to set a <code>penalty</code> to be able to fit the model. We will set this value to <code>0</code> for now, it is not the best value, but we will look at how to select the best value in a little bit.</p>
-<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></code></pre></div>
 <p>Once the specification is created we can fit it to our data. We will use all the predictors.</p>
-<div class="sourceCode" id="cb192"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">ridge_spec</span>, <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters</span><span class="op">)</span></code></pre></div>
 <p>The <code>glmnet</code> package will fit the model for all values of <code>penalty</code> at once, so let us see what the parameter estimate for the model is now that we have <code>penalty = 0</code>.</p>
-<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## Loading required package: Matrix</code></pre>
 <pre><code>## 
@@ -138,7 +119,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 ## 19 Errors        -3.69          0
 ## 20 NewLeagueN   -18.1           0</code></pre>
 <p>Let us instead see what the estimates would be if the penalty was 11498.</p>
-<div class="sourceCode" id="cb199"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">11498</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 20 x 3
 ##    term         estimate penalty
@@ -164,7 +145,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 ## 19 Errors       -0.0206    11498
 ## 20 NewLeagueN    0.303     11498</code></pre>
 <p>Notice how the estimates are decreasing when the amount of penalty goes up. Look below at the parameter estimates for <code>penalty = 705</code> and <code>penalty = 50</code>.</p>
-<div class="sourceCode" id="cb201"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">705</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 20 x 3
 ##    term        estimate penalty
@@ -189,7 +170,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 ## 18 Assists       0.0161     705
 ## 19 Errors       -0.704      705
 ## 20 NewLeagueN    8.61       705</code></pre>
-<div class="sourceCode" id="cb203"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb186"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 20 x 3
 ##    term          estimate penalty
@@ -215,11 +196,11 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 ## 19 Errors        -3.28         50
 ## 20 NewLeagueN    -9.42         50</code></pre>
 <p>We can visualize how the magnitude of the coefficients are being regularized towards zero as the penalty goes up.</p>
-<div class="sourceCode" id="cb205"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb188"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ridge_fit</span><span class="op">$</span><span class="va">fit</span>, xvar <span class="op">=</span> <span class="st">"lambda"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
 <p>Prediction is done like normal, if we use <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> by itself, then <code>penalty = 0</code> as we set in the model specification is used.</p>
-<div class="sourceCode" id="cb206"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb189"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ridge_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 263 x 1
 ##     .pred
@@ -236,7 +217,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 ## 10  865. 
 ## # … with 253 more rows</code></pre>
 <p>but we can also get predictions for other values of <code>penalty</code> by specifying it in <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code></p>
-<div class="sourceCode" id="cb208"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb191"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ridge_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters</span>, penalty <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 263 x 1
 ##    .pred
@@ -254,7 +235,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 ## # … with 253 more rows</code></pre>
 <p>We saw how we can fit a ridge model and make predictions for different values of <code>penalty</code>. But it would be nice if we could find the “best” value of the penalty. This is something we can use hyperparameter tuning for. Hyperparameter tuning is in its simplest form a way of fitting many models with different sets of hyperparameters trying to find one that performs “best.” The complexity in hyperparameter tuning can come from how you try different models. We will keep it simple for this lab and only look at grid search, only looking at evenly spaced parameter values. This is a fine enough approach if you have one or two tunable parameters but can become computationally infeasible. See the chapter on <a href="https://www.tmwr.org/iterative-search.html">iterative search</a> from <a href="https://www.tmwr.org/">Tidy Modeling with R</a> for more information.</p>
 <p>We start like normal by setting up a validation split. A K-fold cross-validation data set is created on the training data set with 10 folds.</p>
-<div class="sourceCode" id="cb210"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb193"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Hitters_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">Hitters</span>, strata <span class="op">=</span> <span class="st">"Salary"</span><span class="op">)</span>
 
 <span class="va">Hitters_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">Hitters_split</span><span class="op">)</span>
@@ -270,7 +251,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <p>Optionally a metric set of performance metrics can be supplied for evaluation. If you don’t set one then a default set of performance metrics is used.</p>
 <p>We already have a resample object created in <code>Hitters_fold</code>. Now we should create the workflow specification next.</p>
 <p>We just used the data set as is when we fit the model earlier. But ridge regression is scale sensitive so we need to make sure that the variables are on the same scale. We can use <code>step_normalize()</code>. Secondly let us deal with the factor variables ourself using <code>step_novel()</code> and <code>step_dummy()</code>.</p>
-<div class="sourceCode" id="cb211"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb194"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_recipe</span> <span class="op">&lt;-</span> 
   <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -278,18 +259,18 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
   <span class="fu">step_zv</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The model specification will look very similar to what we have seen earlier, but we will set <code>penalty = tune()</code>. This tells <code>tune_grid()</code> that the <code>penalty</code> parameter should be tuned.</p>
-<div class="sourceCode" id="cb212"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb195"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_spec</span> <span class="op">&lt;-</span> 
   <span class="fu">linear_reg</span><span class="op">(</span>penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></code></pre></div>
 <p>Now we combine to create a <code>workflow</code> object.</p>
-<div class="sourceCode" id="cb213"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb196"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">ridge_recipe</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">add_model</span><span class="op">(</span><span class="va">ridge_spec</span><span class="op">)</span></code></pre></div>
 <p>The last thing we need is the values of <code>penalty</code> we are trying. This can be created using <code>grid_regular()</code> which creates a grid of evenly spaces parameter values. We use the <code>penalty()</code> function from the <a href="https://dials.tidymodels.org/">dials</a> package to denote the parameter and set the range of the grid we are searching for. Note that this range is log-scaled.</p>
-<div class="sourceCode" id="cb214"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb197"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">penalty_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
 <span class="va">penalty_grid</span></code></pre></div>
 <pre><code>## # A tibble: 50 x 1
@@ -308,7 +289,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 ## # … with 40 more rows</code></pre>
 <p>Using 50 levels for one parameter might seem overkill and in many applications it is. But remember that <code>glmnet</code> fits all the models in one go so adding more levels to <code>penalty</code> doesn’t affect the computational speed much.</p>
 <p>Now we have everything we need and we can fit all the models.</p>
-<div class="sourceCode" id="cb216"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb199"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tune_res</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span>
   <span class="va">ridge_workflow</span>,
   resamples <span class="op">=</span> <span class="va">Hitters_fold</span>, 
@@ -332,28 +313,28 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 ##  9 &lt;split [177/19]&gt; Fold09 &lt;tibble [100 × 5]&gt; &lt;tibble [0 × 1]&gt;
 ## 10 &lt;split [177/19]&gt; Fold10 &lt;tibble [100 × 5]&gt; &lt;tibble [0 × 1]&gt;</code></pre>
 <p>The output of <code>tune_grid()</code> can be hard to read by itself unprocessed. <code>autoplot()</code> creates a great visualization</p>
-<div class="sourceCode" id="cb218"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb201"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <p><img src="06-regularization_files/figure-html/unnamed-chunk-16-1.png" width="672">
 Here we see that the amount of regularization affects the performance metrics differently. Note how there are areas where the amount of regularization doesn’t have any meaningful influence on the coefficient estimates. We can also see the raw metrics that created this chart by calling <code>collect_matrics()</code>.</p>
-<div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb202"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 100 x 7
 ##      penalty .metric .estimator    mean     n std_err .config              
 ##        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
-##  1 0.00001   rmse    standard   336.       10 13.1    Preprocessor1_Model01
-##  2 0.00001   rsq     standard     0.517    10  0.0587 Preprocessor1_Model01
-##  3 0.0000160 rmse    standard   336.       10 13.1    Preprocessor1_Model02
-##  4 0.0000160 rsq     standard     0.517    10  0.0587 Preprocessor1_Model02
-##  5 0.0000256 rmse    standard   336.       10 13.1    Preprocessor1_Model03
-##  6 0.0000256 rsq     standard     0.517    10  0.0587 Preprocessor1_Model03
-##  7 0.0000409 rmse    standard   336.       10 13.1    Preprocessor1_Model04
-##  8 0.0000409 rsq     standard     0.517    10  0.0587 Preprocessor1_Model04
-##  9 0.0000655 rmse    standard   336.       10 13.1    Preprocessor1_Model05
-## 10 0.0000655 rsq     standard     0.517    10  0.0587 Preprocessor1_Model05
+##  1 0.00001   rmse    standard   336.       10 27.3    Preprocessor1_Model01
+##  2 0.00001   rsq     standard     0.452    10  0.0670 Preprocessor1_Model01
+##  3 0.0000160 rmse    standard   336.       10 27.3    Preprocessor1_Model02
+##  4 0.0000160 rsq     standard     0.452    10  0.0670 Preprocessor1_Model02
+##  5 0.0000256 rmse    standard   336.       10 27.3    Preprocessor1_Model03
+##  6 0.0000256 rsq     standard     0.452    10  0.0670 Preprocessor1_Model03
+##  7 0.0000409 rmse    standard   336.       10 27.3    Preprocessor1_Model04
+##  8 0.0000409 rsq     standard     0.452    10  0.0670 Preprocessor1_Model04
+##  9 0.0000655 rmse    standard   336.       10 27.3    Preprocessor1_Model05
+## 10 0.0000655 rsq     standard     0.452    10  0.0670 Preprocessor1_Model05
 ## # … with 90 more rows</code></pre>
 <p>The “best” values of this can be selected using <code>select_best()</code>, this function requires you to specify a <code>matric</code> that it should select against.</p>
-<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb204"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_penalty</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span>
 <span class="va">best_penalty</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 2
@@ -361,18 +342,18 @@ Here we see that the amount of regularization affects the performance metrics di
 ##     &lt;dbl&gt; &lt;chr&gt;                
 ## 1    569. Preprocessor1_Model39</code></pre>
 <p>This value of <code>penalty</code> can then be used with <code>finalize_workflow()</code> to update/finalize the recipe by replacing <code>tune()</code> with the value of <code>best_penalty</code>. Now, this model should be fit again, this time using the whole training data set.</p>
-<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb206"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">ridge_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span>
 
 <span class="va">ridge_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">ridge_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span></code></pre></div>
 <p>This final model can now be applied on our testing data set to validate the performance</p>
-<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb207"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">ridge_final_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rsq</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Salary</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rsq     standard       0.222</code></pre>
+## 1 rsq     standard       0.470</code></pre>
 <p>And it performs fairly well given what we saw earlier.</p>
 </div>
 <div id="the-lasso" class="section level2" number="6.4">
@@ -381,7 +362,7 @@ Here we see that the amount of regularization affects the performance metrics di
 </h2>
 <p>We will use the <code>glmnet</code> package to perform lasso regression. <code>parsnip</code> does not have a dedicated function to create a ridge regression model specification. You need to use <code>linear_reg()</code> and set <code>mixture = 1</code> to specify a lasso model. The <code>mixture</code> argument specifies the amount of different types of regularization, <code>mixture = 0</code> specifies only ridge regularization and <code>mixture = 1</code> specifies only lasso regularization. Setting <code>mixture</code> to a value between 0 and 1 lets us use both.</p>
 <p>The following procedure will be very similar to what we saw in the ridge regression section. The preprocessing needed is the same, but let us write it out one more time.</p>
-<div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb209"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lasso_recipe</span> <span class="op">&lt;-</span> 
   <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -389,7 +370,7 @@ Here we see that the amount of regularization affects the performance metrics di
   <span class="fu">step_zv</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Next, we finish the lasso regression <code>workflow</code>.</p>
-<div class="sourceCode" id="cb227"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb210"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lasso_spec</span> <span class="op">&lt;-</span> 
   <span class="fu">linear_reg</span><span class="op">(</span>penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -399,10 +380,10 @@ Here we see that the amount of regularization affects the performance metrics di
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">lasso_recipe</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">add_model</span><span class="op">(</span><span class="va">lasso_spec</span><span class="op">)</span></code></pre></div>
 <p>While we are doing a different kind of regularization we still use the same <code>penalty</code> argument. I have picked a different range for the values of penalty since I know it will be a good range. You would in practice have to cast a wide net at first and then narrow on the range of interest.</p>
-<div class="sourceCode" id="cb228"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb211"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">penalty_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></code></pre></div>
 <p>And we can use <code>tune_grid()</code> again.</p>
-<div class="sourceCode" id="cb229"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb212"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tune_res</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span>
   <span class="va">lasso_workflow</span>,
   resamples <span class="op">=</span> <span class="va">Hitters_fold</span>, 
@@ -412,21 +393,21 @@ Here we see that the amount of regularization affects the performance metrics di
 <span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-24-1.png" width="672"></div>
 <p>We select the best value of <code>penalty</code> using <code>select_best()</code></p>
-<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb213"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_penalty</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></code></pre></div>
 <p>And refit the using the whole training data set.</p>
-<div class="sourceCode" id="cb231"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb214"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lasso_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">lasso_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span>
 
 <span class="va">lasso_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">lasso_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span></code></pre></div>
 <p>And we are done, by calculating the <code>rsq</code> value for the lasso model can we see that for this data it doesn’t make much difference which kind of regularization we use as they have similar performance.</p>
-<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb215"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">ridge_final_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rsq</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Salary</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rsq     standard       0.222</code></pre>
+## 1 rsq     standard       0.470</code></pre>
 </div>
 <div id="principal-components-regression" class="section level2" number="6.5">
 <h2>
@@ -434,13 +415,13 @@ Here we see that the amount of regularization affects the performance metrics di
 </h2>
 <p>We will talk more about principal components analysis in chapter 10. This section will show how principal components can be used as a dimensionality reduction preprocessing step.</p>
 <p>I will treat principal component regression as a linear model with PCA transformations in the preprocessing. But using the tidymodels framework then this is still mostly one model.</p>
-<div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb217"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">&lt;-</span> 
   <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></code></pre></div>
 <p>The preprocessing recipe will closely resemble the recipe we saw in the ridge and lasso sections. The main difference is that we end the recipe with <code>step_pca()</code> which will perform principal component analysis on all the predictors, and return the components that explain <code>threshold</code> percent of the variance. We have set <code>threshold = tune()</code> so we can treat the threshold as a hyperparameter to be tuned. By using workflows and tune together can be tune parameters in the preprocessing as well as parameters in the models.</p>
-<div class="sourceCode" id="cb235"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb218"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pca_recipe</span> <span class="op">&lt;-</span> 
   <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -454,7 +435,7 @@ Here we see that the amount of regularization affects the performance metrics di
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">pca_recipe</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span></code></pre></div>
 <p>We create a smaller grid for <code>threshold</code> and we don’t need to modify the range since <code>[0, 1]</code> is an acceptable range.</p>
-<div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">threshold_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">threshold</span><span class="op">(</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="va">threshold_grid</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 1
@@ -471,21 +452,21 @@ Here we see that the amount of regularization affects the performance metrics di
 ##  9     0.889
 ## 10     1</code></pre>
 <p>And now we fit using <code>tune_grid()</code>. This time we will actually perform 100 fits since we need to fit a model for each value of <code>threshold</code> within each fold.</p>
-<div class="sourceCode" id="cb238"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tune_res</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span>
   <span class="va">pca_workflow</span>,
   resamples <span class="op">=</span> <span class="va">Hitters_fold</span>, 
   grid <span class="op">=</span> <span class="va">threshold_grid</span>
 <span class="op">)</span></code></pre></div>
 <p>The results look a little shaky here.</p>
-<div class="sourceCode" id="cb239"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb222"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-32-1.png" width="672"></div>
 <p>But we can still select the best model.</p>
-<div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_threshold</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
 <p>And fit the model much like have done a couple of times by now. The workflow is finalized using the value we selected with <code>select_best()</code>, and training using the full training data set.</p>
-<div class="sourceCode" id="cb241"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pca_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">pca_workflow</span>, <span class="va">best_threshold</span><span class="op">)</span>
 
 <span class="va">pca_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">pca_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span></code></pre></div>
@@ -495,7 +476,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <span class="header-section-number">6.6</span> Partial Least Squares<a class="anchor" aria-label="anchor" href="#partial-least-squares"><i class="fas fa-link"></i></a>
 </h2>
 <p>Lastly, we have a partial least squares model. We will treat this much like the PCA section and say that partial least squares calculations will be done as a preprocessing that we tune. The following code is almost identical to previous chapters and will be shown in full without many explanations to avoid repetition. If you skipped to this section, go back and read the previous sections for more commentary.</p>
-<div class="sourceCode" id="cb242"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb225"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pls_recipe</span> <span class="op">&lt;-</span> 
   <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -557,7 +538,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-07.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-12.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

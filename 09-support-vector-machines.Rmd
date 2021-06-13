@@ -1,6 +1,6 @@
 # Support Vector Machines
 
-```{r}
+```{r, message=FALSE}
 library(tidymodels)
 library(ISLR)
 ```
