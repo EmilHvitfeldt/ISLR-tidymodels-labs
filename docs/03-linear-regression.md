@@ -346,7 +346,7 @@ lm_fit3
 ```
 ## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ ., data = data)

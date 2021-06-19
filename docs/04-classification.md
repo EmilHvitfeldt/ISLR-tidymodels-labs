@@ -103,7 +103,7 @@ lr_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  10ms 
+## Fit time:  9ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -410,7 +410,7 @@ lda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -568,7 +568,7 @@ knn_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  41ms 
+## Fit time:  37ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))

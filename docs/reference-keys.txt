@@ -41,7 +41,6 @@ support-vector-machines
 support-vector-classifier
 support-vector-machine
 roc-curves
-svm-with-multiple-classes
 application-to-gene-expression-data
 unsupervised-learning
 principal-components-analysis
