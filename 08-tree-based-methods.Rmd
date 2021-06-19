@@ -196,6 +196,11 @@ reg_tree_fit <- fit(reg_tree_spec, medv ~ ., Boston_train)
 reg_tree_fit
 ```
 
+```{r}
+augment(reg_tree_fit, new_data = Boston_test) %>%
+  rmse(truth = medv, estimate = .pred)
+```
+
 and the `rpart.plot()` function works for the regression decision tree as well
 
 ```{r, warning=FALSE}
@@ -248,20 +253,29 @@ rpart.plot(reg_tree_final_fit$fit$fit$fit)
 
 ## Bagging and Random Forests
 
+Here we apply bagging and random forests to the `Boston` data set. We will be using the `randomForest` package as the engine. A bagging model is the same as a random forest where `mtry` is equal to the number of predictors. We can specify the `mtry` to be `.cols()` which means that the number of columns in the predictor matrix is used. This is useful if you want to make the specification more general and useable to many different data sets. `.cols()` is one of many [descriptors](https://parsnip.tidymodels.org/reference/descriptors.html) in the parsnip package.
+We also set `importance = TRUE` in `set_engine()` to tell the engine to save the information regarding variable importance. This is needed for this engine if we want to use the `vip` package later.
+
 ```{r}
 bagging_spec <- rand_forest(mtry = .cols()) %>%
   set_engine("randomForest", importance = TRUE) %>%
   set_mode("regression")
 ```
 
+We fit the model like normal
+
 ```{r}
 bagging_fit <- fit(bagging_spec, medv ~ ., data = Boston_train)
 ```
+
+and we take a look at the testing performance. Which we see is an improvement over the decision tree.
 
 ```{r}
 augment(bagging_fit, new_data = Boston_test) %>%
   rmse(truth = medv, estimate = .pred)
 ```
+
+We can also create a quick scatterplot between the true and predicted value to see if we can make any diagnostics.
 
 ```{r}
 augment(bagging_fit, new_data = Boston_test) %>%
@@ -270,9 +284,13 @@ augment(bagging_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
+There isn't anything weird going on here so we are happy. Next, let us take a look at the variable importance
+
 ```{r}
 vip(bagging_fit)
 ```
+
+Next, let us take a look at a random forest. By default, `randomForest()` `p / 3` variables when building a random forest of regression trees, and `sqrt(p)` variables when building a random forest of classification trees. Here we use `mtry = 6`.
 
 ```{r}
 rf_spec <- rand_forest(mtry = 6) %>%
@@ -280,14 +298,20 @@ rf_spec <- rand_forest(mtry = 6) %>%
   set_mode("regression")
 ```
 
+and fitting the model like normal
+
 ```{r}
 rf_fit <- fit(rf_spec, medv ~ ., data = Boston_train)
 ```
+
+this model has a slightly better performance than the bagging model
 
 ```{r}
 augment(rf_fit, new_data = Boston_test) %>%
   rmse(truth = medv, estimate = .pred)
 ```
+
+We can likewise plot the true value against the predicted value
 
 ```{r}
 augment(rf_fit, new_data = Boston_test) %>%
@@ -296,11 +320,19 @@ augment(rf_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
+it looks fine. No discernable difference between this chart and the one we created for the bagging model. 
+
+The variable importance plot is also quite similar to what we saw for the bagging model which isn't surprising. 
+
 ```{r}
 vip(rf_fit)
 ```
 
+you would normally want to perform hyperparameter tuning for the random forest model to get the best out of your forest. This exercise is left for the reader.
+
 ## Boosting
+
+We will now fit a boosted tree model. The `xgboost` packages give a good implementation of boosted trees. It has many parameters to tune and we know that setting `trees` too high can lead to overfitting. Nevertheless, let us try fitting a boosted tree. We set `tree = 5000` to grow 5000 trees with a maximal depth of 4 by setting `tree_depth = 4`.
 
 ```{r}
 boost_spec <- boost_tree(trees = 5000, tree_depth = 4) %>%
@@ -308,14 +340,20 @@ boost_spec <- boost_tree(trees = 5000, tree_depth = 4) %>%
   set_mode("regression")
 ```
 
+fitting the model like normal
+
 ```{r}
 boost_fit <- fit(boost_spec, medv ~ ., data = Boston_train)
 ```
+
+and the `rmse` is a little high in this case which is properly because we didn't tune any of the parameters.
 
 ```{r}
 augment(boost_fit, new_data = Boston_test) %>%
   rmse(truth = medv, estimate = .pred)
 ```
+
+We can look at the scatterplot and we don't see anything weird going on.
 
 ```{r}
 augment(boost_fit, new_data = Boston_test) %>%
@@ -324,24 +362,4 @@ augment(boost_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
-```{r}
-boost_spec <- boost_tree(trees = 5000, tree_depth = 4, learn_rate = 0.2) %>%
-  set_engine("xgboost") %>%
-  set_mode("regression")
-```
-
-```{r}
-boost_fit <- fit(boost_spec, medv ~ ., data = Boston_train)
-```
-
-```{r}
-augment(boost_fit, new_data = Boston_test) %>%
-  rmse(truth = medv, estimate = .pred)
-```
-
-```{r}
-augment(boost_fit, new_data = Boston_test) %>%
-  ggplot(aes(medv, .pred)) +
-  geom_abline() +
-  geom_point(alpha = 0.5)
-```
+You would normally want to perform hyperparameter tuning for the boosted tree model to get the best out of your model. This exercise is left for the reader. Look at the [Iterative search](https://www.tmwr.org/iterative-search.html) chapter of [Tidy Modeling with R](https://www.tmwr.org/) for inspiration.
