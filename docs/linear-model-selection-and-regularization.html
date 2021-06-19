@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 6 Linear Model Selection and Regularization | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8.6/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9003/tabs.js"></script><script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -322,16 +322,16 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 100 x 7
 ##      penalty .metric .estimator    mean     n std_err .config              
 ##        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
-##  1 0.00001   rmse    standard   341.       10 34.2    Preprocessor1_Model01
-##  2 0.00001   rsq     standard     0.423    10  0.0480 Preprocessor1_Model01
-##  3 0.0000160 rmse    standard   341.       10 34.2    Preprocessor1_Model02
-##  4 0.0000160 rsq     standard     0.423    10  0.0480 Preprocessor1_Model02
-##  5 0.0000256 rmse    standard   341.       10 34.2    Preprocessor1_Model03
-##  6 0.0000256 rsq     standard     0.423    10  0.0480 Preprocessor1_Model03
-##  7 0.0000409 rmse    standard   341.       10 34.2    Preprocessor1_Model04
-##  8 0.0000409 rsq     standard     0.423    10  0.0480 Preprocessor1_Model04
-##  9 0.0000655 rmse    standard   341.       10 34.2    Preprocessor1_Model05
-## 10 0.0000655 rsq     standard     0.423    10  0.0480 Preprocessor1_Model05
+##  1 0.00001   rmse    standard   337.       10 24.2    Preprocessor1_Model01
+##  2 0.00001   rsq     standard     0.455    10  0.0894 Preprocessor1_Model01
+##  3 0.0000160 rmse    standard   337.       10 24.2    Preprocessor1_Model02
+##  4 0.0000160 rsq     standard     0.455    10  0.0894 Preprocessor1_Model02
+##  5 0.0000256 rmse    standard   337.       10 24.2    Preprocessor1_Model03
+##  6 0.0000256 rsq     standard     0.455    10  0.0894 Preprocessor1_Model03
+##  7 0.0000409 rmse    standard   337.       10 24.2    Preprocessor1_Model04
+##  8 0.0000409 rsq     standard     0.455    10  0.0894 Preprocessor1_Model04
+##  9 0.0000655 rmse    standard   337.       10 24.2    Preprocessor1_Model05
+## 10 0.0000655 rsq     standard     0.455    10  0.0894 Preprocessor1_Model05
 ## # … with 90 more rows</code></pre>
 <p>The “best” values of this can be selected using <code>select_best()</code>, this function requires you to specify a <code>matric</code> that it should select against.</p>
 <div class="sourceCode" id="cb204"><pre class="downlit sourceCode r">
@@ -340,7 +340,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 x 2
 ##   penalty .config              
 ##     &lt;dbl&gt; &lt;chr&gt;                
-## 1    222. Preprocessor1_Model37</code></pre>
+## 1    910. Preprocessor1_Model40</code></pre>
 <p>This value of <code>penalty</code> can then be used with <code>finalize_workflow()</code> to update/finalize the recipe by replacing <code>tune()</code> with the value of <code>best_penalty</code>. Now, this model should be fit again, this time using the whole training data set.</p>
 <div class="sourceCode" id="cb206"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">ridge_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span>
@@ -353,7 +353,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rsq     standard       0.625</code></pre>
+## 1 rsq     standard       0.543</code></pre>
 <p>And it performs fairly well given what we saw earlier.</p>
 </div>
 <div id="the-lasso" class="section level2" number="6.4">
@@ -407,7 +407,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 x 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rsq     standard       0.625</code></pre>
+## 1 rsq     standard       0.543</code></pre>
 </div>
 <div id="principal-components-regression" class="section level2" number="6.5">
 <h2>
@@ -538,7 +538,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-12.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-19.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
