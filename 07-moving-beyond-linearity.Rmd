@@ -2,7 +2,7 @@
 
 This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include; polynomials expansion, step functions, and splines.
 
-GAMs are currently not covered since they are not supported in parsnip [yet](https://github.com/tidymodels/parsnip/pull/512).
+GAM section is WIP since they are now supported in [parsnip](https://github.com/tidymodels/parsnip/pull/512).
 
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
 
@@ -258,4 +258,4 @@ Wage %>%
 
 ## GAMs
 
-GAMs are currently not covered since they are not supported in parsnip [yet](https://github.com/tidymodels/parsnip/pull/512).
+GAM section is WIP since they are now supported in [parsnip](https://github.com/tidymodels/parsnip/pull/512).
