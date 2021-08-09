@@ -167,7 +167,9 @@ class_tree_final_fit
 At last, we can visualize the model, and we see that the better-performing model is less complex than the original model we fit. 
 
 ```{r, warning=FALSE}
-rpart.plot(class_tree_final_fit$fit$fit$fit)
+class_tree_final_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
 ```
 
 ## Fitting Regression Trees
@@ -248,7 +250,9 @@ reg_tree_final_fit
 Visualizing the model reveals a much more complex tree than what we saw in the last section.
 
 ```{r, warning=FALSE}
-rpart.plot(reg_tree_final_fit$fit$fit$fit)
+reg_tree_final_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
 ```
 
 ## Bagging and Random Forests
