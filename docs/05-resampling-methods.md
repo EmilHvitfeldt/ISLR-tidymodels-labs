@@ -47,7 +47,7 @@ Auto_train
 ```
 
 ```
-## # A tibble: 194 x 9
+## # A tibble: 194 × 9
 ##      mpg cylinders displacement horsepower weight acceleration  year origin
 ##    <dbl>     <dbl>        <dbl>      <dbl>  <dbl>        <dbl> <dbl>  <dbl>
 ##  1    15         8          350        165   3693         11.5    70      1
@@ -68,7 +68,7 @@ Auto_test
 ```
 
 ```
-## # A tibble: 198 x 9
+## # A tibble: 198 × 9
 ##      mpg cylinders displacement horsepower weight acceleration  year origin
 ##    <dbl>     <dbl>        <dbl>      <dbl>  <dbl>        <dbl> <dbl>  <dbl>
 ##  1    18         8          318        150   3436         11      70      1
@@ -113,7 +113,7 @@ augment(lm_fit, new_data = Auto_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
 ## 1 rmse    standard        5.06
@@ -130,7 +130,7 @@ augment(lm_fit, new_data = Auto_train) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
 ## 1 rmse    standard        4.74
@@ -184,7 +184,7 @@ augment(poly_fit, new_data = Auto_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
 ## 1 rmse    standard        4.37
@@ -209,7 +209,7 @@ augment(poly_fit, new_data = Auto_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
 ## 1 rmse    standard        4.35
@@ -260,7 +260,7 @@ Auto_folds
 
 ```
 ## #  10-fold cross-validation 
-## # A tibble: 10 x 2
+## # A tibble: 10 × 2
 ##    splits           id    
 ##    <list>           <chr> 
 ##  1 <split [264/30]> Fold01
@@ -323,7 +323,7 @@ collect_metrics(tune_res)
 ```
 
 ```
-## # A tibble: 20 x 7
+## # A tibble: 20 × 7
 ##    degree .metric .estimator  mean     n std_err .config              
 ##     <int> <chr>   <chr>      <dbl> <int>   <dbl> <chr>                
 ##  1      1 rmse    standard   4.81     10  0.172  Preprocessor01_Model1
@@ -356,7 +356,7 @@ show_best(tune_res, metric = "rmse")
 ```
 
 ```
-## # A tibble: 5 x 7
+## # A tibble: 5 × 7
 ##   degree .metric .estimator  mean     n std_err .config              
 ##    <int> <chr>   <chr>      <dbl> <int>   <dbl> <chr>                
 ## 1      2 rmse    standard    4.37    10   0.209 Preprocessor02_Model1
@@ -381,7 +381,7 @@ select_by_one_std_err(tune_res, degree, metric = "rmse")
 ```
 
 ```
-## # A tibble: 1 x 9
+## # A tibble: 1 × 9
 ##   degree .metric .estimator  mean     n std_err .config             .best .bound
 ##    <int> <chr>   <chr>      <dbl> <int>   <dbl> <chr>               <dbl>  <dbl>
 ## 1      2 rmse    standard    4.37    10   0.209 Preprocessor02_Mod…  4.37   4.58
@@ -463,19 +463,19 @@ Portfolio_boots
 
 ```
 ## # Bootstrap sampling 
-## # A tibble: 1,000 x 2
+## # A tibble: 1,000 × 2
 ##    splits           id           
 ##    <list>           <chr>        
-##  1 <split [100/38]> Bootstrap0001
-##  2 <split [100/41]> Bootstrap0002
-##  3 <split [100/31]> Bootstrap0003
+##  1 <split [100/36]> Bootstrap0001
+##  2 <split [100/39]> Bootstrap0002
+##  3 <split [100/39]> Bootstrap0003
 ##  4 <split [100/33]> Bootstrap0004
-##  5 <split [100/35]> Bootstrap0005
-##  6 <split [100/36]> Bootstrap0006
-##  7 <split [100/35]> Bootstrap0007
-##  8 <split [100/37]> Bootstrap0008
+##  5 <split [100/39]> Bootstrap0005
+##  6 <split [100/34]> Bootstrap0006
+##  7 <split [100/40]> Bootstrap0007
+##  8 <split [100/38]> Bootstrap0008
 ##  9 <split [100/36]> Bootstrap0009
-## 10 <split [100/39]> Bootstrap0010
+## 10 <split [100/41]> Bootstrap0010
 ## # … with 990 more rows
 ```
 
@@ -506,19 +506,19 @@ alpha_res
 
 ```
 ## # Bootstrap sampling 
-## # A tibble: 1,000 x 3
+## # A tibble: 1,000 × 3
 ##    splits           id            alpha
 ##    <list>           <chr>         <dbl>
-##  1 <split [100/38]> Bootstrap0001 0.674
-##  2 <split [100/41]> Bootstrap0002 0.586
-##  3 <split [100/31]> Bootstrap0003 0.701
-##  4 <split [100/33]> Bootstrap0004 0.572
-##  5 <split [100/35]> Bootstrap0005 0.684
-##  6 <split [100/36]> Bootstrap0006 0.530
-##  7 <split [100/35]> Bootstrap0007 0.609
-##  8 <split [100/37]> Bootstrap0008 0.530
-##  9 <split [100/36]> Bootstrap0009 0.619
-## 10 <split [100/39]> Bootstrap0010 0.475
+##  1 <split [100/36]> Bootstrap0001 0.516
+##  2 <split [100/39]> Bootstrap0002 0.687
+##  3 <split [100/39]> Bootstrap0003 0.599
+##  4 <split [100/33]> Bootstrap0004 0.556
+##  5 <split [100/39]> Bootstrap0005 0.549
+##  6 <split [100/34]> Bootstrap0006 0.619
+##  7 <split [100/40]> Bootstrap0007 0.387
+##  8 <split [100/38]> Bootstrap0008 0.675
+##  9 <split [100/36]> Bootstrap0009 0.538
+## 10 <split [100/41]> Bootstrap0010 0.407
 ## # … with 990 more rows
 ```
 
@@ -556,9 +556,9 @@ boot_res %>%
 ```
 
 ```
-## # A tibble: 2 x 3
+## # A tibble: 2 × 3
 ##   term          mean      sd
 ##   <chr>        <dbl>   <dbl>
-## 1 (Intercept) 39.7   0.691  
-## 2 horsepower  -0.156 0.00614
+## 1 (Intercept) 39.8   0.759  
+## 2 horsepower  -0.156 0.00593
 ```

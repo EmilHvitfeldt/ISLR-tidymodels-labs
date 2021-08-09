@@ -58,7 +58,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  770ms 
+## Fit time:  704ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -105,7 +105,9 @@ library(kernlab)
 ```
 
 ```r
-plot(svm_linear_fit$fit)
+svm_linear_fit %>%
+  extract_fit_engine() %>%
+  plot()
 ```
 
 <img src="09-support-vector-machines_files/figure-html/unnamed-chunk-6-1.png" width="672" />
@@ -202,8 +204,8 @@ augment(svm_linear_fit, new_data = sim_data_test) %>%
 ```
 ##           Truth
 ## Prediction -1 1
-##         -1  9 2
-##         1   1 8
+##         -1  8 3
+##         1   2 7
 ```
 
 ## Support Vector Machine
@@ -247,7 +249,9 @@ and plotting reveals that the model was able o separate the two classes, even th
 
 
 ```r
-plot(svm_rbf_fit$fit)
+svm_rbf_fit %>%
+  extract_fit_engine() %>%
+  plot()
 ```
 
 <img src="09-support-vector-machines_files/figure-html/unnamed-chunk-15-1.png" width="672" />
@@ -275,8 +279,8 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
 ```
 ##           Truth
 ## Prediction   1   2
-##          1 135   9
-##          2  15  41
+##          1 137   7
+##          2  13  43
 ```
 
 ## ROC Curves
@@ -290,19 +294,19 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
 ```
 
 ```
-## # A tibble: 202 x 3
+## # A tibble: 202 × 3
 ##    .threshold specificity sensitivity
 ##         <dbl>       <dbl>       <dbl>
-##  1  -Inf             0          1    
-##  2     0.0130        0          1    
-##  3     0.0131        0.02       1    
-##  4     0.0137        0.04       1    
-##  5     0.0150        0.04       0.993
-##  6     0.0155        0.06       0.993
-##  7     0.0158        0.08       0.993
-##  8     0.0168        0.1        0.993
-##  9     0.0174        0.12       0.993
-## 10     0.0175        0.14       0.993
+##  1   -Inf            0          1    
+##  2      0.104        0          1    
+##  3      0.113        0.02       1    
+##  4      0.114        0.04       1    
+##  5      0.115        0.06       1    
+##  6      0.117        0.08       1    
+##  7      0.118        0.1        1    
+##  8      0.119        0.12       1    
+##  9      0.124        0.14       1    
+## 10      0.124        0.14       0.993
 ## # … with 192 more rows
 ```
 
@@ -326,10 +330,10 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 roc_auc binary         0.907
+## 1 roc_auc binary         0.925
 ```
 
 ## Application to Gene Expression Data

@@ -165,7 +165,7 @@ tidy(lr_fit)
 ```
 
 ```
-## # A tibble: 7 x 5
+## # A tibble: 7 × 5
 ##   term        estimate std.error statistic p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
 ## 1 (Intercept) -0.126      0.241     -0.523   0.601
@@ -185,7 +185,7 @@ predict(lr_fit, new_data = Smarket)
 ```
 
 ```
-## # A tibble: 1,250 x 1
+## # A tibble: 1,250 × 1
 ##    .pred_class
 ##    <fct>      
 ##  1 Up         
@@ -211,7 +211,7 @@ predict(lr_fit, new_data = Smarket, type = "prob")
 ```
 
 ```
-## # A tibble: 1,250 x 2
+## # A tibble: 1,250 × 2
 ##    .pred_Down .pred_Up
 ##         <dbl>    <dbl>
 ##  1      0.493    0.507
@@ -266,7 +266,7 @@ augment(lr_fit, new_data = Smarket) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   <chr>    <chr>          <dbl>
 ## 1 accuracy binary         0.522
@@ -317,7 +317,7 @@ augment(lr_fit2, new_data = Smarket_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   <chr>    <chr>          <dbl>
 ## 1 accuracy binary         0.480
@@ -352,7 +352,7 @@ augment(lr_fit3, new_data = Smarket_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   <chr>    <chr>          <dbl>
 ## 1 accuracy binary         0.560
@@ -384,7 +384,7 @@ predict(
 ```
 
 ```
-## # A tibble: 2 x 2
+## # A tibble: 2 × 2
 ##   .pred_Down .pred_Up
 ##        <dbl>    <dbl>
 ## 1      0.521    0.479
@@ -439,7 +439,7 @@ predict(lda_fit, new_data = Smarket_test)
 ```
 
 ```
-## # A tibble: 252 x 1
+## # A tibble: 252 × 1
 ##    .pred_class
 ##    <fct>      
 ##  1 Up         
@@ -460,7 +460,7 @@ predict(lda_fit, new_data = Smarket_test, type = "prob")
 ```
 
 ```
-## # A tibble: 252 x 2
+## # A tibble: 252 × 2
 ##    .pred_Down .pred_Up
 ##         <dbl>    <dbl>
 ##  1      0.490    0.510
@@ -497,7 +497,7 @@ augment(lda_fit, new_data = Smarket_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   <chr>    <chr>          <dbl>
 ## 1 accuracy binary         0.560
@@ -541,13 +541,17 @@ augment(qda_fit, new_data = Smarket_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   <chr>    <chr>          <dbl>
 ## 1 accuracy binary         0.599
 ```
 
 And we are seeing another increase in accuracy. However this model still rarely predicts `"Down'`. This make it appear that the quadratic form assumed by QDA captures the relationship more clearly.
+
+## Naive Bayes
+
+This section is WIP.
 
 ## K-Nearest Neighbors
 
@@ -600,15 +604,13 @@ augment(knn_fit, new_data = Smarket_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   <chr>    <chr>          <dbl>
 ## 1 accuracy binary           0.5
 ```
 
 It appears that this model is not performing that well.
-
-## An Application to Caravan Insurance Data
 
 We will try using a K-nearest neighbors model in an application to caravan insurance data. This data set includes 85 predictors that measure demographic characteristics for 5822 individuals. The response variable is `Purchase`, which indicates whether or not a given individual purchases a caravan insurance policy. In this data set, only 6% of people purchased caravan insurance.
 
@@ -711,6 +713,10 @@ augment(knn5_fit, new_data = Caravan_test) %>%
 
 And it appears that the model performance doesn't change much when changing from 1 to 5.
 
+## Poisson Regression
+
+This section is WIP.
+
 ## Extra - comparing multiple models
 
 This section is new and not part of ISLR. We have fitted a lot of different models in this lab. And we were able to calculate the performance metrics one by one, but it is not ideal if we want to compare the different models. Below is an example of how you can more conveniently calculate performance metrics for multiple models at the same time.
@@ -737,7 +743,7 @@ preds %>%
 ```
 
 ```
-## # A tibble: 1,008 x 5
+## # A tibble: 1,008 × 5
 ##    model               Direction .pred_class .pred_Down .pred_Up
 ##    <chr>               <fct>     <fct>            <dbl>    <dbl>
 ##  1 logistic regression Down      Up               0.490    0.510
@@ -771,7 +777,7 @@ preds %>%
 ```
 
 ```
-## # A tibble: 12 x 4
+## # A tibble: 12 × 4
 ##    model               .metric  .estimator .estimate
 ##    <chr>               <chr>    <chr>          <dbl>
 ##  1 KNN                 accuracy binary         0.5  

@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 7 Moving Beyond Linearity | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8.6/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.10/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9003/tabs.js"></script><script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -40,7 +40,10 @@
 <li><a class="active" href="moving-beyond-linearity.html"><span class="header-section-number">7</span> Moving Beyond Linearity</a></li>
 <li><a class="" href="tree-based-methods.html"><span class="header-section-number">8</span> Tree-Based Methods</a></li>
 <li><a class="" href="support-vector-machines.html"><span class="header-section-number">9</span> Support Vector Machines</a></li>
-<li><a class="" href="unsupervised-learning.html"><span class="header-section-number">10</span> Unsupervised Learning</a></li>
+<li><a class="" href="deep-learning.html"><span class="header-section-number">10</span> Deep learning</a></li>
+<li><a class="" href="survival-analysis-and-censored-data.html"><span class="header-section-number">11</span> Survival Analysis and Censored Data</a></li>
+<li><a class="" href="unsupervised-learning.html"><span class="header-section-number">12</span> Unsupervised Learning</a></li>
+<li><a class="" href="multiple-testing.html"><span class="header-section-number">13</span> Multiple Testing</a></li>
 </ul>
 
         <div class="book-extra">
@@ -53,7 +56,7 @@
 <span class="header-section-number">7</span> Moving Beyond Linearity<a class="anchor" aria-label="anchor" href="#moving-beyond-linearity"><i class="fas fa-link"></i></a>
 </h1>
 <p>This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include; polynomials expansion, step functions, and splines.</p>
-<p>GAMs are currently not covered since they are not supported in parsnip <a href="https://github.com/tidymodels/parsnip/pull/512">yet</a>.</p>
+<p>GAM section is WIP since they are now supported in <a href="https://github.com/tidymodels/parsnip/pull/512">parsnip</a>.</p>
 <p>This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip</a> for model fitting and <a href="https://www.tidymodels.org/start/recipes/">recipes and workflows</a> to perform the transformations.</p>
 <div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span>
@@ -102,7 +105,7 @@
 <p>And we cal pull the coefficients using <code>tidy()</code></p>
 <div class="sourceCode" id="cb231"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">poly_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 5 x 5
+<pre><code>## # A tibble: 5 × 5
 ##   term        estimate std.error statistic  p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 (Intercept)    112.      0.729    153.   0       
@@ -160,7 +163,7 @@ One of the benefits of using <code>raw = FALSE</code> is that the resulting vari
 <span class="va">raw_poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">raw_poly_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span>
 
 <span class="fu">tidy</span><span class="op">(</span><span class="va">raw_poly_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 5 x 5
+<pre><code>## # A tibble: 5 × 5
 ##   term            estimate  std.error statistic  p.value
 ##   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
 ## 1 (Intercept) -184.        60.0           -3.07 0.00218 
@@ -177,7 +180,7 @@ One of the benefits of using <code>raw = FALSE</code> is that the resulting vari
   <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span>
 <span class="op">)</span>
 <span class="va">regression_lines</span></code></pre></div>
-<pre><code>## # A tibble: 63 x 4
+<pre><code>## # A tibble: 63 × 4
 ##      age .pred .pred_lower .pred_upper
 ##    &lt;int&gt; &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
 ##  1    18  51.9        41.5        62.3
@@ -248,7 +251,7 @@ We also have to create a logistic regression specification that we will use as o
 <code class="sourceCode R"><span class="va">lr_poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">lr_poly_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_poly_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 3,000 x 1
+<pre><code>## # A tibble: 3,000 × 1
 ##    .pred_class
 ##    &lt;fct&gt;      
 ##  1 Low        
@@ -265,7 +268,7 @@ We also have to create a logistic regression specification that we will use as o
 <p>If we want we can also get back the underlying probability predictions for the two classes, and their confidence intervals for these probability predictions by setting <code>type = "prob"</code> and <code>type = "conf_int"</code>.</p>
 <div class="sourceCode" id="cb247"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_poly_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 3,000 x 2
+<pre><code>## # A tibble: 3,000 × 2
 ##       .pred_High .pred_Low
 ##            &lt;dbl&gt;     &lt;dbl&gt;
 ##  1 0.00000000983     1.00 
@@ -281,7 +284,7 @@ We also have to create a logistic regression specification that we will use as o
 ## # … with 2,990 more rows</code></pre>
 <div class="sourceCode" id="cb249"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_poly_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 3,000 x 4
+<pre><code>## # A tibble: 3,000 × 4
 ##    .pred_lower_High .pred_upper_High .pred_lower_Low .pred_upper_Low
 ##               &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
 ##  1         2.22e-16          0.00166           0.998           1    
@@ -392,7 +395,7 @@ We also have to create a logistic regression specification that we will use as o
 <span class="va">spline_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">spline_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">spline_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 3,000 x 1
+<pre><code>## # A tibble: 3,000 × 1
 ##    .pred
 ##    &lt;dbl&gt;
 ##  1  58.7
@@ -427,7 +430,7 @@ We also have to create a logistic regression specification that we will use as o
 <h2>
 <span class="header-section-number">7.3</span> GAMs<a class="anchor" aria-label="anchor" href="#gams"><i class="fas fa-link"></i></a>
 </h2>
-<p>GAMs are currently not covered since they are not supported in parsnip <a href="https://github.com/tidymodels/parsnip/pull/512">yet</a>.</p>
+<p>GAM section is WIP since they are now supported in <a href="https://github.com/tidymodels/parsnip/pull/512">parsnip</a>.</p>
 
 </div>
 </div>
@@ -457,7 +460,7 @@ We also have to create a logistic regression specification that we will use as o
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-19.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-08-09.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

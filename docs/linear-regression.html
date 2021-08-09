@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 3 Linear Regression | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8.6/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.10/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9003/tabs.js"></script><script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -40,7 +40,10 @@
 <li><a class="" href="moving-beyond-linearity.html"><span class="header-section-number">7</span> Moving Beyond Linearity</a></li>
 <li><a class="" href="tree-based-methods.html"><span class="header-section-number">8</span> Tree-Based Methods</a></li>
 <li><a class="" href="support-vector-machines.html"><span class="header-section-number">9</span> Support Vector Machines</a></li>
-<li><a class="" href="unsupervised-learning.html"><span class="header-section-number">10</span> Unsupervised Learning</a></li>
+<li><a class="" href="deep-learning.html"><span class="header-section-number">10</span> Deep learning</a></li>
+<li><a class="" href="survival-analysis-and-censored-data.html"><span class="header-section-number">11</span> Survival Analysis and Censored Data</a></li>
+<li><a class="" href="unsupervised-learning.html"><span class="header-section-number">12</span> Unsupervised Learning</a></li>
+<li><a class="" href="multiple-testing.html"><span class="header-section-number">13</span> Multiple Testing</a></li>
 </ul>
 
         <div class="book-extra">
@@ -141,7 +144,7 @@ The names used in the formula should match the names of the variables in the dat
 <p>the <code>tidy()</code> function returns the parameter estimates of a <code>lm</code> object</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 2 x 5
+<pre><code>## # A tibble: 2 × 5
 ##   term        estimate std.error statistic   p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 (Intercept)   34.6      0.563       61.4 3.74e-236
@@ -149,7 +152,7 @@ The names used in the formula should match the names of the variables in the dat
 <p>and <code>glance()</code> can be used to extract the model statistics.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">glance</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 12
+<pre><code>## # A tibble: 1 × 12
 ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1     0.544         0.543  6.22      602. 5.08e-88     1 -1641. 3289. 3302.
@@ -161,7 +164,7 @@ The names used in the formula should match the names of the variables in the dat
 <p>But this produces an error when used on a parsnip model object. This is happening because we need to explicitly supply the data set that the predictions should be performed on via the <code>new_data</code> argument</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 506 x 1
+<pre><code>## # A tibble: 506 × 1
 ##    .pred
 ##    &lt;dbl&gt;
 ##  1 29.8 
@@ -179,7 +182,7 @@ The names used in the formula should match the names of the variables in the dat
 <p>We can also return other types of predicts by specifying the <code>type</code> argument. Setting <code>type = "conf_int"</code> return a 95% confidence interval.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 506 x 2
+<pre><code>## # A tibble: 506 × 2
 ##    .pred_lower .pred_upper
 ##          &lt;dbl&gt;       &lt;dbl&gt;
 ##  1       29.0        30.6 
@@ -205,7 +208,7 @@ Not all engines can return all types of predictions.
   <span class="va">Boston</span>
 <span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">medv</span>, <span class="va">.pred</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 506 x 2
+<pre><code>## # A tibble: 506 × 2
 ##     medv .pred
 ##    &lt;dbl&gt; &lt;dbl&gt;
 ##  1  24   29.8 
@@ -223,7 +226,7 @@ Not all engines can return all types of predictions.
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">medv</span>, <span class="va">.pred</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 506 x 2
+<pre><code>## # A tibble: 506 × 2
 ##     medv .pred
 ##    &lt;dbl&gt; &lt;dbl&gt;
 ##  1  24   29.8 
@@ -250,7 +253,7 @@ Not all engines can return all types of predictions.
 <span class="va">lm_fit2</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  2ms 
+## Fit time:  1ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat + age, data = data)
@@ -261,7 +264,7 @@ Not all engines can return all types of predictions.
 <p>Everything else works the same. From extracting parameter estimates</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit2</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 3 x 5
+<pre><code>## # A tibble: 3 × 5
 ##   term        estimate std.error statistic   p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
 ## 1 (Intercept)  33.2       0.731      45.5  2.94e-180
@@ -270,7 +273,7 @@ Not all engines can return all types of predictions.
 <p>to predicting new values</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit2</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 506 x 1
+<pre><code>## # A tibble: 506 × 1
 ##    .pred
 ##    &lt;dbl&gt;
 ##  1 30.3 
@@ -292,7 +295,7 @@ Not all engines can return all types of predictions.
 <span class="va">lm_fit3</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  2ms 
+## Fit time:  3ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ ., data = data)
@@ -542,7 +545,7 @@ While this might seem unnecessary right now, some of the engines, later on, do n
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-19.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-08-09.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

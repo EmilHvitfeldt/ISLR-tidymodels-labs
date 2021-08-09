@@ -12,9 +12,23 @@ description: "tidymodels lab sections mirroring ISLR labs"
 
 # Introduction
 
-This book aims to be a complement to the 1st version [An Introduction to Statistical Learning](https://www.statlearning.com/) book with translations of the labs into using the [tidymodels](https://www.tidymodels.org/) set of packages.
+This book aims to be a complement to the 2nd version [An Introduction to Statistical Learning](https://www.statlearning.com/) book with translations of the labs into using the [tidymodels](https://www.tidymodels.org/) set of packages.
 
 The labs will be mirrored quite closely to stay true to the original material.
+
+## Version Differences {-}
+
+all listed changes will be relative to the 1st version.
+
+- [Naive Bayes] has been added to chapter 4 on [Classification]
+- [Poisson Regression] has been added to chapter 4 on [Classification]
+- "Application to Caravan Insurance Data" section is no longer treated as its own section and is now part of the [K-Nearest Neighbors] section
+- [Bayesian Additive Regression Trees] has been added to chapter 8 on [Tree-Based Methods]
+- chapter on [Unsupervised Learning] has been renumbered to chapter 12 instead of 10
+- [Matrix Completion] has been added to chapter 12 on [Unsupervised Learning]
+- chapter on [Deep learning] has been added as chapter 10
+- chapter on [Survival Analysis and Censored Data] as been added as chapter 11
+- chapter on [Multiple Testing] as been added as chapter 13
 
 ## Colophon {-}
 

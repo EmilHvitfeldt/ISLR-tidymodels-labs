@@ -267,6 +267,10 @@ augment(qda_fit, new_data = Smarket_test) %>%
 
 And we are seeing another increase in accuracy. However this model still rarely predicts `"Down'`. This make it appear that the quadratic form assumed by QDA captures the relationship more clearly.
 
+## Naive Bayes
+
+This section is WIP.
+
 ## K-Nearest Neighbors
 
 Lastly let us take a look at a K-Nearest Neighbors model. This is the first model we have looked at that has a hyperparameter we need to specify. I have set it to 3 with `neighbors = 3`. Fitting is done like normal.
@@ -293,8 +297,6 @@ augment(knn_fit, new_data = Smarket_test) %>%
 ```
 
 It appears that this model is not performing that well.
-
-## An Application to Caravan Insurance Data
 
 We will try using a K-nearest neighbors model in an application to caravan insurance data. This data set includes 85 predictors that measure demographic characteristics for 5822 individuals. The response variable is `Purchase`, which indicates whether or not a given individual purchases a caravan insurance policy. In this data set, only 6% of people purchased caravan insurance.
 
@@ -366,6 +368,10 @@ augment(knn5_fit, new_data = Caravan_test) %>%
 ```
 
 And it appears that the model performance doesn't change much when changing from 1 to 5.
+
+## Poisson Regression
+
+This section is WIP.
 
 ## Extra - comparing multiple models
 

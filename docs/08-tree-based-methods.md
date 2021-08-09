@@ -99,7 +99,9 @@ The `summary()` method provides even more information that can be useful.
 
 
 ```r
-summary(class_tree_fit$fit)
+class_tree_fit %>%
+  extract_fit_engine() %>%
+  summary()
 ```
 
 ```
@@ -110,12 +112,12 @@ summary(class_tree_fit$fit)
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.28658537      0 1.0000000 1.0000000 0.05997967
 ## 2 0.10975610      1 0.7134146 0.7134146 0.05547692
-## 3 0.04573171      2 0.6036585 0.6402439 0.05365767
-## 4 0.03658537      4 0.5121951 0.6341463 0.05349198
-## 5 0.02743902      5 0.4756098 0.5914634 0.05226769
-## 6 0.02439024      7 0.4207317 0.5792683 0.05189648
-## 7 0.01219512      8 0.3963415 0.5548780 0.05112415
-## 8 0.01000000     10 0.3719512 0.5304878 0.05031042
+## 3 0.04573171      2 0.6036585 0.6097561 0.05280643
+## 4 0.03658537      4 0.5121951 0.5792683 0.05189648
+## 5 0.02743902      5 0.4756098 0.5853659 0.05208331
+## 6 0.02439024      7 0.4207317 0.5731707 0.05170717
+## 7 0.01219512      8 0.3963415 0.5731707 0.05170717
+## 8 0.01000000     10 0.3719512 0.5731707 0.05170717
 ## 
 ## Variable importance
 ##       Price   ShelveLoc         Age Advertising   CompPrice      Income 
@@ -332,7 +334,9 @@ Once the tree gets more than a couple of nodes it can become hard to read the pr
 
 
 ```r
-rpart.plot(class_tree_fit$fit)
+class_tree_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
 ```
 
 <img src="08-tree-based-methods_files/figure-html/unnamed-chunk-9-1.png" width="672" />
@@ -348,7 +352,7 @@ augment(class_tree_fit, new_data = Carseats) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   <chr>    <chr>          <dbl>
 ## 1 accuracy binary         0.848
@@ -426,7 +430,7 @@ augment(class_tree_fit, new_data = Carseats_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   <chr>    <chr>          <dbl>
 ## 1 accuracy binary          0.77
@@ -504,7 +508,9 @@ At last, we can visualize the model, and we see that the better-performing model
 
 
 ```r
-rpart.plot(class_tree_final_fit$fit$fit$fit)
+class_tree_final_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
 ```
 
 <img src="08-tree-based-methods_files/figure-html/unnamed-chunk-21-1.png" width="672" />
@@ -541,29 +547,29 @@ reg_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  13ms 
+## Fit time:  11ms 
 ## n= 379 
 ## 
 ## node), split, n, deviance, yval
 ##       * denotes terminal node
 ## 
-##  1) root 379 33574.1000 23.10554  
-##    2) rm< 6.92 316 13278.0400 20.28924  
-##      4) lstat>=14.395 118  2331.0780 15.06186  
-##        8) nox>=0.607 72   952.7732 12.81528  
-##         16) lstat>=18.885 44   358.7518 11.01364 *
-##         17) lstat< 18.885 28   226.7696 15.64643 *
-##        9) nox< 0.607 46   446.1183 18.57826 *
-##      5) lstat< 14.395 198  5800.9460 23.40455  
-##       10) dis>=1.5604 191  2826.0840 22.86963  
-##         20) rm< 6.543 149  1320.8880 21.67383 *
-##         21) rm>=6.543 42   536.2640 27.11190 *
-##       11) dis< 1.5604 7  1429.0200 38.00000 *
-##    3) rm>=6.92 63  5218.0570 37.23175  
-##      6) rm< 7.437 39  1770.9840 32.18718  
-##       12) lstat>=8.33 7   470.3343 23.57143 *
-##       13) lstat< 8.33 32   667.3647 34.07188 *
-##      7) rm>=7.437 24   841.8696 45.42917 *
+##  1) root 379 32622.9500 22.54802  
+##    2) rm< 6.941 320 13602.3100 19.86281  
+##      4) lstat>=14.395 129  2582.1090 14.51550  
+##        8) nox>=0.607 80   984.7339 12.35875  
+##         16) lstat>=19.34 47   388.6332 10.35957 *
+##         17) lstat< 19.34 33   140.7188 15.20606 *
+##        9) nox< 0.607 49   617.6939 18.03673 *
+##      5) lstat< 14.395 191  4840.3640 23.47435  
+##       10) rm< 6.543 151  2861.3990 22.21192  
+##         20) dis>=1.68515 144  1179.5970 21.82083 *
+##         21) dis< 1.68515 7  1206.6970 30.25714 *
+##       11) rm>=6.543 40   829.8560 28.24000 *
+##    3) rm>=6.941 59  4199.1020 37.11186  
+##      6) rm< 7.437 35  1012.4100 32.08286 *
+##      7) rm>=7.437 24  1010.6200 44.44583  
+##       14) ptratio>=15.4 12   585.0767 40.71667 *
+##       15) ptratio< 15.4 12    91.7825 48.17500 *
 ```
 
 
@@ -573,17 +579,19 @@ augment(reg_tree_fit, new_data = Boston_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        3.51
+## 1 rmse    standard        4.78
 ```
 
 and the `rpart.plot()` function works for the regression decision tree as well
 
 
 ```r
-rpart.plot(reg_tree_fit$fit)
+reg_tree_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
 ```
 
 <img src="08-tree-based-methods_files/figure-html/unnamed-chunk-26-1.png" width="672" />
@@ -645,61 +653,44 @@ reg_tree_final_fit
 ## node), split, n, deviance, yval
 ##       * denotes terminal node
 ## 
-##    1) root 379 33574.10000 23.10554  
-##      2) rm< 6.92 316 13278.04000 20.28924  
-##        4) lstat>=14.395 118  2331.07800 15.06186  
-##          8) nox>=0.607 72   952.77320 12.81528  
-##           16) lstat>=18.885 44   358.75180 11.01364  
-##             32) tax>=551.5 36   225.74560 10.26111  
-##               64) lstat>=23.88 16    91.40438  9.21875 *
-##               65) lstat< 23.88 20   103.04950 11.09500  
-##                130) crim>=11.48635 10    64.56100  9.83000 *
-##                131) crim< 11.48635 10     6.48400 12.36000 *
-##             33) tax< 551.5 8    20.88000 14.40000 *
-##           17) lstat< 18.885 28   226.76960 15.64643  
-##             34) crim>=6.88166 11    42.42182 13.37273 *
-##             35) crim< 6.88166 17    90.68471 17.11765 *
-##          9) nox< 0.607 46   446.11830 18.57826  
-##           18) age>=60.55 38   318.05890 17.89474  
-##             36) crim>=0.592985 15   206.00000 16.50000 *
-##             37) crim< 0.592985 23    63.84957 18.80435  
-##               74) age>=93.15 8    25.03500 17.62500 *
-##               75) age< 93.15 15    21.75333 19.43333 *
-##           19) age< 60.55 8    25.97500 21.82500 *
-##        5) lstat< 14.395 198  5800.94600 23.40455  
-##         10) dis>=1.5604 191  2826.08400 22.86963  
-##           20) rm< 6.543 149  1320.88800 21.67383  
-##             40) lstat>=7.57 113   926.73010 20.91327  
-##               80) rm< 6.064 61   351.43410 19.99016  
-##                160) dis>=6.6261 10     8.86400 18.36000 *
-##                161) dis< 6.6261 51   310.78510 20.30980  
-##                  322) black>=396.255 17    99.48235 19.15294 *
-##                  323) black< 396.255 34   177.17530 20.88824  
-##                    646) indus>=6.58 23    92.67304 20.28261  
-##                     1292) rm< 5.844 11    40.70182 19.17273 *
-##                     1293) rm>=5.844 12    26.00000 21.30000 *
-##                    647) indus< 6.58 11    58.42727 22.15455 *
-##               81) rm>=6.064 52   462.33920 21.99615  
-##                162) lstat>=9.98 33    97.62970 21.10303  
-##                  324) lstat>=11.755 19    44.50632 20.45789 *
-##                  325) lstat< 11.755 14    34.48357 21.97857 *
-##                163) lstat< 9.98 19   292.66740 23.54737 *
-##             41) lstat< 7.57 36   123.62560 24.06111  
-##               82) dis>=6.12605 15    26.71333 23.03333 *
-##               83) dis< 6.12605 21    69.74952 24.79524  
-##                166) indus>=7.17 14    29.93214 24.16429 *
-##                167) indus< 7.17 7    23.09714 26.05714 *
-##           21) rm>=6.543 42   536.26400 27.11190  
-## 
-## ...
-## and 16 more lines.
+##  1) root 379 32622.95000 22.54802  
+##    2) rm< 6.941 320 13602.31000 19.86281  
+##      4) lstat>=14.395 129  2582.10900 14.51550  
+##        8) nox>=0.607 80   984.73390 12.35875  
+##         16) lstat>=19.34 47   388.63320 10.35957  
+##           32) tax>=551.5 40   243.94980  9.67750 *
+##           33) tax< 551.5 7    19.73714 14.25714 *
+##         17) lstat< 19.34 33   140.71880 15.20606 *
+##        9) nox< 0.607 49   617.69390 18.03673  
+##         18) crim>=0.381565 25   313.20000 16.20000 *
+##         19) crim< 0.381565 24   132.30000 19.95000 *
+##      5) lstat< 14.395 191  4840.36400 23.47435  
+##       10) rm< 6.543 151  2861.39900 22.21192  
+##         20) dis>=1.68515 144  1179.59700 21.82083  
+##           40) rm< 6.062 56   306.22860 20.28571 *
+##           41) rm>=6.062 88   657.41950 22.79773  
+##             82) lstat>=9.98 35    98.32686 21.02571 *
+##             83) lstat< 9.98 53   376.61550 23.96792 *
+##         21) dis< 1.68515 7  1206.69700 30.25714 *
+##       11) rm>=6.543 40   829.85600 28.24000  
+##         22) lstat>=4.44 33   274.06180 27.15455 *
+##         23) lstat< 4.44 7   333.61710 33.35714 *
+##    3) rm>=6.941 59  4199.10200 37.11186  
+##      6) rm< 7.437 35  1012.41000 32.08286  
+##       12) nox>=0.4885 14   673.46930 28.89286 *
+##       13) nox< 0.4885 21   101.49810 34.20952 *
+##      7) rm>=7.437 24  1010.62000 44.44583  
+##       14) ptratio>=15.4 12   585.07670 40.71667 *
+##       15) ptratio< 15.4 12    91.78250 48.17500 *
 ```
 
 Visualizing the model reveals a much more complex tree than what we saw in the last section.
 
 
 ```r
-rpart.plot(reg_tree_final_fit$fit$fit$fit)
+reg_tree_final_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
 ```
 
 <img src="08-tree-based-methods_files/figure-html/unnamed-chunk-30-1.png" width="672" />
@@ -732,10 +723,10 @@ augment(bagging_fit, new_data = Boston_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        2.53
+## 1 rmse    standard        3.43
 ```
 
 We can also create a quick scatterplot between the true and predicted value to see if we can make any diagnostics.
@@ -784,10 +775,10 @@ augment(rf_fit, new_data = Boston_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        2.50
+## 1 rmse    standard        3.26
 ```
 
 We can likewise plot the true value against the predicted value
@@ -842,10 +833,10 @@ augment(boost_fit, new_data = Boston_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard        2.57
+## 1 rmse    standard        3.34
 ```
 
 We can look at the scatterplot and we don't see anything weird going on.
@@ -861,3 +852,7 @@ augment(boost_fit, new_data = Boston_test) %>%
 <img src="08-tree-based-methods_files/figure-html/unnamed-chunk-44-1.png" width="672" />
 
 You would normally want to perform hyperparameter tuning for the boosted tree model to get the best out of your model. This exercise is left for the reader. Look at the [Iterative search](https://www.tmwr.org/iterative-search.html) chapter of [Tidy Modeling with R](https://www.tmwr.org/) for inspiration.
+
+## Bayesian Additive Regression Trees
+
+This section is WIP.

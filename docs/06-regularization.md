@@ -63,11 +63,11 @@ tidy(ridge_fit)
 ```
 
 ```
-## Loaded glmnet 4.1-1
+## Loaded glmnet 4.1-2
 ```
 
 ```
-## # A tibble: 20 x 3
+## # A tibble: 20 × 3
 ##    term          estimate penalty
 ##    <chr>            <dbl>   <dbl>
 ##  1 (Intercept)   81.1           0
@@ -100,7 +100,7 @@ tidy(ridge_fit, penalty = 11498)
 ```
 
 ```
-## # A tibble: 20 x 3
+## # A tibble: 20 × 3
 ##    term         estimate penalty
 ##    <chr>           <dbl>   <dbl>
 ##  1 (Intercept) 407.        11498
@@ -133,7 +133,7 @@ tidy(ridge_fit, penalty = 705)
 ```
 
 ```
-## # A tibble: 20 x 3
+## # A tibble: 20 × 3
 ##    term        estimate penalty
 ##    <chr>          <dbl>   <dbl>
 ##  1 (Intercept)  54.4        705
@@ -163,7 +163,7 @@ tidy(ridge_fit, penalty = 50)
 ```
 
 ```
-## # A tibble: 20 x 3
+## # A tibble: 20 × 3
 ##    term          estimate penalty
 ##    <chr>            <dbl>   <dbl>
 ##  1 (Intercept)   48.2          50
@@ -192,7 +192,9 @@ We can visualize how the magnitude of the coefficients are being regularized tow
 
 
 ```r
-plot(ridge_fit$fit, xvar = "lambda")
+ridge_fit %>%
+  extract_fit_engine() %>%
+  plot(xvar = "lambda")
 ```
 
 <img src="06-regularization_files/figure-html/unnamed-chunk-7-1.png" width="672" />
@@ -205,7 +207,7 @@ predict(ridge_fit, new_data = Hitters)
 ```
 
 ```
-## # A tibble: 263 x 1
+## # A tibble: 263 × 1
 ##     .pred
 ##     <dbl>
 ##  1  442. 
@@ -229,7 +231,7 @@ predict(ridge_fit, new_data = Hitters, penalty = 500)
 ```
 
 ```
-## # A tibble: 263 x 1
+## # A tibble: 263 × 1
 ##    .pred
 ##    <dbl>
 ##  1  525.
@@ -309,7 +311,7 @@ penalty_grid
 ```
 
 ```
-## # A tibble: 50 x 1
+## # A tibble: 50 × 1
 ##      penalty
 ##        <dbl>
 ##  1 0.00001  
@@ -343,7 +345,7 @@ tune_res
 ```
 ## # Tuning results
 ## # 10-fold cross-validation 
-## # A tibble: 10 x 4
+## # A tibble: 10 × 4
 ##    splits           id     .metrics           .notes          
 ##    <list>           <chr>  <list>             <list>          
 ##  1 <split [176/20]> Fold01 <tibble [100 × 5]> <tibble [0 × 1]>
@@ -374,19 +376,19 @@ collect_metrics(tune_res)
 ```
 
 ```
-## # A tibble: 100 x 7
+## # A tibble: 100 × 7
 ##      penalty .metric .estimator    mean     n std_err .config              
 ##        <dbl> <chr>   <chr>        <dbl> <int>   <dbl> <chr>                
-##  1 0.00001   rmse    standard   349.       10 34.3    Preprocessor1_Model01
-##  2 0.00001   rsq     standard     0.407    10  0.0789 Preprocessor1_Model01
-##  3 0.0000160 rmse    standard   349.       10 34.3    Preprocessor1_Model02
-##  4 0.0000160 rsq     standard     0.407    10  0.0789 Preprocessor1_Model02
-##  5 0.0000256 rmse    standard   349.       10 34.3    Preprocessor1_Model03
-##  6 0.0000256 rsq     standard     0.407    10  0.0789 Preprocessor1_Model03
-##  7 0.0000409 rmse    standard   349.       10 34.3    Preprocessor1_Model04
-##  8 0.0000409 rsq     standard     0.407    10  0.0789 Preprocessor1_Model04
-##  9 0.0000655 rmse    standard   349.       10 34.3    Preprocessor1_Model05
-## 10 0.0000655 rsq     standard     0.407    10  0.0789 Preprocessor1_Model05
+##  1 0.00001   rmse    standard   340.       10 44.2    Preprocessor1_Model01
+##  2 0.00001   rsq     standard     0.484    10  0.0658 Preprocessor1_Model01
+##  3 0.0000160 rmse    standard   340.       10 44.2    Preprocessor1_Model02
+##  4 0.0000160 rsq     standard     0.484    10  0.0658 Preprocessor1_Model02
+##  5 0.0000256 rmse    standard   340.       10 44.2    Preprocessor1_Model03
+##  6 0.0000256 rsq     standard     0.484    10  0.0658 Preprocessor1_Model03
+##  7 0.0000409 rmse    standard   340.       10 44.2    Preprocessor1_Model04
+##  8 0.0000409 rsq     standard     0.484    10  0.0658 Preprocessor1_Model04
+##  9 0.0000655 rmse    standard   340.       10 44.2    Preprocessor1_Model05
+## 10 0.0000655 rsq     standard     0.484    10  0.0658 Preprocessor1_Model05
 ## # … with 90 more rows
 ```
 
@@ -399,10 +401,10 @@ best_penalty
 ```
 
 ```
-## # A tibble: 1 x 2
+## # A tibble: 1 × 2
 ##   penalty .config              
 ##     <dbl> <chr>                
-## 1   2330. Preprocessor1_Model42
+## 1  100000 Preprocessor1_Model50
 ```
 
 This value of `penalty` can then be used with `finalize_workflow()` to update/finalize the recipe by replacing `tune()` with the value of `best_penalty`. Now, this model should be fit again, this time using the whole training data set.
@@ -423,10 +425,10 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.546
+## 1 rsq     standard       0.449
 ```
 
 And it performs fairly well given what we saw earlier.
@@ -508,10 +510,10 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ```
 
 ```
-## # A tibble: 1 x 3
+## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.546
+## 1 rsq     standard       0.449
 ```
 
 ## Principal Components Regression
@@ -555,7 +557,7 @@ threshold_grid
 ```
 
 ```
-## # A tibble: 10 x 1
+## # A tibble: 10 × 1
 ##    threshold
 ##        <dbl>
 ##  1     0    

@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 8 Tree-Based Methods | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.8.6/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.10/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.4.9003/tabs.js"></script><script src="libs/bs3compat-0.2.4.9003/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -40,7 +40,10 @@
 <li><a class="" href="moving-beyond-linearity.html"><span class="header-section-number">7</span> Moving Beyond Linearity</a></li>
 <li><a class="active" href="tree-based-methods.html"><span class="header-section-number">8</span> Tree-Based Methods</a></li>
 <li><a class="" href="support-vector-machines.html"><span class="header-section-number">9</span> Support Vector Machines</a></li>
-<li><a class="" href="unsupervised-learning.html"><span class="header-section-number">10</span> Unsupervised Learning</a></li>
+<li><a class="" href="deep-learning.html"><span class="header-section-number">10</span> Deep learning</a></li>
+<li><a class="" href="survival-analysis-and-censored-data.html"><span class="header-section-number">11</span> Survival Analysis and Censored Data</a></li>
+<li><a class="" href="unsupervised-learning.html"><span class="header-section-number">12</span> Unsupervised Learning</a></li>
+<li><a class="" href="multiple-testing.html"><span class="header-section-number">13</span> Multiple Testing</a></li>
 </ul>
 
         <div class="book-extra">
@@ -124,7 +127,9 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 ##       7) Price&lt; 142.5 73  10 Yes (0.13698630 0.86301370) *</code></pre>
 <p>The <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method provides even more information that can be useful.</p>
 <div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">class_tree_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">class_tree_fit</span> <span class="op">%&gt;%</span>
+  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## Call:
 ## rpart::rpart(formula = High ~ ., data = data)
 ##   n= 400 
@@ -132,12 +137,12 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.28658537      0 1.0000000 1.0000000 0.05997967
 ## 2 0.10975610      1 0.7134146 0.7134146 0.05547692
-## 3 0.04573171      2 0.6036585 0.6402439 0.05365767
-## 4 0.03658537      4 0.5121951 0.6341463 0.05349198
-## 5 0.02743902      5 0.4756098 0.5914634 0.05226769
-## 6 0.02439024      7 0.4207317 0.5792683 0.05189648
-## 7 0.01219512      8 0.3963415 0.5548780 0.05112415
-## 8 0.01000000     10 0.3719512 0.5304878 0.05031042
+## 3 0.04573171      2 0.6036585 0.6097561 0.05280643
+## 4 0.03658537      4 0.5121951 0.5792683 0.05189648
+## 5 0.02743902      5 0.4756098 0.5853659 0.05208331
+## 6 0.02439024      7 0.4207317 0.5731707 0.05170717
+## 7 0.01219512      8 0.3963415 0.5731707 0.05170717
+## 8 0.01000000     10 0.3719512 0.5731707 0.05170717
 ## 
 ## Variable importance
 ##       Price   ShelveLoc         Age Advertising   CompPrice      Income 
@@ -349,14 +354,16 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 ##    probabilities: 0.400 0.600</code></pre>
 <p>Once the tree gets more than a couple of nodes it can become hard to read the printed diagram. The <code>rpart.plot</code> package provides functions to let us easily visualize the decision tree. As the name implies, it only works with <code>rpart</code> trees.</p>
 <div class="sourceCode" id="cb270"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="va">class_tree_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">class_tree_fit</span> <span class="op">%&gt;%</span>
+  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
 <p>We can see that the most important variable to predict high sales appears to be shelving location as it forms the first node.</p>
 <p>The training accuracy of this model is 85%</p>
 <div class="sourceCode" id="cb271"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">class_tree_fit</span>, new_data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">High</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 3
+<pre><code>## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary         0.848</code></pre>
@@ -398,7 +405,7 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 <div class="sourceCode" id="cb281"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">class_tree_fit</span>, new_data <span class="op">=</span> <span class="va">Carseats_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">High</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 3
+<pre><code>## # A tibble: 1 × 3
 ##   .metric  .estimator .estimate
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary          0.77</code></pre>
@@ -452,7 +459,9 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 ##   3) ShelveLoc=Good 58  11 Yes (0.1896552 0.8103448) *</code></pre>
 <p>At last, we can visualize the model, and we see that the better-performing model is less complex than the original model we fit.</p>
 <div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="va">class_tree_final_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">class_tree_final_fit</span> <span class="op">%&gt;%</span>
+  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-21-1.png" width="672"></div>
 </div>
 <div id="fitting-regression-trees" class="section level2" number="8.2">
@@ -476,39 +485,41 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 <span class="va">reg_tree_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  13ms 
+## Fit time:  11ms 
 ## n= 379 
 ## 
 ## node), split, n, deviance, yval
 ##       * denotes terminal node
 ## 
-##  1) root 379 33574.1000 23.10554  
-##    2) rm&lt; 6.92 316 13278.0400 20.28924  
-##      4) lstat&gt;=14.395 118  2331.0780 15.06186  
-##        8) nox&gt;=0.607 72   952.7732 12.81528  
-##         16) lstat&gt;=18.885 44   358.7518 11.01364 *
-##         17) lstat&lt; 18.885 28   226.7696 15.64643 *
-##        9) nox&lt; 0.607 46   446.1183 18.57826 *
-##      5) lstat&lt; 14.395 198  5800.9460 23.40455  
-##       10) dis&gt;=1.5604 191  2826.0840 22.86963  
-##         20) rm&lt; 6.543 149  1320.8880 21.67383 *
-##         21) rm&gt;=6.543 42   536.2640 27.11190 *
-##       11) dis&lt; 1.5604 7  1429.0200 38.00000 *
-##    3) rm&gt;=6.92 63  5218.0570 37.23175  
-##      6) rm&lt; 7.437 39  1770.9840 32.18718  
-##       12) lstat&gt;=8.33 7   470.3343 23.57143 *
-##       13) lstat&lt; 8.33 32   667.3647 34.07188 *
-##      7) rm&gt;=7.437 24   841.8696 45.42917 *</code></pre>
+##  1) root 379 32622.9500 22.54802  
+##    2) rm&lt; 6.941 320 13602.3100 19.86281  
+##      4) lstat&gt;=14.395 129  2582.1090 14.51550  
+##        8) nox&gt;=0.607 80   984.7339 12.35875  
+##         16) lstat&gt;=19.34 47   388.6332 10.35957 *
+##         17) lstat&lt; 19.34 33   140.7188 15.20606 *
+##        9) nox&lt; 0.607 49   617.6939 18.03673 *
+##      5) lstat&lt; 14.395 191  4840.3640 23.47435  
+##       10) rm&lt; 6.543 151  2861.3990 22.21192  
+##         20) dis&gt;=1.68515 144  1179.5970 21.82083 *
+##         21) dis&lt; 1.68515 7  1206.6970 30.25714 *
+##       11) rm&gt;=6.543 40   829.8560 28.24000 *
+##    3) rm&gt;=6.941 59  4199.1020 37.11186  
+##      6) rm&lt; 7.437 35  1012.4100 32.08286 *
+##      7) rm&gt;=7.437 24  1010.6200 44.44583  
+##       14) ptratio&gt;=15.4 12   585.0767 40.71667 *
+##       15) ptratio&lt; 15.4 12    91.7825 48.17500 *</code></pre>
 <div class="sourceCode" id="cb293"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">reg_tree_fit</span>, new_data <span class="op">=</span> <span class="va">Boston_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">medv</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 3
+<pre><code>## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard        3.51</code></pre>
+## 1 rmse    standard        4.78</code></pre>
 <p>and the <code><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot()</a></code> function works for the regression decision tree as well</p>
 <div class="sourceCode" id="cb295"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="va">reg_tree_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">reg_tree_fit</span> <span class="op">%&gt;%</span>
+  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-26-1.png" width="672"></div>
 <p>Notice how the result is a numeric variable instead of a class.</p>
 <p>Now let us again try to tune the <code>cost_complexity</code> to find the best performing model.</p>
@@ -552,57 +563,40 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 ## node), split, n, deviance, yval
 ##       * denotes terminal node
 ## 
-##    1) root 379 33574.10000 23.10554  
-##      2) rm&lt; 6.92 316 13278.04000 20.28924  
-##        4) lstat&gt;=14.395 118  2331.07800 15.06186  
-##          8) nox&gt;=0.607 72   952.77320 12.81528  
-##           16) lstat&gt;=18.885 44   358.75180 11.01364  
-##             32) tax&gt;=551.5 36   225.74560 10.26111  
-##               64) lstat&gt;=23.88 16    91.40438  9.21875 *
-##               65) lstat&lt; 23.88 20   103.04950 11.09500  
-##                130) crim&gt;=11.48635 10    64.56100  9.83000 *
-##                131) crim&lt; 11.48635 10     6.48400 12.36000 *
-##             33) tax&lt; 551.5 8    20.88000 14.40000 *
-##           17) lstat&lt; 18.885 28   226.76960 15.64643  
-##             34) crim&gt;=6.88166 11    42.42182 13.37273 *
-##             35) crim&lt; 6.88166 17    90.68471 17.11765 *
-##          9) nox&lt; 0.607 46   446.11830 18.57826  
-##           18) age&gt;=60.55 38   318.05890 17.89474  
-##             36) crim&gt;=0.592985 15   206.00000 16.50000 *
-##             37) crim&lt; 0.592985 23    63.84957 18.80435  
-##               74) age&gt;=93.15 8    25.03500 17.62500 *
-##               75) age&lt; 93.15 15    21.75333 19.43333 *
-##           19) age&lt; 60.55 8    25.97500 21.82500 *
-##        5) lstat&lt; 14.395 198  5800.94600 23.40455  
-##         10) dis&gt;=1.5604 191  2826.08400 22.86963  
-##           20) rm&lt; 6.543 149  1320.88800 21.67383  
-##             40) lstat&gt;=7.57 113   926.73010 20.91327  
-##               80) rm&lt; 6.064 61   351.43410 19.99016  
-##                160) dis&gt;=6.6261 10     8.86400 18.36000 *
-##                161) dis&lt; 6.6261 51   310.78510 20.30980  
-##                  322) black&gt;=396.255 17    99.48235 19.15294 *
-##                  323) black&lt; 396.255 34   177.17530 20.88824  
-##                    646) indus&gt;=6.58 23    92.67304 20.28261  
-##                     1292) rm&lt; 5.844 11    40.70182 19.17273 *
-##                     1293) rm&gt;=5.844 12    26.00000 21.30000 *
-##                    647) indus&lt; 6.58 11    58.42727 22.15455 *
-##               81) rm&gt;=6.064 52   462.33920 21.99615  
-##                162) lstat&gt;=9.98 33    97.62970 21.10303  
-##                  324) lstat&gt;=11.755 19    44.50632 20.45789 *
-##                  325) lstat&lt; 11.755 14    34.48357 21.97857 *
-##                163) lstat&lt; 9.98 19   292.66740 23.54737 *
-##             41) lstat&lt; 7.57 36   123.62560 24.06111  
-##               82) dis&gt;=6.12605 15    26.71333 23.03333 *
-##               83) dis&lt; 6.12605 21    69.74952 24.79524  
-##                166) indus&gt;=7.17 14    29.93214 24.16429 *
-##                167) indus&lt; 7.17 7    23.09714 26.05714 *
-##           21) rm&gt;=6.543 42   536.26400 27.11190  
-## 
-## ...
-## and 16 more lines.</code></pre>
+##  1) root 379 32622.95000 22.54802  
+##    2) rm&lt; 6.941 320 13602.31000 19.86281  
+##      4) lstat&gt;=14.395 129  2582.10900 14.51550  
+##        8) nox&gt;=0.607 80   984.73390 12.35875  
+##         16) lstat&gt;=19.34 47   388.63320 10.35957  
+##           32) tax&gt;=551.5 40   243.94980  9.67750 *
+##           33) tax&lt; 551.5 7    19.73714 14.25714 *
+##         17) lstat&lt; 19.34 33   140.71880 15.20606 *
+##        9) nox&lt; 0.607 49   617.69390 18.03673  
+##         18) crim&gt;=0.381565 25   313.20000 16.20000 *
+##         19) crim&lt; 0.381565 24   132.30000 19.95000 *
+##      5) lstat&lt; 14.395 191  4840.36400 23.47435  
+##       10) rm&lt; 6.543 151  2861.39900 22.21192  
+##         20) dis&gt;=1.68515 144  1179.59700 21.82083  
+##           40) rm&lt; 6.062 56   306.22860 20.28571 *
+##           41) rm&gt;=6.062 88   657.41950 22.79773  
+##             82) lstat&gt;=9.98 35    98.32686 21.02571 *
+##             83) lstat&lt; 9.98 53   376.61550 23.96792 *
+##         21) dis&lt; 1.68515 7  1206.69700 30.25714 *
+##       11) rm&gt;=6.543 40   829.85600 28.24000  
+##         22) lstat&gt;=4.44 33   274.06180 27.15455 *
+##         23) lstat&lt; 4.44 7   333.61710 33.35714 *
+##    3) rm&gt;=6.941 59  4199.10200 37.11186  
+##      6) rm&lt; 7.437 35  1012.41000 32.08286  
+##       12) nox&gt;=0.4885 14   673.46930 28.89286 *
+##       13) nox&lt; 0.4885 21   101.49810 34.20952 *
+##      7) rm&gt;=7.437 24  1010.62000 44.44583  
+##       14) ptratio&gt;=15.4 12   585.07670 40.71667 *
+##       15) ptratio&lt; 15.4 12    91.78250 48.17500 *</code></pre>
 <p>Visualizing the model reveals a much more complex tree than what we saw in the last section.</p>
 <div class="sourceCode" id="cb300"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="va">reg_tree_final_fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">fit</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">reg_tree_final_fit</span> <span class="op">%&gt;%</span>
+  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-30-1.png" width="672"></div>
 </div>
 <div id="bagging-and-random-forests" class="section level2" number="8.3">
@@ -622,10 +616,10 @@ We also set <code>importance = TRUE</code> in <code>set_engine()</code> to tell 
 <div class="sourceCode" id="cb303"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">bagging_fit</span>, new_data <span class="op">=</span> <span class="va">Boston_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">medv</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 3
+<pre><code>## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard        2.53</code></pre>
+## 1 rmse    standard        3.43</code></pre>
 <p>We can also create a quick scatterplot between the true and predicted value to see if we can make any diagnostics.</p>
 <div class="sourceCode" id="cb305"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">bagging_fit</span>, new_data <span class="op">=</span> <span class="va">Boston_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -649,10 +643,10 @@ We also set <code>importance = TRUE</code> in <code>set_engine()</code> to tell 
 <div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">rf_fit</span>, new_data <span class="op">=</span> <span class="va">Boston_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">medv</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 3
+<pre><code>## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard        2.50</code></pre>
+## 1 rmse    standard        3.26</code></pre>
 <p>We can likewise plot the true value against the predicted value</p>
 <div class="sourceCode" id="cb311"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">rf_fit</span>, new_data <span class="op">=</span> <span class="va">Boston_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -683,10 +677,10 @@ We also set <code>importance = TRUE</code> in <code>set_engine()</code> to tell 
 <div class="sourceCode" id="cb315"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">boost_fit</span>, new_data <span class="op">=</span> <span class="va">Boston_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">medv</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
-<pre><code>## # A tibble: 1 x 3
+<pre><code>## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rmse    standard        2.57</code></pre>
+## 1 rmse    standard        3.34</code></pre>
 <p>We can look at the scatterplot and we don’t see anything weird going on.</p>
 <div class="sourceCode" id="cb317"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">boost_fit</span>, new_data <span class="op">=</span> <span class="va">Boston_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -695,6 +689,12 @@ We also set <code>importance = TRUE</code> in <code>set_engine()</code> to tell 
   <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-44-1.png" width="672"></div>
 <p>You would normally want to perform hyperparameter tuning for the boosted tree model to get the best out of your model. This exercise is left for the reader. Look at the <a href="https://www.tmwr.org/iterative-search.html">Iterative search</a> chapter of <a href="https://www.tmwr.org/">Tidy Modeling with R</a> for inspiration.</p>
+</div>
+<div id="bayesian-additive-regression-trees" class="section level2" number="8.5">
+<h2>
+<span class="header-section-number">8.5</span> Bayesian Additive Regression Trees<a class="anchor" aria-label="anchor" href="#bayesian-additive-regression-trees"><i class="fas fa-link"></i></a>
+</h2>
+<p>This section is WIP.</p>
 
 </div>
 </div>
@@ -709,6 +709,7 @@ We also set <code>importance = TRUE</code> in <code>set_engine()</code> to tell 
 <li><a class="nav-link" href="#fitting-regression-trees"><span class="header-section-number">8.2</span> Fitting Regression Trees</a></li>
 <li><a class="nav-link" href="#bagging-and-random-forests"><span class="header-section-number">8.3</span> Bagging and Random Forests</a></li>
 <li><a class="nav-link" href="#boosting"><span class="header-section-number">8.4</span> Boosting</a></li>
+<li><a class="nav-link" href="#bayesian-additive-regression-trees"><span class="header-section-number">8.5</span> Bayesian Additive Regression Trees</a></li>
 </ul>
 
       <div class="book-extra">
@@ -725,7 +726,7 @@ We also set <code>importance = TRUE</code> in <code>set_engine()</code> to tell 
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-06-19.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-08-09.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

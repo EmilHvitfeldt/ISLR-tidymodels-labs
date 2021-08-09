@@ -128,7 +128,7 @@ tidy(lm_fit)
 ```
 
 ```
-## # A tibble: 2 x 5
+## # A tibble: 2 × 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
 ## 1 (Intercept)   34.6      0.563       61.4 3.74e-236
@@ -143,7 +143,7 @@ glance(lm_fit)
 ```
 
 ```
-## # A tibble: 1 x 12
+## # A tibble: 1 × 12
 ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
 ##       <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>
 ## 1     0.544         0.543  6.22      602. 5.08e-88     1 -1641. 3289. 3302.
@@ -169,7 +169,7 @@ predict(lm_fit, new_data = Boston)
 ```
 
 ```
-## # A tibble: 506 x 1
+## # A tibble: 506 × 1
 ##    .pred
 ##    <dbl>
 ##  1 29.8 
@@ -195,7 +195,7 @@ predict(lm_fit, new_data = Boston, type = "conf_int")
 ```
 
 ```
-## # A tibble: 506 x 2
+## # A tibble: 506 × 2
 ##    .pred_lower .pred_upper
 ##          <dbl>       <dbl>
 ##  1       29.0        30.6 
@@ -227,7 +227,7 @@ bind_cols(
 ```
 
 ```
-## # A tibble: 506 x 2
+## # A tibble: 506 × 2
 ##     medv .pred
 ##    <dbl> <dbl>
 ##  1  24   29.8 
@@ -252,7 +252,7 @@ augment(lm_fit, new_data = Boston) %>%
 ```
 
 ```
-## # A tibble: 506 x 2
+## # A tibble: 506 × 2
 ##     medv .pred
 ##    <dbl> <dbl>
 ##  1  24   29.8 
@@ -283,7 +283,7 @@ lm_fit2
 ```
 ## parsnip model object
 ## 
-## Fit time:  2ms 
+## Fit time:  1ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat + age, data = data)
@@ -301,7 +301,7 @@ tidy(lm_fit2)
 ```
 
 ```
-## # A tibble: 3 x 5
+## # A tibble: 3 × 5
 ##   term        estimate std.error statistic   p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>     <dbl>
 ## 1 (Intercept)  33.2       0.731      45.5  2.94e-180
@@ -317,7 +317,7 @@ predict(lm_fit2, new_data = Boston)
 ```
 
 ```
-## # A tibble: 506 x 1
+## # A tibble: 506 × 1
 ##    .pred
 ##    <dbl>
 ##  1 30.3 
@@ -346,7 +346,7 @@ lm_fit3
 ```
 ## parsnip model object
 ## 
-## Fit time:  2ms 
+## Fit time:  3ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ ., data = data)

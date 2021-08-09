@@ -2,7 +2,7 @@
 
 This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include; polynomials expansion, step functions, and splines.
 
-GAMs are currently not covered since they are not supported in parsnip [yet](https://github.com/tidymodels/parsnip/pull/512).
+GAM section is WIP since they are now supported in [parsnip](https://github.com/tidymodels/parsnip/pull/512).
 
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
 
@@ -75,7 +75,7 @@ tidy(poly_fit)
 ```
 
 ```
-## # A tibble: 5 x 5
+## # A tibble: 5 × 5
 ##   term        estimate std.error statistic  p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>    <dbl>
 ## 1 (Intercept)    112.      0.729    153.   0       
@@ -155,7 +155,7 @@ tidy(raw_poly_fit)
 ```
 
 ```
-## # A tibble: 5 x 5
+## # A tibble: 5 × 5
 ##   term            estimate  std.error statistic  p.value
 ##   <chr>              <dbl>      <dbl>     <dbl>    <dbl>
 ## 1 (Intercept) -184.        60.0           -3.07 0.00218 
@@ -179,7 +179,7 @@ regression_lines
 ```
 
 ```
-## # A tibble: 63 x 4
+## # A tibble: 63 × 4
 ##      age .pred .pred_lower .pred_upper
 ##    <int> <dbl>       <dbl>       <dbl>
 ##  1    18  51.9        41.5        62.3
@@ -277,7 +277,7 @@ predict(lr_poly_fit, new_data = Wage)
 ```
 
 ```
-## # A tibble: 3,000 x 1
+## # A tibble: 3,000 × 1
 ##    .pred_class
 ##    <fct>      
 ##  1 Low        
@@ -301,7 +301,7 @@ predict(lr_poly_fit, new_data = Wage, type = "prob")
 ```
 
 ```
-## # A tibble: 3,000 x 2
+## # A tibble: 3,000 × 2
 ##       .pred_High .pred_Low
 ##            <dbl>     <dbl>
 ##  1 0.00000000983     1.00 
@@ -322,7 +322,7 @@ predict(lr_poly_fit, new_data = Wage, type = "conf_int")
 ```
 
 ```
-## # A tibble: 3,000 x 4
+## # A tibble: 3,000 × 4
 ##    .pred_lower_High .pred_upper_High .pred_lower_Low .pred_upper_Low
 ##               <dbl>            <dbl>           <dbl>           <dbl>
 ##  1         2.22e-16          0.00166           0.998           1    
@@ -463,7 +463,7 @@ predict(spline_fit, new_data = Wage)
 ```
 
 ```
-## # A tibble: 3,000 x 1
+## # A tibble: 3,000 × 1
 ##    .pred
 ##    <dbl>
 ##  1  58.7
@@ -502,4 +502,4 @@ Wage %>%
 
 ## GAMs
 
-GAMs are currently not covered since they are not supported in parsnip [yet](https://github.com/tidymodels/parsnip/pull/512).
+GAM section is WIP since they are now supported in [parsnip](https://github.com/tidymodels/parsnip/pull/512).

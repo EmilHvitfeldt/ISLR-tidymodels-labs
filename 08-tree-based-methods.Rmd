@@ -373,3 +373,7 @@ augment(boost_fit, new_data = Boston_test) %>%
 ```
 
 You would normally want to perform hyperparameter tuning for the boosted tree model to get the best out of your model. This exercise is left for the reader. Look at the [Iterative search](https://www.tmwr.org/iterative-search.html) chapter of [Tidy Modeling with R](https://www.tmwr.org/) for inspiration.
+
+## Bayesian Additive Regression Trees
+
+This section is WIP.
