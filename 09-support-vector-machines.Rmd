@@ -52,7 +52,9 @@ The `kernlab` models can be visualized using the `plot()` function if you load t
 
 ```{r}
 library(kernlab)
-plot(svm_linear_fit$fit)
+svm_linear_fit %>%
+  extract_fit_engine() %>%
+  plot()
 ```
 
 what if we instead used a smaller value of the `cost` parameter?
@@ -153,7 +155,9 @@ svm_rbf_fit <- svm_rbf_spec %>%
 and plotting reveals that the model was able o separate the two classes, even though they were non-linearly separated.
 
 ```{r}
-plot(svm_rbf_fit$fit)
+svm_rbf_fit %>%
+  extract_fit_engine() %>%
+  plot()
 ```
 
 But let us see how well this model generalizes to new data from the same generating process. 

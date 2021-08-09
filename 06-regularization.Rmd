@@ -59,7 +59,9 @@ tidy(ridge_fit, penalty = 50)
 We can visualize how the magnitude of the coefficients are being regularized towards zero as the penalty goes up. 
 
 ```{r}
-plot(ridge_fit$fit, xvar = "lambda")
+ridge_fit %>%
+  extract_fit_engine() %>%
+  plot(xvar = "lambda")
 ```
 
 Prediction is done like normal, if we use `predict()` by itself, then `penalty = 0` as we set in the model specification is used.

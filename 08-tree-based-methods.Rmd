@@ -60,14 +60,18 @@ class_tree_fit
 The `summary()` method provides even more information that can be useful.
 
 ```{r}
-summary(class_tree_fit$fit)
+class_tree_fit %>%
+  extract_fit_engine() %>%
+  summary()
 ```
 
 
 Once the tree gets more than a couple of nodes it can become hard to read the printed diagram. The `rpart.plot` package provides functions to let us easily visualize the decision tree. As the name implies, it only works with `rpart` trees.
 
 ```{r, warning=FALSE}
-rpart.plot(class_tree_fit$fit)
+class_tree_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
 ```
 
 We can see that the most important variable to predict high sales appears to be shelving location as it forms the first node.
@@ -206,7 +210,9 @@ augment(reg_tree_fit, new_data = Boston_test) %>%
 and the `rpart.plot()` function works for the regression decision tree as well
 
 ```{r, warning=FALSE}
-rpart.plot(reg_tree_fit$fit)
+reg_tree_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot()
 ```
 
 Notice how the result is a numeric variable instead of a class.
