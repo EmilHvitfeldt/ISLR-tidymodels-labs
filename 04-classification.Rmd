@@ -5,12 +5,14 @@ This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for mo
 
 ## The Stock Market Data
 
-We load the tidymodels for modeling functions, ISlR for data sets, and [discrim](https://discrim.tidymodels.org/) to give us access to discriminant analysis models such as LDA and QDA.
+We load the tidymodels for modeling functions, ISLR and ISLR2 for data sets, [discrim](https://discrim.tidymodels.org/) to give us access to discriminant analysis models such as LDA and QDA as well as the Naive Bayes model and [poissonreg](https://poissonreg.tidymodels.org/) for Poisson Regression.
 
 ```{r, message=FALSE}
 library(tidymodels)
-library(ISLR)
+library(ISLR) # For the Smarket data set
+library(ISLR2) # For the Bikeshare data set
 library(discrim)
+library(poissonreg)
 ```
 
 ```{r, echo=FALSE}
@@ -269,7 +271,41 @@ And we are seeing another increase in accuracy. However this model still rarely 
 
 ## Naive Bayes
 
-This section is WIP.
+We will now fit a Naive Bayes model to the `Smarket` data. For this we will be using the `naive_bayes()` function to the create the specification and also set the `usekernel` argument to `FALSE`. This means that we are assuming that the predictors `Lag1` and `Lag2` are drawn from Gaussian distributions.
+
+Once the model is specified, the fitting process is exactly like before
+
+```{r}
+nb_spec <- naive_Bayes() %>% 
+  set_mode("classification") %>% 
+  set_engine("klaR") %>% 
+  set_args(usekernel = FALSE)  
+
+nb_fit <- nb_spec %>% 
+  fit(Direction ~ Lag1 + Lag2, data = Smarket_train)
+```
+
+Once the model is fit, we can create the confusion matrix based on the testing data and also assess the model accuracy.
+
+```{r}
+augment(nb_fit, new_data = Smarket_test) %>% 
+  conf_mat(truth = Direction, estimate = .pred_class)
+```
+
+```{r}
+augment(nb_fit, new_data = Smarket_test) %>% 
+  accuracy(truth = Direction, estimate = .pred_class)
+```
+
+The accuracy of the Naive Bayes is very similar to that of the QDA model. This seems reasonable since the below scatter plot shows that their is no apparent relationship between `Lag1` vs `Lag2` and thus the Naive Bayes' assumption of independently distributed predictors is not unreasonable.
+
+```{r}
+ggplot(Smarket, aes(Lag1, Lag2)) +
+  geom_point(alpha = 0.1, size = 2) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "No apparent correlation between Lag1 and Lag2") +
+  theme_light() 
+```
 
 ## K-Nearest Neighbors
 
@@ -371,7 +407,104 @@ And it appears that the model performance doesn't change much when changing from
 
 ## Poisson Regression
 
-This section is WIP.
+So far we have been using the `Smarket` data set in order to predict the stock price movement. We will now shift to a new data set, `Bikeshare` and look at number of bike rentals per hour in Washington, D.C.
+
+The variable of interest, *number of bike rentals per hour* can take on non-negative integer values. This make Poisson Regression a suitable candidate to model the same.
+
+We start with specifying the model using the `poisson_reg()` function.
+
+```{r}
+pois_spec <- poisson_reg() %>% 
+  set_mode("regression") %>% 
+  set_engine("glm")
+```
+
+Here we will be predicting `bikers` using the following predictors:
+
+* `mnth` - month of the year, coded as a factor
+* `hr` - hour of the day, coded as a factor from 0 to 23
+* `workingday` - Is it a work day? Already coded as a dummy variable with Yes = 1, No = 0
+* `temp` - normalized temperature in Celsius
+* `weathersit` - weather condition, again coded as a factor with the following levels:
+ 
+  * clear
+  * cloudy/misty
+  * light rain/snow
+  * heavy rain/snow
+
+As we can see, apart from `temp` all other predictors are categorical in nature. Thus, we will first create a recipe to convert these into dummy variables and then bundle the model spec and recipe using a workflow.
+
+```{r}
+pois_rec_spec <- recipe(
+  bikers ~ mnth + hr + workingday + temp + weathersit,
+  data = Bikeshare
+) %>% 
+  step_dummy(all_nominal_predictors())
+```
+
+```{r}
+pois_wf <- workflow() %>% 
+  add_recipe(pois_rec_spec) %>% 
+  add_model(pois_spec)
+```
+
+With the workflow in place, we follow the same pattern to fit the model and look at the predictions.
+
+```{r fig.asp=1}
+pois_fit <- pois_wf %>% fit(data = Bikeshare)
+
+augment(pois_fit, new_data = Bikeshare, type.predict = "response") %>% 
+  ggplot(aes(bikers, .pred)) +
+  geom_point(alpha = 0.1) +
+  geom_abline(slope = 1, size = 1, color = "grey40") +
+  labs(title = "Predicting the number of bikers per hour using Poission Regression",
+       x = "Actual", y = "Predicted") +
+  theme_light()
+```
+
+We can also look at the model coefficients to get a feel for the working of the model and comparing it with our own understanding.
+
+Looking at the coefficients corresponing to the `mnth` variable, we note that it is lower in the winter months and higher in the summer months. This seems logical as we would expect the number of bike rentals to be higher during summer time.  
+
+```{r fig.asp=0.6}
+pois_fit_coef_mnths <- 
+  tidy(pois_fit) %>% 
+  filter(grepl("^mnth", term)) %>% 
+  mutate(
+    term = stringr::str_replace(term, "mnth_", ""),
+    term = forcats::fct_inorder(term)
+  ) 
+
+pois_fit_coef_mnths %>% 
+  ggplot(aes(term, estimate)) +
+  geom_line(group = 1) +
+  geom_point(shape = 21, size = 3, stroke = 1.5, 
+             fill = "black", color = "white") +
+  labs(title = "Coefficient value from Poission Regression",
+       x = "Month", y = "Coefficient") +
+  theme_light()
+```
+
+We can similarly also look at the coefficients corresponding to the `hr` variable. Here the peaks occur at 8:00AM and 5:00PM, i.e. during normal office start and end times. 
+
+```{r fig.asp=0.6}
+pois_fit_coef_hr <- 
+  tidy(pois_fit) %>% 
+  filter(grepl("^hr", term)) %>% 
+  mutate(
+    term = stringr::str_replace(term, "hr_X", ""),
+    term = forcats::fct_inorder(term)
+  )
+
+pois_fit_coef_hr %>% 
+  ggplot(aes(term, estimate)) +
+  geom_line(group = 1) +
+  geom_point(shape = 21, size = 3, stroke = 1.5, 
+             fill = "black", color = "white") +
+  labs(title = "Coefficient value from Poission Regression",
+       x = "Month", y = "Coefficient") +
+  theme_light()
+```
 
 ## Extra - comparing multiple models
 
