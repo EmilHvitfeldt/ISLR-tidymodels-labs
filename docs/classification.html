@@ -6,10 +6,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 4 Classification | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.10/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="This lab will be our first experience with classification models. These models differ from the regression model we saw in the last chapter by the fact that the response variable is a qualitative...">
+<meta name="generator" content="bookdown 0.23 with bs4_book()">
+<meta property="og:title" content="Chapter 4 Classification | ISLR tidymodels Labs">
+<meta property="og:type" content="book">
+<meta property="og:description" content="This lab will be our first experience with classification models. These models differ from the regression model we saw in the last chapter by the fact that the response variable is a qualitative...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 4 Classification | ISLR tidymodels Labs">
+<meta name="twitter:description" content="This lab will be our first experience with classification models. These models differ from the regression model we saw in the last chapter by the fact that the response variable is a qualitative...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.10/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.0/transition.js"></script><script src="libs/bs3compat-0.3.0/tabs.js"></script><script src="libs/bs3compat-0.3.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -61,11 +69,13 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <h2>
 <span class="header-section-number">4.1</span> The Stock Market Data<a class="anchor" aria-label="anchor" href="#the-stock-market-data"><i class="fas fa-link"></i></a>
 </h2>
-<p>We load the tidymodels for modeling functions, ISlR for data sets, and <a href="https://discrim.tidymodels.org/">discrim</a> to give us access to discriminant analysis models such as LDA and QDA.</p>
+<p>We load the tidymodels for modeling functions, ISLR and ISLR2 for data sets, <a href="https://discrim.tidymodels.org/">discrim</a> to give us access to discriminant analysis models such as LDA and QDA as well as the Naive Bayes model and <a href="https://poissonreg.tidymodels.org/">poissonreg</a> for Poisson Regression.</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://discrim.tidymodels.org">discrim</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span> <span class="co"># For the Smarket data set</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.statlearning.com">ISLR2</a></span><span class="op">)</span> <span class="co"># For the Bikeshare data set</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://discrim.tidymodels.org">discrim</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/poissonreg">poissonreg</a></span><span class="op">)</span></code></pre></div>
 <p>We will be examining the <code>Smarket</code> data set for this lab. It contains a number of numeric variables plus a variable called <code>Direction</code> which has the two labels <code>"Up"</code> and <code>"Down"</code>. Before we do on to modeling, let us take a look at the correlation between the variables.</p>
 <p>To look at the correlation, we will use the <a href="https://corrr.tidymodels.org/">corrr</a> package. The <code><a href="https://corrr.tidymodels.org/reference/correlate.html">correlate()</a></code> function will calculate the correlation matrix between all the variables that it is being fed. We will therefore remove <code>Direction</code> as it is not numeric.
 Then we pass that to <code><a href="https://corrr.tidymodels.org/reference/rplot.html">rplot()</a></code> to quickly visualize the correlation matrix. I have also changed the <code>colours</code> argument to better see what is going on.</p>
@@ -121,7 +131,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lr_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  9ms 
+## Fit time:  8ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -166,9 +176,9 @@ When fitting a classification with parsnip requires that the response variable i
 ## AIC: 1741.6
 ## 
 ## Number of Fisher Scoring iterations: 3</code></pre>
-<p>This lets us see a couple of different things such as; parameter estimates, standard errors, p-values, and model fit statistics. we can use the <code>tidy()</code> function to extract some of these model attributes for further analysis or presentation.</p>
+<p>This lets us see a couple of different things such as; parameter estimates, standard errors, p-values, and model fit statistics. we can use the <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> function to extract some of these model attributes for further analysis or presentation.</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lr_fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">lr_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 7 × 5
 ##   term        estimate std.error statistic p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
@@ -327,7 +337,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lda_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  5ms 
+## Fit time:  4ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -429,14 +439,47 @@ When fitting a classification with parsnip requires that the response variable i
 <h2>
 <span class="header-section-number">4.5</span> Naive Bayes<a class="anchor" aria-label="anchor" href="#naive-bayes"><i class="fas fa-link"></i></a>
 </h2>
-<p>This section is WIP.</p>
+<p>We will now fit a Naive Bayes model to the <code>Smarket</code> data. For this, we will be using the <code>naive_bayes()</code> function to create the specification and also set the <code>usekernel</code> argument to <code>FALSE</code>. This means that we are assuming that the predictors <code>Lag1</code> and <code>Lag2</code> are drawn from Gaussian distributions.</p>
+<p>Once the model is specified, the fitting process is exactly like before</p>
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nb_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://discrim.tidymodels.org/reference/naive_Bayes.html">naive_Bayes</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"klaR"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">set_args</span><span class="op">(</span>usekernel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  
+
+<span class="va">nb_fit</span> <span class="op">&lt;-</span> <span class="va">nb_spec</span> <span class="op">%&gt;%</span> 
+  <span class="fu">fit</span><span class="op">(</span><span class="va">Direction</span> <span class="op">~</span> <span class="va">Lag1</span> <span class="op">+</span> <span class="va">Lag2</span>, data <span class="op">=</span> <span class="va">Smarket_train</span><span class="op">)</span></code></pre></div>
+<p>Once the model is fit, we can create the confusion matrix based on the testing data and also assess the model accuracy.</p>
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">nb_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
+<pre><code>##           Truth
+## Prediction Down  Up
+##       Down   28  20
+##       Up     83 121</code></pre>
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">nb_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 3
+##   .metric  .estimator .estimate
+##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
+## 1 accuracy binary         0.591</code></pre>
+<p>The accuracy of the Naive Bayes is very similar to that of the QDA model. This seems reasonable since the below scatter plot shows that there is no apparent relationship between <code>Lag1</code> vs <code>Lag2</code> and thus the Naive Bayes’ assumption of independently distributed predictors is not unreasonable.</p>
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">Smarket</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">Lag1</span>, <span class="va">Lag2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.1</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"No apparent correlation between Lag1 and Lag2"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<pre><code>## `geom_smooth()` using formula 'y ~ x'</code></pre>
+<div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-29-1.png" width="672"></div>
 </div>
 <div id="k-nearest-neighbors" class="section level2" number="4.6">
 <h2>
 <span class="header-section-number">4.6</span> K-Nearest Neighbors<a class="anchor" aria-label="anchor" href="#k-nearest-neighbors"><i class="fas fa-link"></i></a>
 </h2>
 <p>Lastly let us take a look at a K-Nearest Neighbors model. This is the first model we have looked at that has a hyperparameter we need to specify. I have set it to 3 with <code>neighbors = 3</code>. Fitting is done like normal.</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn_spec</span> <span class="op">&lt;-</span> <span class="fu">nearest_neighbor</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"kknn"</span><span class="op">)</span>
@@ -447,7 +490,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">knn_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  37ms 
+## Fit time:  39ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))
@@ -457,14 +500,14 @@ When fitting a classification with parsnip requires that the response variable i
 ## Best kernel: optimal
 ## Best k: 3</code></pre>
 <p>And evaluation is done the same way</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>##           Truth
 ## Prediction Down Up
 ##       Down   43 58
 ##       Up     68 83</code></pre>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">accuracy</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 1 × 3
@@ -474,24 +517,24 @@ When fitting a classification with parsnip requires that the response variable i
 <p>It appears that this model is not performing that well.</p>
 <p>We will try using a K-nearest neighbors model in an application to caravan insurance data. This data set includes 85 predictors that measure demographic characteristics for 5822 individuals. The response variable is <code>Purchase</code>, which indicates whether or not a given individual purchases a caravan insurance policy. In this data set, only 6% of people purchased caravan insurance.</p>
 <p>We want to build a predictive model that uses the demographic characteristics to predict whether an individual is going to purchase a caravan insurance. Before we go on, we split the data set into a training data set and testing data set. (This is a not the proper way this should be done. See next chapter for the correct way.)</p>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Caravan_test</span> <span class="op">&lt;-</span> <span class="va">Caravan</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>, <span class="op">]</span>
 <span class="va">Caravan_train</span> <span class="op">&lt;-</span> <span class="va">Caravan</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fl">1000</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
 <p>Since we are using a K-nearest neighbor model, it is importance that the variables are centered and scaled to make sure that the variables have a uniform influence. We can accomplish this transformation with <code>step_normalize()</code>, which does centering and scaling in one go.</p>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Purchase</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We will be trying different values of K to see how the number of neighbors affect the model performance. A workflow object is created, with just the recipe added.</p>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Caravan_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec</span><span class="op">)</span></code></pre></div>
 <p>Next we create a general KNN model specification.</p>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn_spec</span> <span class="op">&lt;-</span> <span class="fu">nearest_neighbor</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"kknn"</span><span class="op">)</span></code></pre></div>
 <p>We can then use this model specification along with <code>Caravan_wf</code> to create 3 full workflow objects for <code>K = 1,3,5</code>.</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn1_wf</span> <span class="op">&lt;-</span> <span class="va">Caravan_wf</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">knn_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 
@@ -501,26 +544,26 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">knn5_wf</span> <span class="op">&lt;-</span> <span class="va">Caravan_wf</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">knn_spec</span> <span class="op">%&gt;%</span> <span class="fu">set_args</span><span class="op">(</span>neighbors <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>With all these workflow specification we can fit all the models one by one.</p>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">knn1_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn1_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span>
 <span class="va">knn3_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn3_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span>
 <span class="va">knn5_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn5_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span></code></pre></div>
 <p>And we can calculate all the confusion matricies.</p>
-<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn1_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction  No Yes
 ##        No  874  50
 ##        Yes  67   9</code></pre>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn3_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
 ## Prediction  No Yes
 ##        No  875  50
 ##        Yes  66   9</code></pre>
-<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn5_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
 <pre><code>##           Truth
@@ -533,7 +576,91 @@ When fitting a classification with parsnip requires that the response variable i
 <h2>
 <span class="header-section-number">4.7</span> Poisson Regression<a class="anchor" aria-label="anchor" href="#poisson-regression"><i class="fas fa-link"></i></a>
 </h2>
-<p>This section is WIP.</p>
+<p>So far we have been using the <code>Smarket</code> data set to predict the stock price movement. We will now shift to a new data set, <code>Bikeshare</code>, and look at the number of bike rentals per hour in Washington, D.C.</p>
+<p>The variable of interest, <em>number of bike rentals per hour</em> can take on non-negative integer values. This makes Poisson Regression a suitable candidate to model the same.</p>
+<p>We start with specifying the model using the <code><a href="https://poissonreg.tidymodels.org/reference/poisson_reg.html">poisson_reg()</a></code> function.</p>
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pois_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://poissonreg.tidymodels.org/reference/poisson_reg.html">poisson_reg</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glm"</span><span class="op">)</span></code></pre></div>
+<p>Here we will be predicting <code>bikers</code> using the following predictors:</p>
+<ul>
+<li><p><code>mnth</code> - month of the year, coded as a factor</p></li>
+<li><p><code>hr</code> - hour of the day, coded as a factor from 0 to 23</p></li>
+<li><p><code>workingday</code> - Is it a workday? Already coded as a dummy variable with Yes = 1, No = 0</p></li>
+<li><p><code>temp</code> - normalized temperature in Celsius</p></li>
+<li>
+<p><code>weathersit</code> - weather condition, again coded as a factor with the following levels:</p>
+<ul>
+<li>clear</li>
+<li>cloudy/misty</li>
+<li>light rain/snow</li>
+<li>heavy rain/snow</li>
+</ul>
+</li>
+</ul>
+<p>As we can see, apart from <code>temp</code> all other predictors are categorical in nature. Thus, we will first create a recipe to convert these into dummy variables and then bundle the model spec and recipe using a workflow.</p>
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pois_rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span>
+  <span class="va">bikers</span> <span class="op">~</span> <span class="va">mnth</span> <span class="op">+</span> <span class="va">hr</span> <span class="op">+</span> <span class="va">workingday</span> <span class="op">+</span> <span class="va">temp</span> <span class="op">+</span> <span class="va">weathersit</span>,
+  data <span class="op">=</span> <span class="va">Bikeshare</span>
+<span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pois_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">pois_rec_spec</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">add_model</span><span class="op">(</span><span class="va">pois_spec</span><span class="op">)</span></code></pre></div>
+<p>With the workflow in place, we follow the same pattern to fit the model and look at the predictions.</p>
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pois_fit</span> <span class="op">&lt;-</span> <span class="va">pois_wf</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">Bikeshare</span><span class="op">)</span>
+
+<span class="fu">augment</span><span class="op">(</span><span class="va">pois_fit</span>, new_data <span class="op">=</span> <span class="va">Bikeshare</span>, type.predict <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">bikers</span>, <span class="va">.pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"grey40"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Predicting the number of bikers per hour using Poission Regression"</span>,
+       x <span class="op">=</span> <span class="st">"Actual"</span>, y <span class="op">=</span> <span class="st">"Predicted"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-44-1.png" width="672"></div>
+<p>We can also look at the model coefficients to get a feel for the working of the model and comparing it with our own understanding.</p>
+<p>Looking at the coefficients corresponding to the <code>mnth</code> variable, we note that it is lower in the winter months and higher in the summer months. This seems logical as we would expect the number of bike rentals to be higher during summertime.</p>
+<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pois_fit_coef_mnths</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">pois_fit</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"^mnth"</span>, <span class="va">term</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">mutate</span><span class="op">(</span>
+    term <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"mnth_"</span>, <span class="st">""</span><span class="op">)</span>,
+    term <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_inorder</a></span><span class="op">(</span><span class="va">term</span><span class="op">)</span>
+  <span class="op">)</span> 
+
+<span class="va">pois_fit_coef_mnths</span> <span class="op">%&gt;%</span> 
+  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">term</span>, <span class="va">estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_line</span><span class="op">(</span>group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_point</span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">3</span>, stroke <span class="op">=</span> <span class="fl">1.5</span>, 
+             fill <span class="op">=</span> <span class="st">"black"</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Coefficient value from Poission Regression"</span>,
+       x <span class="op">=</span> <span class="st">"Month"</span>, y <span class="op">=</span> <span class="st">"Coefficient"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-45-1.png" width="672"></div>
+<p>We can similarly also look at the coefficients corresponding to the <code>hr</code> variable. Here the peaks occur at 8:00 AM and 5:00 PM, i.e. during normal office start and end times.</p>
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pois_fit_coef_hr</span> <span class="op">&lt;-</span> 
+  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">pois_fit</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"^hr"</span>, <span class="va">term</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">mutate</span><span class="op">(</span>
+    term <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"hr_X"</span>, <span class="st">""</span><span class="op">)</span>,
+    term <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_inorder</a></span><span class="op">(</span><span class="va">term</span><span class="op">)</span>
+  <span class="op">)</span>
+
+<span class="va">pois_fit_coef_hr</span> <span class="op">%&gt;%</span> 
+  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">term</span>, <span class="va">estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_line</span><span class="op">(</span>group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_point</span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">3</span>, stroke <span class="op">=</span> <span class="fl">1.5</span>, 
+             fill <span class="op">=</span> <span class="st">"black"</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Coefficient value from Poission Regression"</span>,
+       x <span class="op">=</span> <span class="st">"Month"</span>, y <span class="op">=</span> <span class="st">"Coefficient"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_light</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-46-1.png" width="672"></div>
 </div>
 <div id="extra---comparing-multiple-models" class="section level2" number="4.8">
 <h2>
@@ -541,13 +668,13 @@ When fitting a classification with parsnip requires that the response variable i
 </h2>
 <p>This section is new and not part of ISLR. We have fitted a lot of different models in this lab. And we were able to calculate the performance metrics one by one, but it is not ideal if we want to compare the different models. Below is an example of how you can more conveniently calculate performance metrics for multiple models at the same time.</p>
 <p>Start of by creating a named list of the fitted models you want to evaluate. I have made sure only to include models that were fitted on the same parameters to make it easier to compare them.</p>
-<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"logistic regression"</span> <span class="op">=</span> <span class="va">lr_fit3</span>,
                <span class="st">"LDA"</span> <span class="op">=</span> <span class="va">lda_fit</span>,
                <span class="st">"QDA"</span> <span class="op">=</span> <span class="va">qda_fit</span>,
                <span class="st">"KNN"</span> <span class="op">=</span> <span class="va">knn_fit</span><span class="op">)</span></code></pre></div>
 <p>Next use <code>imap_dfr()</code> from the <a href="https://purrr.tidyverse.org/">purrr</a> package to apply <code>augment()</code> to each of the models using the testing data set. <code>.id = "model"</code> creates a column named <code>"model"</code> that is added to the resulting tibble using the names of <code>models</code>.</p>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu">imap_dfr</span><span class="op">(</span><span class="va">models</span>, <span class="va">augment</span>, 
                   new_data <span class="op">=</span> <span class="va">Smarket_test</span>, .id <span class="op">=</span> <span class="st">"model"</span><span class="op">)</span>
 
@@ -569,10 +696,10 @@ When fitting a classification with parsnip requires that the response variable i
 ## # … with 998 more rows</code></pre>
 <p>we have seen how to use <code>accuracy()</code> a lot of times by now, but it is not the only metric to use for classification, and yardstick provides <a href="https://yardstick.tidymodels.org/reference/index.html#section-classification-metrics">many more</a>.
 You can combine multiple different metrics together with <code>metric_set()</code></p>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">multi_metric</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">accuracy</span>, <span class="va">sensitivity</span>, <span class="va">specificity</span><span class="op">)</span></code></pre></div>
 <p>and then the resulting function can be applied to calculate multiple metrics at the same time. All of the yardstick works with grouped tibbles so by calling <code>group_by(model)</code> we can calculate the metrics for each of the models in one go.</p>
-<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">preds</span> <span class="op">%&gt;%</span>
   <span class="fu">group_by</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">multi_metric</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
@@ -592,12 +719,12 @@ You can combine multiple different metrics together with <code>metric_set()</cod
 ## 11 logistic regression spec     binary         0.752
 ## 12 QDA                 spec     binary         0.858</code></pre>
 <p>The same technique can be used to create ROC curves.</p>
-<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">preds</span> <span class="op">%&gt;%</span>
   <span class="fu">group_by</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">roc_curve</span><span class="op">(</span><span class="va">Direction</span>, <span class="va">.pred_Down</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-41-1.png" width="672"></div>
+<div class="inline-figure"><img src="04-classification_files/figure-html/unnamed-chunk-51-1.png" width="672"></div>
 <p>Here you can’t see the LDA because it lies perfectly under the logistic regression.</p>
 
 </div>
@@ -633,7 +760,7 @@ You can combine multiple different metrics together with <code>metric_set()</cod
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-08-09.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-09-08.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

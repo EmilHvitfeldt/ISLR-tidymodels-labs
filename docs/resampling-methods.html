@@ -6,10 +6,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 5 Resampling Methods | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.2"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.10/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter...">
+<meta name="generator" content="bookdown 0.23 with bs4_book()">
+<meta property="og:title" content="Chapter 5 Resampling Methods | ISLR tidymodels Labs">
+<meta property="og:type" content="book">
+<meta property="og:description" content="This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 5 Resampling Methods | ISLR tidymodels Labs">
+<meta name="twitter:description" content="This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.10/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/mark.min.js"></script><!-- CSS -->
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.0/transition.js"></script><script src="libs/bs3compat-0.3.0/tabs.js"></script><script src="libs/bs3compat-0.3.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS -->
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -57,7 +65,7 @@
 </h1>
 <p>This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter introduces a lot of new packages.
 This chapter will bring <a href="https://www.tidymodels.org/start/resampling/">rsample</a> into view for creating resampled data frames as well as <a href="https://yardstick.tidymodels.org/">yardstick</a> to calculate performance metrics. Lastly, will we also use <a href="https://tune.tidymodels.org/">tune</a> to fit out models within said resamples. We also see a use of <a href="https://dials.tidymodels.org/">dials</a> which are used together with tune to select hyperparameter tuning values.</p>
-<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.StatLearning.com">ISLR</a></span><span class="op">)</span>
 
@@ -70,18 +78,18 @@ This chapter will bring <a href="https://www.tidymodels.org/start/resampling/">r
 <p>When fitting a model it is often desired to be able to calculate a performance metric to quantify how well the model fits the data. If a model is evaluated on the data it was fit on you are quite likely to get over-optimistic results. It is therefore we split our data into testing and training. This way we can fit the model to data and evaluate it on some other that that is similar.</p>
 <p>Splitting of the data is done using random sampling, so it is advised to set a seed before splitting to assure we can reproduce the results.
 The <code>inintial_split()</code> function takes a data.frame and returns a <code>rsplit</code> object. This object contains information about which observations belong to which data set, testing, and training. This is where you would normally set a proportion of data that is used for training and how much is used for evaluation. This is set using the <code>prop</code> argument which I set to <code>0.5</code> to closely match what happened in ISLR. I’m also setting the <code>strata</code> argument. This argument makes sure that both sides of the split have roughly the same distribution for each value of <code>strata</code>. If a numeric variable is passed to <code>strata</code> then it is binned and distributions are matched within bins.</p>
-<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">Auto_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">Auto</span>, strata <span class="op">=</span> <span class="va">mpg</span>, prop <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
 <span class="va">Auto_split</span></code></pre></div>
 <pre><code>## &lt;Analysis/Assess/Total&gt;
 ## &lt;194/198/392&gt;</code></pre>
 <p>The testing and training data sets can be materialized using the <code>testing()</code> and <code>training()</code> functions respectively.</p>
-<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Auto_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span>
 <span class="va">Auto_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">Auto_split</span><span class="op">)</span></code></pre></div>
 <p>And by looking at <code>Auto_train</code> and <code>Auto_test</code> we see that the lengths match what we expect.</p>
-<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Auto_train</span></code></pre></div>
 <pre><code>## # A tibble: 194 × 9
 ##      mpg cylinders displacement horsepower weight acceleration  year origin
@@ -97,7 +105,7 @@ The <code>inintial_split()</code> function takes a data.frame and returns a <cod
 ##  9    14         8          318        150   4096         13      71      1
 ## 10    13         8          400        170   4746         12      71      1
 ## # … with 184 more rows, and 1 more variable: name &lt;fct&gt;</code></pre>
-<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Auto_test</span></code></pre></div>
 <pre><code>## # A tibble: 198 × 9
 ##      mpg cylinders displacement horsepower weight acceleration  year origin
@@ -116,16 +124,16 @@ The <code>inintial_split()</code> function takes a data.frame and returns a <cod
 <p>Now that we have a train-test split let us fit some models and evaluate their performance. Before we move on it is important to reiterate that you should only use the testing data set once! Once you have looked at the performance on the testing data set you should not modify your models. If you do you might overfit the model due to data leakage.</p>
 <p>Our modeling goal is to predict <code>mpg</code> by <code>horsepower</code> using a simple linear regression model, and a polynomial regression model.
 First, we set up a linear regression specification.</p>
-<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></code></pre></div>
 <p>And we fit it like normal. Note that we are fitting it using <code>Auto_train</code>.</p>
-<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> 
   <span class="fu">fit</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">horsepower</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span></code></pre></div>
 <p>We can now use the <code>augment()</code> function to extract the prediction and <code>rmse()</code> to calculate the root mean squared error. This will be the testing RMSE since we are evaluating on <code>Auto_test</code>.</p>
-<div class="sourceCode" id="cb133"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Auto_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 3
@@ -134,7 +142,7 @@ First, we set up a linear regression specification.</p>
 ## 1 rmse    standard        5.06</code></pre>
 <p>and we get a RMSE of 5.0583165. This particular value is going to vary depending on what seed number you picked since the random sampling used in splitting the data set will be slightly different.</p>
 <p>Using this framework makes it easy for us to calculate the training RMSE</p>
-<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 3
@@ -143,7 +151,7 @@ First, we set up a linear regression specification.</p>
 ## 1 rmse    standard        4.74</code></pre>
 <p>Comparing these two values can give us a look into how generalizable the model is to data it hasn’t seen before. We do expect that the training RMSE to be lower than the testing RMSE but if you see a large difference there is an indication of overfitting or a shift between the training data set and testing data set. We don’t expect a shift here since the data sets were created with random sampling.</p>
 <p>Next we will fit a polynomial regression model. We can use the linear model specification <code>lm_spec</code> to add a preprocessing unit with <code>recipe()</code> and <code>step_poly()</code> to create the polynomial expansion of <code>horsepower</code>. we can combine these two with <code>workflow()</code> to create a workflow object.</p>
-<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">poly_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">horsepower</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_poly</span><span class="op">(</span><span class="va">horsepower</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 
@@ -166,10 +174,10 @@ First, we set up a linear regression specification.</p>
 ## 
 ## Computational engine: lm</code></pre>
 <p>We can now fit this model. Again remember to fit it on the training data set <code>Auto_train</code>.</p>
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">poly_wf</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span></code></pre></div>
 <p>The testing RMSE is then calculated as</p>
-<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">Auto_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">rmse</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 3
@@ -178,7 +186,7 @@ First, we set up a linear regression specification.</p>
 ## 1 rmse    standard        4.37</code></pre>
 <p>Which is a little bit lower. So it would appear just from this, that the polynomial regression model has a better fit. Note that we are making decisions using the testing performance metrics, not the training performance metrics.</p>
 <p>Lastly, we show below how changing the seed results in a slightly different estimate.</p>
-<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
 <span class="va">Auto_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">Auto</span><span class="op">)</span>
 
@@ -211,7 +219,7 @@ First, we set up a linear regression specification.</p>
 <li>A tibble denoting the values of hyperparameter values to be explored.</li>
 </ul>
 <p>we are doing the hyperparameter tuning on just one parameter, namely the <code>degree</code> argument in <code>step_poly()</code>. Creating a new recipe with <code>degree = tune()</code> indicated that we intend for <code>degree</code> to be tuned.</p>
-<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">poly_tuned_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">horsepower</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">step_poly</span><span class="op">(</span><span class="va">horsepower</span>, degree <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
@@ -219,11 +227,11 @@ First, we set up a linear regression specification.</p>
   <span class="fu">add_recipe</span><span class="op">(</span><span class="va">poly_tuned_rec</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span></code></pre></div>
 <p>This means that would not be able to fit this workflow right now as the value of <code>degree</code> is unspecified, and if we try we get an error:</p>
-<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">fit</span><span class="op">(</span><span class="va">poly_tuned_wf</span>, data <span class="op">=</span> <span class="va">Auto_train</span><span class="op">)</span></code></pre></div>
 <pre><code>## Error: You cannot `prep()` a tuneable recipe. Argument(s) with `tune()`: 'degree'. Do you want to use a tuning function such as `tune_grid()`?</code></pre>
 <p>The next thing we need to create is the k-Fold data set. This can be done using the <code>vfold_cv()</code> function. Note that the function uses <code>v</code> instead of <em>k</em> which is the terminology of ISLR. we set <code>v = 10</code> as a common choice for <em>k</em>.</p>
-<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Auto_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">Auto_train</span>, v <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="va">Auto_folds</span></code></pre></div>
 <pre><code>## #  10-fold cross-validation 
@@ -242,13 +250,13 @@ First, we set up a linear regression specification.</p>
 ## 10 &lt;split [265/29]&gt; Fold10</code></pre>
 <p>The result is a tibble of <code>vfold_split</code>s which is quite similar to the <code>rsplit</code> object we saw earlier.</p>
 <p>The last thing we need is a tibble of possible values we want to explore. Each of the tunable parameters in tidymodels has an associated function in the <a href="https://dials.tidymodels.org/reference/index.html">dials package</a>. We need to use the <code>degree()</code> function here, and we extend the range to have a max of 10. This dials function is then passed to <code>grid_regular()</code> to create a regular grid of values.</p>
-<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">degree_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">degree</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
 <p>Using <code>grid_regular()</code> is a little overkill for this application since the following code would provide the same result. But once you have multiple parameters you want to tune it makes sure that everything is in check and properly named.</p>
-<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">degree_grid</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>degree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Now that all the necessary objects have been created we can pass them to <code>tune_grid()</code> which will fit the models within each fold for each value specified in <code>degree_grid</code>.</p>
-<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tune_res</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span>
   object <span class="op">=</span> <span class="va">poly_tuned_wf</span>, 
   resamples <span class="op">=</span> <span class="va">Auto_folds</span>, 
@@ -256,12 +264,12 @@ First, we set up a linear regression specification.</p>
 <span class="op">)</span></code></pre></div>
 <p>It can be helpful to add <code>control = control_grid(verbose = TRUE)</code>, this will print out the progress. Especially helpful when the models take a while to fit. <code>tune_res</code> by itself isn’t easily readable. Luckily <code>tune</code> provides a handful of helper functions.</p>
 <p><code>autoplot()</code> gives a visual overview of the performance of different hyperparameter pairs.</p>
-<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="05-resampling-methods_files/figure-html/unnamed-chunk-19-1.png" width="672"></div>
 <p>It appears that the biggest jump in performance comes from going to <code>degree = 2</code>. Afterward, there might be a little bit of improvement but it isn’t as obvious.</p>
 <p>The number used for plotting can be extracted directly with <code>collect_metrics()</code>. We also get an estimate of the standard error of the performance metric. We get this since we have 10 different estimates, one for each fold.</p>
-<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 20 × 7
 ##    degree .metric .estimator  mean     n std_err .config              
@@ -287,7 +295,7 @@ First, we set up a linear regression specification.</p>
 ## 19     10 rmse    standard   4.50     10  0.227  Preprocessor10_Model1
 ## 20     10 rsq     standard   0.658    10  0.0465 Preprocessor10_Model1</code></pre>
 <p>You can also use <code>show_best()</code> to only show the best performing models.</p>
-<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">show_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 5 × 7
 ##   degree .metric .estimator  mean     n std_err .config              
@@ -304,17 +312,17 @@ First, we set up a linear regression specification.</p>
 <li>use <code>you_model_parameter</code> if smaller values lead to a simpler model</li>
 </ul>
 <p>lower polynomials models are simpler so we ditch <code>desc()</code>.</p>
-<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">select_by_one_std_err</span><span class="op">(</span><span class="va">tune_res</span>, <span class="va">degree</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 1 × 9
 ##   degree .metric .estimator  mean     n std_err .config             .best .bound
 ##    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;
 ## 1      2 rmse    standard    4.37    10   0.209 Preprocessor02_Mod…  4.37   4.58</code></pre>
 <p>This selected <code>degree = 2</code>. And we will use this value since we simpler models sometimes can be very beneficial. Especially if we want to explain what happens in it.</p>
-<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_degree</span> <span class="op">&lt;-</span> <span class="fu">select_by_one_std_err</span><span class="op">(</span><span class="va">tune_res</span>, <span class="va">degree</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>
 <p>This selected value can be now be used to specify the previous unspecified <code>degree</code> argument in <code>poly_wf</code> using <code>finalize_workflow()</code>.</p>
-<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">final_wf</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">poly_wf</span>, <span class="va">best_degree</span><span class="op">)</span>
 
 <span class="va">final_wf</span></code></pre></div>
@@ -332,7 +340,7 @@ First, we set up a linear regression specification.</p>
 ## 
 ## Computational engine: lm</code></pre>
 <p>This workflow can now be fitted. And we want to make sure we fit it on the full training data set.</p>
-<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">final_wf</span>, <span class="va">Auto_train</span><span class="op">)</span>
 
 <span class="va">final_fit</span></code></pre></div>
@@ -360,7 +368,7 @@ First, we set up a linear regression specification.</p>
 </h2>
 <p>This section illustrates the use of the bootstrap in the simple Section 5.2 of ISLR, as well as on an example involving estimating the accuracy of the linear regression model on the <code>Auto</code> data set.</p>
 <p>First, we want to look at the accuracy of a statistic of interest. This statistic is justified in ISLR. We want to calculate the metric within many different bootstraps. We start by calculating 1000 bootstraps of the <code>Portfolio</code> data set.</p>
-<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Portfolio_boots</span> <span class="op">&lt;-</span> <span class="fu">bootstraps</span><span class="op">(</span><span class="va">Portfolio</span>, times <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
 <span class="va">Portfolio_boots</span></code></pre></div>
 <pre><code>## # Bootstrap sampling 
@@ -380,7 +388,7 @@ First, we set up a linear regression specification.</p>
 ## # … with 990 more rows</code></pre>
 <p>The result is a tibble of <code>boot_split</code> objects. The rsample has constructed these splits in such a way that these 1000 bootstraps take up way less than 1000 times the space as <code>Portfolio</code>.</p>
 <p>Next, we create a function that takes a <code>boot_split</code> object and returns the calculated metric.</p>
-<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alpha.fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">split</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">analysis</span><span class="op">(</span><span class="va">split</span><span class="op">)</span>
   <span class="va">X</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">X</span>
@@ -389,7 +397,7 @@ First, we set up a linear regression specification.</p>
   <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">Y</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">Y</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>Now we can use <code>mutate()</code> and <code>map_dbl()</code> from <a href="https://dplyr.tidyverse.org/">dplyr</a> and <a href="https://purrr.tidyverse.org/">purrr</a> respectively to apply <code>alpha.fn</code> to each of the bootstraps.</p>
-<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alpha_res</span> <span class="op">&lt;-</span> <span class="va">Portfolio_boots</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fu">map_dbl</span><span class="op">(</span><span class="va">splits</span>, <span class="va">alpha.fn</span><span class="op">)</span><span class="op">)</span>
 
@@ -411,19 +419,19 @@ First, we set up a linear regression specification.</p>
 ## # … with 990 more rows</code></pre>
 <p>and now we have all the bootstrap sample values. These can now further be analyzed.</p>
 <p>In the next example do we want to study the variability of the slope and intercept estimate of the linear regression model. And it follows the same structure. First, we create some bootstraps of the data. Then we create a function that takes a split and returns some values. This function will return a tibble for each bootstrap.</p>
-<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Auto_boots</span> <span class="op">&lt;-</span> <span class="fu">bootstraps</span><span class="op">(</span><span class="va">Auto</span><span class="op">)</span>
 
 <span class="va">boot.fn</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">split</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">horsepower</span>, data <span class="op">=</span> <span class="fu">analysis</span><span class="op">(</span><span class="va">split</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span>
+  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>then we use <code>mutate()</code> and <code>map()</code> to apply the function to each of the bootstraps.</p>
-<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">boot_res</span> <span class="op">&lt;-</span> <span class="va">Auto_boots</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>models <span class="op">=</span> <span class="fu">map</span><span class="op">(</span><span class="va">splits</span>, <span class="va">boot.fn</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>And we can now <code>unnest()</code> and use <code>group_by()</code> and <code>summarise()</code> to get an estimate of the variability of the slope and intercept in this linear regression model.</p>
-<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">boot_res</span> <span class="op">%&gt;%</span>
   <span class="fu">unnest</span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">models</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">group_by</span><span class="op">(</span><span class="va">term</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -464,7 +472,7 @@ First, we set up a linear regression specification.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-08-09.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-09-08.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

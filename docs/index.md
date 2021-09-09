@@ -1,7 +1,7 @@
 --- 
 title: "ISLR tidymodels Labs"
 author: "Emil Hvitfeldt"
-date: "2021-08-09"
+date: "2021-09-08"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -48,7 +48,7 @@ This version of the book was built with R version 4.1.0 (2021-05-18) and the fol
 |factoextra   |1.0.7   |CRAN (R 4.1.0) |
 |ggplot2      |3.3.5   |CRAN (R 4.1.0) |
 |glmnet       |4.1-2   |CRAN (R 4.1.0) |
-|infer        |0.5.4   |CRAN (R 4.1.0) |
+|infer        |1.0.0   |CRAN (R 4.1.0) |
 |ISLR         |1.2     |CRAN (R 4.1.0) |
 |kernlab      |0.9-29  |CRAN (R 4.1.0) |
 |kknn         |1.3.1   |CRAN (R 4.1.0) |
@@ -62,13 +62,13 @@ This version of the book was built with R version 4.1.0 (2021-05-18) and the fol
 |proxy        |0.4-26  |CRAN (R 4.1.0) |
 |purrr        |0.3.4   |CRAN (R 4.1.0) |
 |randomForest |4.6-14  |CRAN (R 4.1.0) |
-|readr        |2.0.0   |CRAN (R 4.1.0) |
+|readr        |2.0.1   |CRAN (R 4.1.0) |
 |recipes      |0.1.16  |CRAN (R 4.1.0) |
 |rpart        |4.1-15  |CRAN (R 4.1.0) |
 |rpart.plot   |3.1.0   |CRAN (R 4.1.0) |
 |rsample      |0.1.0   |CRAN (R 4.1.0) |
 |scico        |1.2.0   |CRAN (R 4.1.0) |
-|tibble       |3.1.3   |CRAN (R 4.1.0) |
+|tibble       |3.1.4   |CRAN (R 4.1.0) |
 |tidymodels   |0.1.3   |CRAN (R 4.1.0) |
 |tidyr        |1.1.3   |CRAN (R 4.1.0) |
 |tidyverse    |1.3.1   |CRAN (R 4.1.0) |
