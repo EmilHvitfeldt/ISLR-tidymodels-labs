@@ -1,5 +1,9 @@
 # Moving Beyond Linearity
 
+```{r, echo=FALSE}
+set.seed(1234)
+```
+
 This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include; polynomials expansion, step functions, and splines.
 
 GAM section is WIP since they are now supported in [parsnip](https://github.com/tidymodels/parsnip/pull/512).

@@ -1,5 +1,9 @@
 # Linear Regression
 
+```{r, echo=FALSE}
+set.seed(1234)
+```
+
 This lab will go over how to perform linear regression. This will include [simple linear regression] and [multiple linear regression] in addition to how you can apply transformations to the predictors. This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
  
 ## Libraries
