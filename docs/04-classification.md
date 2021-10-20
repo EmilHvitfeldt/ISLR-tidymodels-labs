@@ -1,5 +1,7 @@
 # Classification
 
+
+
 This lab will be our first experience with classification models. These models differ from the regression model we saw in the last chapter by the fact that the response variable is a qualitative variable instead of a continuous variable.
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
 
@@ -45,7 +47,7 @@ rplot(cor_Smarket, colours = c("indianred2", "black", "skyblue1"))
 ## Don't know how to automatically pick scale for object of type noquote. Defaulting to continuous.
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 And we see that these variables are more or less uncorrelated with each other. The other pair is `Year` and `Volume` that is a little correlated.
 
@@ -63,7 +65,7 @@ cor_Smarket %>%
   theme_minimal()
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 If we plot `Year` against `Volume` we see that there is an upwards trend in `Volume` with time.
 
@@ -73,7 +75,7 @@ ggplot(Smarket, aes(Year, Volume)) +
   geom_jitter(height = 0)
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
 ## Logistic Regression
 
@@ -105,7 +107,7 @@ lr_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  9ms 
+## Fit time:  5ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -257,7 +259,7 @@ augment(lr_fit, new_data = Smarket) %>%
   autoplot(type = "heatmap")
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 We can also calculate various performance metrics. One of the most common metrics is accuracy, which is how often the model predicted correctly as a percentage.
 
@@ -611,7 +613,7 @@ ggplot(Smarket, aes(Lag1, Lag2)) +
 ## `geom_smooth()` using formula 'y ~ x'
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-30-1.png" width="672" />
 
 ## K-Nearest Neighbors
 
@@ -632,7 +634,7 @@ knn_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  38ms 
+## Fit time:  39ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))
@@ -834,7 +836,7 @@ augment(pois_fit, new_data = Bikeshare, type.predict = "response") %>%
   theme_light()
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-44-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-45-1.png" width="672" />
 
 We can also look at the model coefficients to get a feel for the working of the model and comparing it with our own understanding.
 
@@ -860,7 +862,7 @@ pois_fit_coef_mnths %>%
   theme_light()
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-45-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-46-1.png" width="672" />
 
 We can similarly also look at the coefficients corresponding to the `hr` variable. Here the peaks occur at 8:00 AM and 5:00 PM, i.e. during normal office start and end times. 
 
@@ -884,7 +886,7 @@ pois_fit_coef_hr %>%
   theme_light()
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-46-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-47-1.png" width="672" />
 
 ## Extra - comparing multiple models
 
@@ -973,6 +975,6 @@ preds %>%
   autoplot()
 ```
 
-<img src="04-classification_files/figure-html/unnamed-chunk-51-1.png" width="672" />
+<img src="04-classification_files/figure-html/unnamed-chunk-52-1.png" width="672" />
 
 Here you can't see the LDA because it lies perfectly under the logistic regression.

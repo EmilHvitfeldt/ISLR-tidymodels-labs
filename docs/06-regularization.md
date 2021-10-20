@@ -1,5 +1,7 @@
 # Linear Model Selection and Regularization
 
+
+
 This lab will take a look at regularization models and hyperparameter tuning. These models are related to the models we saw in chapter 3 and 4, with the difference that they contain a regularization term.
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations, and [tune and dials](https://www.tidymodels.org/start/tuning/) to tune the hyperparameters of the model.
 
@@ -197,7 +199,7 @@ ridge_fit %>%
   plot(xvar = "lambda")
 ```
 
-<img src="06-regularization_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="06-regularization_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 Prediction is done like normal, if we use `predict()` by itself, then `penalty = 0` as we set in the model specification is used.
 
@@ -367,7 +369,7 @@ The output of `tune_grid()` can be hard to read by itself unprocessed. `autoplot
 autoplot(tune_res)
 ```
 
-<img src="06-regularization_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="06-regularization_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 Here we see that the amount of regularization affects the performance metrics differently. Note how there are areas where the amount of regularization doesn't have any meaningful influence on the coefficient estimates. We can also see the raw metrics that created this chart by calling `collect_matrics()`. 
 
 
@@ -379,16 +381,16 @@ collect_metrics(tune_res)
 ## # A tibble: 100 × 7
 ##      penalty .metric .estimator    mean     n std_err .config              
 ##        <dbl> <chr>   <chr>        <dbl> <int>   <dbl> <chr>                
-##  1 0.00001   rmse    standard   292.       10 16.2    Preprocessor1_Model01
-##  2 0.00001   rsq     standard     0.573    10  0.0558 Preprocessor1_Model01
-##  3 0.0000160 rmse    standard   292.       10 16.2    Preprocessor1_Model02
-##  4 0.0000160 rsq     standard     0.573    10  0.0558 Preprocessor1_Model02
-##  5 0.0000256 rmse    standard   292.       10 16.2    Preprocessor1_Model03
-##  6 0.0000256 rsq     standard     0.573    10  0.0558 Preprocessor1_Model03
-##  7 0.0000409 rmse    standard   292.       10 16.2    Preprocessor1_Model04
-##  8 0.0000409 rsq     standard     0.573    10  0.0558 Preprocessor1_Model04
-##  9 0.0000655 rmse    standard   292.       10 16.2    Preprocessor1_Model05
-## 10 0.0000655 rsq     standard     0.573    10  0.0558 Preprocessor1_Model05
+##  1 0.00001   rmse    standard   340.       10 32.7    Preprocessor1_Model01
+##  2 0.00001   rsq     standard     0.473    10  0.0525 Preprocessor1_Model01
+##  3 0.0000160 rmse    standard   340.       10 32.7    Preprocessor1_Model02
+##  4 0.0000160 rsq     standard     0.473    10  0.0525 Preprocessor1_Model02
+##  5 0.0000256 rmse    standard   340.       10 32.7    Preprocessor1_Model03
+##  6 0.0000256 rsq     standard     0.473    10  0.0525 Preprocessor1_Model03
+##  7 0.0000409 rmse    standard   340.       10 32.7    Preprocessor1_Model04
+##  8 0.0000409 rsq     standard     0.473    10  0.0525 Preprocessor1_Model04
+##  9 0.0000655 rmse    standard   340.       10 32.7    Preprocessor1_Model05
+## 10 0.0000655 rsq     standard     0.473    10  0.0525 Preprocessor1_Model05
 ## # … with 90 more rows
 ```
 
@@ -404,7 +406,7 @@ best_penalty
 ## # A tibble: 1 × 2
 ##   penalty .config              
 ##     <dbl> <chr>                
-## 1 0.00001 Preprocessor1_Model01
+## 1    569. Preprocessor1_Model39
 ```
 
 This value of `penalty` can then be used with `finalize_workflow()` to update/finalize the recipe by replacing `tune()` with the value of `best_penalty`. Now, this model should be fit again, this time using the whole training data set.
@@ -428,7 +430,7 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.175
+## 1 rsq     standard       0.488
 ```
 
 And it performs fairly well given what we saw earlier.
@@ -483,7 +485,7 @@ tune_res <- tune_grid(
 autoplot(tune_res)
 ```
 
-<img src="06-regularization_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+<img src="06-regularization_files/figure-html/unnamed-chunk-25-1.png" width="672" />
 
 We select the best value of `penalty` using `select_best()`
 
@@ -513,7 +515,7 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.175
+## 1 rsq     standard       0.488
 ```
 
 ## Principal Components Regression
@@ -590,7 +592,7 @@ The results look a little shaky here.
 autoplot(tune_res)
 ```
 
-<img src="06-regularization_files/figure-html/unnamed-chunk-32-1.png" width="672" />
+<img src="06-regularization_files/figure-html/unnamed-chunk-33-1.png" width="672" />
 
 But we can still select the best model.
 

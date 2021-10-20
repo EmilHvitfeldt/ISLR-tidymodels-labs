@@ -1,5 +1,7 @@
 # Linear Regression
 
+
+
 This lab will go over how to perform linear regression. This will include [simple linear regression] and [multiple linear regression] in addition to how you can apply transformations to the predictors. This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
  
 ## Libraries
@@ -60,7 +62,7 @@ lm_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  5ms 
+## Fit time:  7ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat, data = data)
@@ -283,7 +285,7 @@ lm_fit2
 ```
 ## parsnip model object
 ## 
-## Fit time:  2ms 
+## Fit time:  3ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat + age, data = data)
@@ -346,7 +348,7 @@ lm_fit3
 ```
 ## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ ., data = data)
@@ -541,7 +543,7 @@ lm_spec %>%
 ```
 ## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## 
 ## Call:
 ## stats::lm(formula = Sales ~ . + Income:Advertising + Price:Age, 

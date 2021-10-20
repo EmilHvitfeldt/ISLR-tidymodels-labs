@@ -86,7 +86,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <div class="sourceCode" id="cb333"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">sim_data</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, color <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-3-1.png" width="672"></div>
+<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-4-1.png" width="672"></div>
 <p>We can then create a linear SVM specification by setting <code>degree = 1</code> in a polynomial SVM model. We furthermore set <code>scaled = FALSE</code> in <code>set_engine()</code> to have the engine scale the data for us. Once we get to it later we can be performing this scaling in a recipe instead.</p>
 <div class="sourceCode" id="cb334"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">svm_linear_spec</span> <span class="op">&lt;-</span> <span class="fu">svm_poly</span><span class="op">(</span>degree <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -101,7 +101,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <span class="va">svm_linear_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  575ms 
+## Fit time:  818ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -133,7 +133,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <code class="sourceCode R"><span class="va">svm_linear_fit</span> <span class="op">%&gt;%</span>
   <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-6-1.png" width="672"></div>
+<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
 <p>what if we instead used a smaller value of the <code>cost</code> parameter?</p>
 <div class="sourceCode" id="cb343"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">svm_linear_fit</span> <span class="op">&lt;-</span> <span class="va">svm_linear_spec</span> <span class="op">%&gt;%</span> 
@@ -143,7 +143,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <span class="va">svm_linear_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  26ms 
+## Fit time:  29ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -176,7 +176,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <span class="op">)</span>
 
 <span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
+<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
 <p>using the <code>tune_res</code> object and <code>select_best()</code> function allows us to find the value of <code>cost</code> that gives the best cross-validated accuracy. Finalize the workflow with <code>finalize_workflow()</code> and fit the new workflow on the data set.</p>
 <div class="sourceCode" id="cb346"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_cost</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"accuracy"</span><span class="op">)</span>
@@ -219,7 +219,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <span class="va">sim_data2</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, color <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-12-1.png" width="672"></div>
+<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-13-1.png" width="672"></div>
 <p>We will try an SVM with a radial basis function. Such a kernel would allow us to capture the non-linearity in our data.</p>
 <div class="sourceCode" id="cb351"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">svm_rbf_spec</span> <span class="op">&lt;-</span> <span class="fu">svm_rbf</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -234,7 +234,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <code class="sourceCode R"><span class="va">svm_rbf_fit</span> <span class="op">%&gt;%</span>
   <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-15-1.png" width="672"></div>
+<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-16-1.png" width="672"></div>
 <p>But let us see how well this model generalizes to new data from the same generating process.</p>
 <div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
@@ -279,7 +279,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">svm_rbf_fit</span>, new_data <span class="op">=</span> <span class="va">sim_data2_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">roc_curve</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">y</span>, estimate <span class="op">=</span> <span class="va">.pred_1</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-19-1.png" width="672"></div>
+<div class="inline-figure"><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-20-1.png" width="672"></div>
 <p>A common metric is t calculate the area under this curve. This can be done using the <code>roc_auc()</code> function (<code>_auc</code> stands for <strong>a</strong>rea <strong>u</strong>nder <strong>c</strong>urve).</p>
 <div class="sourceCode" id="cb360"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">svm_rbf_fit</span>, new_data <span class="op">=</span> <span class="va">sim_data2_test</span><span class="op">)</span> <span class="op">%&gt;%</span>

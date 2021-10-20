@@ -1,5 +1,7 @@
 # Moving Beyond Linearity
 
+
+
 This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include; polynomials expansion, step functions, and splines.
 
 GAM section is WIP since they are now supported in [parsnip](https://github.com/tidymodels/parsnip/pull/512).
@@ -210,7 +212,7 @@ Wage %>%
             linetype = "dashed", color = "blue")
 ```
 
-<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 the regression curve is now a curve instead of a line as we would have gotten with a simple linear regression model. Notice furthermore that the confidence bands are tighter when there is a lot of data and they wider towards the ends of the data.
 
@@ -236,7 +238,7 @@ Wage %>%
             linetype = "dashed", color = "blue")
 ```
 
-<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
 And we see that the curve starts diverging once we get to 93 the predicted `wage` is negative. The confidence bands also get wider and wider as we get farther away from the data.
 
@@ -361,7 +363,7 @@ regression_lines %>%
 ## Warning: Removed 8 row(s) containing missing values (geom_path).
 ```
 
-<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 Next, let us take a look at the step function and how to fit a model using it as a preprocessor. You can create step functions in a couple of different ways. `step_discretize()` will convert a numeric variable into a factor variable with `n` bins, `n` here is specified with `num_breaks`. These will have approximately the same number of points in them according to the training data set.
 
@@ -498,7 +500,7 @@ Wage %>%
             linetype = "dashed", color = "blue")
 ```
 
-<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-22-1.png" width="672" />
 
 ## GAMs
 

@@ -211,7 +211,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <code class="sourceCode R"><span class="va">ridge_fit</span> <span class="op">%&gt;%</span>
   <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>xvar <span class="op">=</span> <span class="st">"lambda"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
+<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
 <p>Prediction is done like normal, if we use <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> by itself, then <code>penalty = 0</code> as we set in the model specification is used.</p>
 <div class="sourceCode" id="cb202"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ridge_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters</span><span class="op">)</span></code></pre></div>
@@ -328,23 +328,23 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <p>The output of <code>tune_grid()</code> can be hard to read by itself unprocessed. <code>autoplot()</code> creates a great visualization</p>
 <div class="sourceCode" id="cb214"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<p><img src="06-regularization_files/figure-html/unnamed-chunk-16-1.png" width="672">
+<p><img src="06-regularization_files/figure-html/unnamed-chunk-17-1.png" width="672">
 Here we see that the amount of regularization affects the performance metrics differently. Note how there are areas where the amount of regularization doesn’t have any meaningful influence on the coefficient estimates. We can also see the raw metrics that created this chart by calling <code>collect_matrics()</code>.</p>
 <div class="sourceCode" id="cb215"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 100 × 7
 ##      penalty .metric .estimator    mean     n std_err .config              
 ##        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
-##  1 0.00001   rmse    standard   292.       10 16.2    Preprocessor1_Model01
-##  2 0.00001   rsq     standard     0.573    10  0.0558 Preprocessor1_Model01
-##  3 0.0000160 rmse    standard   292.       10 16.2    Preprocessor1_Model02
-##  4 0.0000160 rsq     standard     0.573    10  0.0558 Preprocessor1_Model02
-##  5 0.0000256 rmse    standard   292.       10 16.2    Preprocessor1_Model03
-##  6 0.0000256 rsq     standard     0.573    10  0.0558 Preprocessor1_Model03
-##  7 0.0000409 rmse    standard   292.       10 16.2    Preprocessor1_Model04
-##  8 0.0000409 rsq     standard     0.573    10  0.0558 Preprocessor1_Model04
-##  9 0.0000655 rmse    standard   292.       10 16.2    Preprocessor1_Model05
-## 10 0.0000655 rsq     standard     0.573    10  0.0558 Preprocessor1_Model05
+##  1 0.00001   rmse    standard   340.       10 32.7    Preprocessor1_Model01
+##  2 0.00001   rsq     standard     0.473    10  0.0525 Preprocessor1_Model01
+##  3 0.0000160 rmse    standard   340.       10 32.7    Preprocessor1_Model02
+##  4 0.0000160 rsq     standard     0.473    10  0.0525 Preprocessor1_Model02
+##  5 0.0000256 rmse    standard   340.       10 32.7    Preprocessor1_Model03
+##  6 0.0000256 rsq     standard     0.473    10  0.0525 Preprocessor1_Model03
+##  7 0.0000409 rmse    standard   340.       10 32.7    Preprocessor1_Model04
+##  8 0.0000409 rsq     standard     0.473    10  0.0525 Preprocessor1_Model04
+##  9 0.0000655 rmse    standard   340.       10 32.7    Preprocessor1_Model05
+## 10 0.0000655 rsq     standard     0.473    10  0.0525 Preprocessor1_Model05
 ## # … with 90 more rows</code></pre>
 <p>The “best” values of this can be selected using <code>select_best()</code>, this function requires you to specify a <code>matric</code> that it should select against.</p>
 <div class="sourceCode" id="cb217"><pre class="downlit sourceCode r">
@@ -353,7 +353,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 × 2
 ##   penalty .config              
 ##     &lt;dbl&gt; &lt;chr&gt;                
-## 1 0.00001 Preprocessor1_Model01</code></pre>
+## 1    569. Preprocessor1_Model39</code></pre>
 <p>This value of <code>penalty</code> can then be used with <code>finalize_workflow()</code> to update/finalize the recipe by replacing <code>tune()</code> with the value of <code>best_penalty</code>. Now, this model should be fit again, this time using the whole training data set.</p>
 <div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ridge_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">ridge_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span>
@@ -366,7 +366,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rsq     standard       0.175</code></pre>
+## 1 rsq     standard       0.488</code></pre>
 <p>And it performs fairly well given what we saw earlier.</p>
 </div>
 <div id="the-lasso" class="section level2" number="6.4">
@@ -404,7 +404,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <span class="op">)</span>
 
 <span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-24-1.png" width="672"></div>
+<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-25-1.png" width="672"></div>
 <p>We select the best value of <code>penalty</code> using <code>select_best()</code></p>
 <div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_penalty</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></code></pre></div>
@@ -420,7 +420,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <pre><code>## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-## 1 rsq     standard       0.175</code></pre>
+## 1 rsq     standard       0.488</code></pre>
 </div>
 <div id="principal-components-regression" class="section level2" number="6.5">
 <h2>
@@ -474,7 +474,7 @@ Here we see that the amount of regularization affects the performance metrics di
 <p>The results look a little shaky here.</p>
 <div class="sourceCode" id="cb235"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-32-1.png" width="672"></div>
+<div class="inline-figure"><img src="06-regularization_files/figure-html/unnamed-chunk-33-1.png" width="672"></div>
 <p>But we can still select the best model.</p>
 <div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">best_threshold</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></code></pre></div>

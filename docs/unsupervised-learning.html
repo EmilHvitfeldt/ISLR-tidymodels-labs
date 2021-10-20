@@ -183,7 +183,7 @@ We start with <code><a href="https://generics.r-lib.org/reference/tidy.html">tid
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">value</span>, <span class="va">column</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">PC</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_col</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
 <p>Lastly, we can set <code>matrix = "eigenvalues"</code> and get back the explained standard deviation for each PC including as a percent and cumulative which is quite handy for plotting.</p>
 <div class="sourceCode" id="cb386"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">USArrests_pca</span>, matrix <span class="op">=</span> <span class="st">"eigenvalues"</span><span class="op">)</span></code></pre></div>
@@ -199,7 +199,7 @@ We start with <code><a href="https://generics.r-lib.org/reference/tidy.html">tid
 <code class="sourceCode R"><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">USArrests_pca</span>, matrix <span class="op">=</span> <span class="st">"eigenvalues"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">PC</span>, <span class="va">percent</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_col</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
 <p>Lastly, we have the <code>augment()</code> function which will give you back the fitted PC transformation if you apply it to the <code><a href="https://rdrr.io/r/stats/prcomp.html">prcomp()</a></code> object directly</p>
 <div class="sourceCode" id="cb389"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">USArrests_pca</span><span class="op">)</span></code></pre></div>
@@ -377,7 +377,7 @@ We start with <code><a href="https://generics.r-lib.org/reference/tidy.html">tid
 <code class="sourceCode R"><span class="va">x_df</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">25</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-21-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-22-1.png" width="672"></div>
 <p>the <code><a href="https://rdrr.io/r/stats/kmeans.html">kmeans()</a></code> functions takes a matrix or data.frame and <code>centers</code> which is the number of clusters we want <code><a href="https://rdrr.io/r/stats/kmeans.html">kmeans()</a></code> to find. We also set <code>nstart = 20</code>, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.</p>
 <div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
@@ -443,7 +443,7 @@ We start with <code><a href="https://generics.r-lib.org/reference/tidy.html">tid
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">res_kmeans</span>, data <span class="op">=</span> <span class="va">x_df</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, color <span class="op">=</span> <span class="va">.cluster</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-27-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-28-1.png" width="672"></div>
 <p>This is all well and good, but it would be nice if we could try out a number of different clusters and then find the best one. We will use the <code>mutate()</code> and <code>map()</code> combo to fit multiple models and extract information from them. We remember to set a seed to ensure reproducibility.</p>
 <div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span>
@@ -473,7 +473,7 @@ We start with <code><a href="https://generics.r-lib.org/reference/tidy.html">tid
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">k</span>, <span class="va">tot.withinss</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-29-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-30-1.png" width="672"></div>
 <p>We see an elbow at <code>k = 2</code> which makes us happy since the data set is specifically created to have 2 clusters. We can now extract the model where <code>k = 2</code> from <code>multi_kmeans</code>.</p>
 <div class="sourceCode" id="cb421"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">final_kmeans</span> <span class="op">&lt;-</span> <span class="va">multi_kmeans</span> <span class="op">%&gt;%</span>
@@ -485,7 +485,7 @@ We start with <code><a href="https://generics.r-lib.org/reference/tidy.html">tid
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">final_kmeans</span>, data <span class="op">=</span> <span class="va">x_df</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">V1</span>, <span class="va">V2</span>, color <span class="op">=</span> <span class="va">.cluster</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-31-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-32-1.png" width="672"></div>
 </div>
 <div id="hierarchical-clustering" class="section level2" number="12.4">
 <h2>
@@ -509,17 +509,17 @@ We start with <code><a href="https://generics.r-lib.org/reference/tidy.html">tid
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_complete</span>, main <span class="op">=</span> <span class="st">"complete"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-33-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-34-1.png" width="672"></div>
 <div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_average</span>, main <span class="op">=</span> <span class="st">"average"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-33-2.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-34-2.png" width="672"></div>
 <div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_single</span>, main <span class="op">=</span> <span class="st">"single"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-33-3.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-34-3.png" width="672"></div>
 <p>If we don’t know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We can perform scaling by using <code><a href="https://rdrr.io/r/base/scale.html">scale()</a></code> before <code><a href="https://rdrr.io/pkg/factoextra/man/dist.html">dist()</a></code>.</p>
 <div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x_df</span> <span class="op">%&gt;%</span>
@@ -530,7 +530,7 @@ We start with <code><a href="https://generics.r-lib.org/reference/tidy.html">tid
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
 <div class="inline-figure">
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-34-1.png" width="672">
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-35-1.png" width="672">
 Another way of calculating distances is based on correlation. This only makes sense if has 3 or more variables.</div>
 <div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># correlation based distance</span>
@@ -543,7 +543,7 @@ Another way of calculating distances is based on correlation. This only makes se
   <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-35-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-36-1.png" width="672"></div>
 </div>
 <div id="pca-on-the-nci60-data" class="section level2" number="12.5">
 <h2>
@@ -578,7 +578,7 @@ Another way of calculating distances is based on correlation. This only makes se
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_color_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="va">colors</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-40-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-41-1.png" width="672"></div>
 <p>We see there is some local clustering of the different cancer types which is promising, it is not perfect but let us see what happens when we compare PC1 against PC3 now.</p>
 <div class="sourceCode" id="cb439"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nci60_pcs</span> <span class="op">%&gt;%</span>
@@ -586,14 +586,14 @@ Another way of calculating distances is based on correlation. This only makes se
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_color_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="va">colors</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-41-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-42-1.png" width="672"></div>
 <p>Lastly, we will plot the variance explained of each principal component. We can use <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> with <code>matrix = "eigenvalues"</code> to accomplish this easily, so we start with the percentage of each PC</p>
 <div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">nci60_pca</span>, matrix <span class="op">=</span> <span class="st">"eigenvalues"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">PC</span>, <span class="va">percent</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-42-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-43-1.png" width="672"></div>
 <p>with the first PC having a little more than 10% and a fairly fast drop.</p>
 <p>And we can get the cumulative variance explained just the same.</p>
 <div class="sourceCode" id="cb441"><pre class="downlit sourceCode r">
@@ -601,7 +601,7 @@ Another way of calculating distances is based on correlation. This only makes se
   <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">PC</span>, <span class="va">cumulative</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-43-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-44-1.png" width="672"></div>
 </div>
 <div id="clustering-on-nci60-dataset" class="section level2" number="12.6">
 <h2>
@@ -632,24 +632,24 @@ Another way of calculating distances is based on correlation. This only makes se
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_complete</span>, main <span class="op">=</span> <span class="st">"Complete"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-46-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-1.png" width="672"></div>
 <div class="sourceCode" id="cb446"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_average</span>, main <span class="op">=</span> <span class="st">"Average"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-46-2.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-2.png" width="672"></div>
 <div class="sourceCode" id="cb448"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_single</span>, main <span class="op">=</span> <span class="st">"Single"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-46-3.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-3.png" width="672"></div>
 <p>We now color according to <code>k = 4</code> and we get the following separations.</p>
 <div class="sourceCode" id="cb450"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nci60_complete</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, main <span class="op">=</span> <span class="st">"hclust(complete) on nci60"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-48-1.png" width="672"></div>
 <p>We now take the clustering id extracted with <code>cutree</code> and calculate which Label is the most common within each cluster.</p>
 <div class="sourceCode" id="cb452"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">tibble</span><span class="op">(</span>
@@ -696,7 +696,7 @@ Another way of calculating distances is based on correlation. This only makes se
 <span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span><span class="va">kmeans</span>, <span class="va">hclust</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">autoplot</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-51-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-52-1.png" width="672"></div>
 <p>There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).</p>
 <p>One last thing that is sometimes useful is to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of <code>nci60</code> and keep the 5 first components. (we could have started with <code>nci60</code> too if we added <code>step_rm()</code> and <code>step_normalize()</code>).</p>
 <div class="sourceCode" id="cb458"><pre class="downlit sourceCode r">
@@ -712,7 +712,7 @@ Another way of calculating distances is based on correlation. This only makes se
   <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, main <span class="op">=</span> <span class="st">"hclust on first five PCs"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =
 ## "none")` instead.</code></pre>
-<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-53-1.png" width="672"></div>
+<div class="inline-figure"><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-54-1.png" width="672"></div>
 
 </div>
 </div>

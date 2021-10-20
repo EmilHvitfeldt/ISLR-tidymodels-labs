@@ -1,5 +1,7 @@
 # Unsupervised Learning
 
+
+
 This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. One downside at this moment is that clustering is not well integrated into tidymodels at this time. But we are still able to use some of the features in tidymodels.
 
 
@@ -168,7 +170,7 @@ tidy(USArrests_pca, matrix = "loadings") %>%
   geom_col()
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 Lastly, we can set `matrix = "eigenvalues"` and get back the explained standard deviation for each PC including as a percent and cumulative which is quite handy for plotting.
 
@@ -196,7 +198,7 @@ tidy(USArrests_pca, matrix = "eigenvalues") %>%
   geom_col()
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 Lastly, we have the `augment()` function which will give you back the fitted PC transformation if you apply it to the `prcomp()` object directly
 
@@ -439,7 +441,7 @@ x_df %>%
   geom_point()
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-22-1.png" width="672" />
 
 the `kmeans()` functions takes a matrix or data.frame and `centers` which is the number of clusters we want `kmeans()` to find. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
 
@@ -542,7 +544,7 @@ augment(res_kmeans, data = x_df) %>%
   geom_point()
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-27-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-28-1.png" width="672" />
 
 This is all well and good, but it would be nice if we could try out a number of different clusters and then find the best one. We will use the `mutate()` and `map()` combo to fit multiple models and extract information from them. We remember to set a seed to ensure reproducibility.
 
@@ -584,7 +586,7 @@ multi_kmeans %>%
   geom_line()
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-30-1.png" width="672" />
 
 We see an elbow at `k = 2` which makes us happy since the data set is specifically created to have 2 clusters. We can now extract the model where `k = 2` from `multi_kmeans`.
 
@@ -605,7 +607,7 @@ augment(final_kmeans, data = x_df) %>%
   geom_point()
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-31-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-32-1.png" width="672" />
 
 ## Hierarchical Clustering
 
@@ -638,7 +640,7 @@ fviz_dend(res_hclust_complete, main = "complete", k = 2)
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-33-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-34-1.png" width="672" />
 
 ```r
 fviz_dend(res_hclust_average, main = "average", k = 2)
@@ -649,7 +651,7 @@ fviz_dend(res_hclust_average, main = "average", k = 2)
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-33-2.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-34-2.png" width="672" />
 
 ```r
 fviz_dend(res_hclust_single, main = "single", k = 2)
@@ -660,7 +662,7 @@ fviz_dend(res_hclust_single, main = "single", k = 2)
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-33-3.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-34-3.png" width="672" />
 
 If we don't know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We can perform scaling by using `scale()` before `dist()`.
 
@@ -678,7 +680,7 @@ x_df %>%
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-34-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-35-1.png" width="672" />
 Another way of calculating distances is based on correlation. This only makes sense if has 3 or more variables.
 
 
@@ -698,7 +700,7 @@ x %>%
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-35-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-36-1.png" width="672" />
 
 ## PCA on the NCI60 Data
 
@@ -751,7 +753,7 @@ nci60_pcs %>%
   scale_color_manual(values = colors)
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-40-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-41-1.png" width="672" />
 
 We see there is some local clustering of the different cancer types which is promising, it is not perfect but let us see what happens when we compare PC1 against PC3 now. 
 
@@ -764,7 +766,7 @@ nci60_pcs %>%
   scale_color_manual(values = colors)
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-41-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-42-1.png" width="672" />
 
 Lastly, we will plot the variance explained of each principal component. We can use `tidy()` with `matrix = "eigenvalues"` to accomplish this easily, so we start with the percentage of each PC
 
@@ -776,7 +778,7 @@ tidy(nci60_pca, matrix = "eigenvalues") %>%
   geom_line()
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-42-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-43-1.png" width="672" />
 
 with the first PC having a little more than 10% and a fairly fast drop. 
 
@@ -790,7 +792,7 @@ tidy(nci60_pca, matrix = "eigenvalues") %>%
   geom_line()
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-43-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-44-1.png" width="672" />
 
 ## Clustering on nci60 dataset
 
@@ -834,7 +836,7 @@ fviz_dend(nci60_complete, main = "Complete")
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-46-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-1.png" width="672" />
 
 ```r
 fviz_dend(nci60_average, main = "Average")
@@ -845,7 +847,7 @@ fviz_dend(nci60_average, main = "Average")
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-46-2.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-2.png" width="672" />
 
 ```r
 fviz_dend(nci60_single, main = "Single")
@@ -856,7 +858,7 @@ fviz_dend(nci60_single, main = "Single")
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-46-3.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-3.png" width="672" />
 
 We now color according to `k = 4` and we get the following separations.
 
@@ -871,7 +873,7 @@ nci60_complete %>%
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-48-1.png" width="672" />
 
 We now take the clustering id extracted with `cutree` and calculate which Label is the most common within each cluster.
 
@@ -941,7 +943,7 @@ tibble(
   autoplot(type = "heatmap")
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-51-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-52-1.png" width="672" />
 
 There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).
 
@@ -970,4 +972,4 @@ nci60_pca %>%
 ## "none")` instead.
 ```
 
-<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-53-1.png" width="672" />
+<img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-54-1.png" width="672" />

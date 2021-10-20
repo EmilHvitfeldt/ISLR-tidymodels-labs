@@ -213,7 +213,7 @@ One of the benefits of using <code>raw = FALSE</code> is that the resulting vari
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, 
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
+<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
 <p>the regression curve is now a curve instead of a line as we would have gotten with a simple linear regression model. Notice furthermore that the confidence bands are tighter when there is a lot of data and they wider towards the ends of the data.</p>
 <p>Let us take that one step further and see what happens to the regression line once we go past the domain it was trained on. the previous plot showed individuals within the age range 18-80. Let us see what happens once we push this to 18-100. This is not an impossible range but an unrealistic range.</p>
 <div class="sourceCode" id="cb255"><pre class="downlit sourceCode r">
@@ -233,7 +233,7 @@ One of the benefits of using <code>raw = FALSE</code> is that the resulting vari
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, 
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
+<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-12-1.png" width="672"></div>
 <p>And we see that the curve starts diverging once we get to 93 the predicted <code>wage</code> is negative. The confidence bands also get wider and wider as we get farther away from the data.</p>
 <p>We can also think of this problem as a classification problem, and we will do that just now by setting us the task of predicting whether an individual earns more than $250000 per year. We will add a new factor value denoting this response.</p>
 <div class="sourceCode" id="cb256"><pre class="downlit sourceCode r">
@@ -322,7 +322,7 @@ We also have to create a logistic regression specification that we will use as o
   <span class="fu">geom_jitter</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="op">(</span><span class="va">high</span> <span class="op">==</span> <span class="st">"High"</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">Wage</span>, 
               shape <span class="op">=</span> <span class="st">"|"</span>, height <span class="op">=</span> <span class="fl">0</span>, width <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Removed 8 row(s) containing missing values (geom_path).</code></pre>
-<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-16-1.png" width="672"></div>
+<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-17-1.png" width="672"></div>
 <p>Next, let us take a look at the step function and how to fit a model using it as a preprocessor. You can create step functions in a couple of different ways. <code>step_discretize()</code> will convert a numeric variable into a factor variable with <code>n</code> bins, <code>n</code> here is specified with <code>num_breaks</code>. These will have approximately the same number of points in them according to the training data set.</p>
 <div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rec_discretize</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -432,7 +432,7 @@ We also have to create a logistic regression specification that we will use as o
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, 
             linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-21-1.png" width="672"></div>
+<div class="inline-figure"><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-22-1.png" width="672"></div>
 </div>
 <div id="gams" class="section level2" number="7.3">
 <h2>

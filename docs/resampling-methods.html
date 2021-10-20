@@ -266,7 +266,7 @@ First, we set up a linear regression specification.</p>
 <p><code>autoplot()</code> gives a visual overview of the performance of different hyperparameter pairs.</p>
 <div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="05-resampling-methods_files/figure-html/unnamed-chunk-19-1.png" width="672"></div>
+<div class="inline-figure"><img src="05-resampling-methods_files/figure-html/unnamed-chunk-20-1.png" width="672"></div>
 <p>It appears that the biggest jump in performance comes from going to <code>degree = 2</code>. Afterward, there might be a little bit of improvement but it isn’t as obvious.</p>
 <p>The number used for plotting can be extracted directly with <code>collect_metrics()</code>. We also get an estimate of the standard error of the performance metric. We get this since we have 10 different estimates, one for each fold.</p>
 <div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">

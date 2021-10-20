@@ -1,5 +1,7 @@
 # Support Vector Machines
 
+
+
 This lab will take a look at support vector machines, in doing so we will explore how changing the hyperparameters can help improve performance. 
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations, and [tune and dials](https://www.tidymodels.org/start/tuning/) to tune the hyperparameters of the model.
 
@@ -33,7 +35,7 @@ ggplot(sim_data, aes(x1, x2, color = y)) +
   geom_point()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
 We can then create a linear SVM specification by setting `degree = 1` in a polynomial SVM model. We furthermore set `scaled = FALSE` in `set_engine()` to have the engine scale the data for us. Once we get to it later we can be performing this scaling in a recipe instead. 
 
@@ -58,7 +60,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  575ms 
+## Fit time:  818ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -110,7 +112,7 @@ svm_linear_fit %>%
   plot()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
 what if we instead used a smaller value of the `cost` parameter?
 
@@ -126,7 +128,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  26ms 
+## Fit time:  29ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -166,7 +168,7 @@ tune_res <- tune_grid(
 autoplot(tune_res)
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 using the `tune_res` object and `select_best()` function allows us to find the value of `cost` that gives the best cross-validated accuracy. Finalize the workflow with `finalize_workflow()` and fit the new workflow on the data set.
 
@@ -226,7 +228,7 @@ sim_data2 %>%
   geom_point()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-13-1.png" width="672" />
 
 We will try an SVM with a radial basis function. Such a kernel would allow us to capture the non-linearity in our data.
 
@@ -254,7 +256,7 @@ svm_rbf_fit %>%
   plot()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 
 But let us see how well this model generalizes to new data from the same generating process. 
 
@@ -319,7 +321,7 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
   autoplot()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 
 A common metric is t calculate the area under this curve. This can be done using the `roc_auc()` function (`_auc` stands for **a**rea **u**nder **c**urve).
 

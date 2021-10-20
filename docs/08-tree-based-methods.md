@@ -1,5 +1,7 @@
 # Tree-Based Methods
 
+
+
 This lab will take a look at different tree-based models, in doing so we will explore how changing the hyperparameters can help improve performance. 
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations, and [tune and dials](https://www.tidymodels.org/start/tuning/) to tune the hyperparameters of the model. `rpart.plot` is used to visualize the decision trees created using the `rpart` package as engine, and `vip` is used to visualize variable importance for later models.
 
@@ -66,7 +68,7 @@ class_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  15ms 
+## Fit time:  18ms 
 ## n= 400 
 ## 
 ## node), split, n, loss, yval, (yprob)
@@ -112,12 +114,12 @@ class_tree_fit %>%
 ##           CP nsplit rel error    xerror       xstd
 ## 1 0.28658537      0 1.0000000 1.0000000 0.05997967
 ## 2 0.10975610      1 0.7134146 0.7134146 0.05547692
-## 3 0.04573171      2 0.6036585 0.6158537 0.05298128
-## 4 0.03658537      4 0.5121951 0.5792683 0.05189648
-## 5 0.02743902      5 0.4756098 0.5487805 0.05092467
-## 6 0.02439024      7 0.4207317 0.5609756 0.05132104
-## 7 0.01219512      8 0.3963415 0.5731707 0.05170717
-## 8 0.01000000     10 0.3719512 0.5548780 0.05112415
+## 3 0.04573171      2 0.6036585 0.7439024 0.05614725
+## 4 0.03658537      4 0.5121951 0.7804878 0.05688734
+## 5 0.02743902      5 0.4756098 0.7195122 0.05561497
+## 6 0.02439024      7 0.4207317 0.7012195 0.05519472
+## 7 0.01219512      8 0.3963415 0.6829268 0.05475596
+## 8 0.01000000     10 0.3719512 0.6463415 0.05382112
 ## 
 ## Variable importance
 ##       Price   ShelveLoc         Age Advertising   CompPrice      Income 
@@ -339,7 +341,7 @@ class_tree_fit %>%
   rpart.plot()
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 We can see that the most important variable to predict high sales appears to be shelving location as it forms the first node.
 
@@ -469,7 +471,7 @@ using `autoplot()` shows which values of `cost_complexity` appear to produce the
 autoplot(tune_res)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 
 We can now select the best performing value with `select_best()`, finalize the workflow by updating the value of `cost_complexity` and fit the model on the full training data set.
 
@@ -513,7 +515,7 @@ class_tree_final_fit %>%
   rpart.plot()
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-22-1.png" width="672" />
 
 ## Fitting Regression Trees
 
@@ -547,7 +549,7 @@ reg_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  11ms 
+## Fit time:  13ms 
 ## n= 379 
 ## 
 ## node), split, n, deviance, yval
@@ -594,7 +596,7 @@ reg_tree_fit %>%
   rpart.plot()
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-27-1.png" width="672" />
 
 Notice how the result is a numeric variable instead of a class.
 
@@ -625,7 +627,7 @@ And it appears that higher complexity works are to be preferred according to our
 autoplot(tune_res)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-28-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-29-1.png" width="672" />
 
 We select the best-performing model according to `"rmse"` and fit the final model on the whole training data set.
 
@@ -693,7 +695,7 @@ reg_tree_final_fit %>%
   rpart.plot()
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-30-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-31-1.png" width="672" />
 
 ## Bagging and Random Forests
 
@@ -739,7 +741,7 @@ augment(bagging_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-34-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-35-1.png" width="672" />
 
 There isn't anything weird going on here so we are happy. Next, let us take a look at the variable importance
 
@@ -748,7 +750,7 @@ There isn't anything weird going on here so we are happy. Next, let us take a lo
 vip(bagging_fit)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-35-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-36-1.png" width="672" />
 
 Next, let us take a look at a random forest. By default, `randomForest()` `p / 3` variables when building a random forest of regression trees, and `sqrt(p)` variables when building a random forest of classification trees. Here we use `mtry = 6`.
 
@@ -791,7 +793,7 @@ augment(rf_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-39-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-40-1.png" width="672" />
 
 it looks fine. No discernable difference between this chart and the one we created for the bagging model. 
 
@@ -802,7 +804,7 @@ The variable importance plot is also quite similar to what we saw for the baggin
 vip(rf_fit)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-40-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-41-1.png" width="672" />
 
 you would normally want to perform hyperparameter tuning for the random forest model to get the best out of your forest. This exercise is left for the reader.
 
@@ -849,7 +851,7 @@ augment(boost_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-44-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-45-1.png" width="672" />
 
 You would normally want to perform hyperparameter tuning for the boosted tree model to get the best out of your model. This exercise is left for the reader. Look at the [Iterative search](https://www.tmwr.org/iterative-search.html) chapter of [Tidy Modeling with R](https://www.tmwr.org/) for inspiration.
 

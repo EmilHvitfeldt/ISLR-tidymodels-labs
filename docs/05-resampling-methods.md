@@ -1,5 +1,7 @@
 # Resampling Methods
 
+
+
 This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter introduces a lot of new packages.
 This chapter will bring [rsample](https://www.tidymodels.org/start/resampling/) into view for creating resampled data frames as well as [yardstick](https://yardstick.tidymodels.org/) to calculate performance metrics. Lastly, will we also use [tune](https://tune.tidymodels.org/) to fit out models within said resamples. We also see a use of [dials](https://dials.tidymodels.org/) which are used together with tune to select hyperparameter tuning values.
 
@@ -311,7 +313,7 @@ It can be helpful to add `control = control_grid(verbose = TRUE)`, this will pri
 autoplot(tune_res)
 ```
 
-<img src="05-resampling-methods_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="05-resampling-methods_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 
 It appears that the biggest jump in performance comes from going to `degree = 2`. Afterward, there might be a little bit of improvement but it isn't as obvious.
 
