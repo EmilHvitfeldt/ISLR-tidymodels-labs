@@ -55,7 +55,7 @@
 </ul>
 
         <div class="book-extra">
-          
+          <p><a id="book-repo" href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs">View book source <i class="fab fa-github"></i></a></p>
         </div>
       </nav>
 </div>
@@ -130,7 +130,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lr_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  9ms 
+## Fit time:  10ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -336,7 +336,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lda_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  5ms 
+## Fit time:  4ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -487,7 +487,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">knn_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  39ms 
+## Fit time:  36ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))
@@ -742,7 +742,8 @@ You can combine multiple different metrics together with <code>metric_set()</cod
 
       <div class="book-extra">
         <ul class="list-unstyled">
-          
+<li><a id="book-source" href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/blob/master/04-classification.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/master/04-classification.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>

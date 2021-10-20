@@ -2,3 +2,4 @@ bookdown::bs4_book:
   css: ["style.css"]
   theme:
     primary: "#74a180"
+  repo: https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs
