@@ -511,16 +511,15 @@ And we see no markedly difference performance between this model and the logisti
 
 ## Quadratic Discriminant Analysis
 
-We will now fit a QDA model. This is first time we are trying to fit a model that doesn't have a direct parsnip function. The QDA model is a special case of the regularized discriminant model. So setting `frac_common_cov = 0` and `frac_identity = 0` we are able to specify a QDA model.
+We will now fit a QDA model. The `discrim_quad()` function is used here.
 
 Once we have the model specification fitting the model is just like before.
 
 
 ```r
-qda_spec <- discrim_regularized() %>%
+qda_spec <- discrim_quad() %>%
   set_mode("classification") %>%
-  set_args(frac_common_cov = 0, frac_identity = 0) %>%
-  set_engine("klaR")
+  set_engine("MASS")
 
 qda_fit <- qda_spec %>%
   fit(Direction ~ Lag1 + Lag2, data = Smarket_train)
