@@ -68,7 +68,7 @@ class_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  18ms 
+## Fit time:  15ms 
 ## n= 400 
 ## 
 ## node), split, n, loss, yval, (yprob)
@@ -97,241 +97,6 @@ class_tree_fit
 ##       7) Price< 142.5 73  10 Yes (0.13698630 0.86301370) *
 ```
 
-The `summary()` method provides even more information that can be useful.
-
-
-```r
-class_tree_fit %>%
-  extract_fit_engine() %>%
-  summary()
-```
-
-```
-## Call:
-## rpart::rpart(formula = High ~ ., data = data)
-##   n= 400 
-## 
-##           CP nsplit rel error    xerror       xstd
-## 1 0.28658537      0 1.0000000 1.0000000 0.05997967
-## 2 0.10975610      1 0.7134146 0.7134146 0.05547692
-## 3 0.04573171      2 0.6036585 0.7439024 0.05614725
-## 4 0.03658537      4 0.5121951 0.7804878 0.05688734
-## 5 0.02743902      5 0.4756098 0.7195122 0.05561497
-## 6 0.02439024      7 0.4207317 0.7012195 0.05519472
-## 7 0.01219512      8 0.3963415 0.6829268 0.05475596
-## 8 0.01000000     10 0.3719512 0.6463415 0.05382112
-## 
-## Variable importance
-##       Price   ShelveLoc         Age Advertising   CompPrice      Income 
-##          34          25          11          11           9           5 
-##  Population   Education 
-##           3           1 
-## 
-## Node number 1: 400 observations,    complexity param=0.2865854
-##   predicted class=No   expected loss=0.41  P(node) =1
-##     class counts:   236   164
-##    probabilities: 0.590 0.410 
-##   left son=2 (315 obs) right son=3 (85 obs)
-##   Primary splits:
-##       ShelveLoc   splits as  LRL,       improve=28.991900, (0 missing)
-##       Price       < 92.5  to the right, improve=19.463880, (0 missing)
-##       Advertising < 6.5   to the left,  improve=17.277980, (0 missing)
-##       Age         < 61.5  to the right, improve= 9.264442, (0 missing)
-##       Income      < 60.5  to the left,  improve= 7.249032, (0 missing)
-## 
-## Node number 2: 315 observations,    complexity param=0.1097561
-##   predicted class=No   expected loss=0.3111111  P(node) =0.7875
-##     class counts:   217    98
-##    probabilities: 0.689 0.311 
-##   left son=4 (269 obs) right son=5 (46 obs)
-##   Primary splits:
-##       Price       < 92.5  to the right, improve=15.930580, (0 missing)
-##       Advertising < 7.5   to the left,  improve=11.432570, (0 missing)
-##       ShelveLoc   splits as  L-R,       improve= 7.543912, (0 missing)
-##       Age         < 50.5  to the right, improve= 6.369905, (0 missing)
-##       Income      < 60.5  to the left,  improve= 5.984509, (0 missing)
-##   Surrogate splits:
-##       CompPrice < 95.5  to the right, agree=0.873, adj=0.13, (0 split)
-## 
-## Node number 3: 85 observations,    complexity param=0.03658537
-##   predicted class=Yes  expected loss=0.2235294  P(node) =0.2125
-##     class counts:    19    66
-##    probabilities: 0.224 0.776 
-##   left son=6 (12 obs) right son=7 (73 obs)
-##   Primary splits:
-##       Price       < 142.5 to the right, improve=7.745608, (0 missing)
-##       US          splits as  LR,        improve=5.112440, (0 missing)
-##       Income      < 35    to the left,  improve=4.529433, (0 missing)
-##       Advertising < 6     to the left,  improve=3.739996, (0 missing)
-##       Education   < 15.5  to the left,  improve=2.565856, (0 missing)
-##   Surrogate splits:
-##       CompPrice < 154.5 to the right, agree=0.882, adj=0.167, (0 split)
-## 
-## Node number 4: 269 observations,    complexity param=0.04573171
-##   predicted class=No   expected loss=0.2453532  P(node) =0.6725
-##     class counts:   203    66
-##    probabilities: 0.755 0.245 
-##   left son=8 (224 obs) right son=9 (45 obs)
-##   Primary splits:
-##       Advertising < 13.5  to the left,  improve=10.400090, (0 missing)
-##       Age         < 49.5  to the right, improve= 8.083998, (0 missing)
-##       ShelveLoc   splits as  L-R,       improve= 7.023150, (0 missing)
-##       CompPrice   < 124.5 to the left,  improve= 6.749986, (0 missing)
-##       Price       < 126.5 to the right, improve= 5.646063, (0 missing)
-## 
-## Node number 5: 46 observations,    complexity param=0.02439024
-##   predicted class=Yes  expected loss=0.3043478  P(node) =0.115
-##     class counts:    14    32
-##    probabilities: 0.304 0.696 
-##   left son=10 (10 obs) right son=11 (36 obs)
-##   Primary splits:
-##       Income      < 57    to the left,  improve=4.000483, (0 missing)
-##       ShelveLoc   splits as  L-R,       improve=3.189762, (0 missing)
-##       Advertising < 9.5   to the left,  improve=1.388592, (0 missing)
-##       Price       < 80.5  to the right, improve=1.388592, (0 missing)
-##       Age         < 64.5  to the right, improve=1.172885, (0 missing)
-## 
-## Node number 6: 12 observations
-##   predicted class=No   expected loss=0.25  P(node) =0.03
-##     class counts:     9     3
-##    probabilities: 0.750 0.250 
-## 
-## Node number 7: 73 observations
-##   predicted class=Yes  expected loss=0.1369863  P(node) =0.1825
-##     class counts:    10    63
-##    probabilities: 0.137 0.863 
-## 
-## Node number 8: 224 observations,    complexity param=0.02743902
-##   predicted class=No   expected loss=0.1830357  P(node) =0.56
-##     class counts:   183    41
-##    probabilities: 0.817 0.183 
-##   left son=16 (96 obs) right son=17 (128 obs)
-##   Primary splits:
-##       CompPrice   < 124.5 to the left,  improve=4.881696, (0 missing)
-##       Age         < 49.5  to the right, improve=3.960418, (0 missing)
-##       ShelveLoc   splits as  L-R,       improve=3.654633, (0 missing)
-##       Price       < 126.5 to the right, improve=3.234428, (0 missing)
-##       Advertising < 6.5   to the left,  improve=2.371276, (0 missing)
-##   Surrogate splits:
-##       Price      < 115.5 to the left,  agree=0.741, adj=0.396, (0 split)
-##       Age        < 50.5  to the right, agree=0.634, adj=0.146, (0 split)
-##       Population < 405   to the right, agree=0.629, adj=0.135, (0 split)
-##       Education  < 11.5  to the left,  agree=0.585, adj=0.031, (0 split)
-##       Income     < 22.5  to the left,  agree=0.580, adj=0.021, (0 split)
-## 
-## Node number 9: 45 observations,    complexity param=0.04573171
-##   predicted class=Yes  expected loss=0.4444444  P(node) =0.1125
-##     class counts:    20    25
-##    probabilities: 0.444 0.556 
-##   left son=18 (20 obs) right son=19 (25 obs)
-##   Primary splits:
-##       Age       < 54.5  to the right, improve=6.722222, (0 missing)
-##       CompPrice < 121.5 to the left,  improve=4.629630, (0 missing)
-##       ShelveLoc splits as  L-R,       improve=3.250794, (0 missing)
-##       Income    < 99.5  to the left,  improve=3.050794, (0 missing)
-##       Price     < 127   to the right, improve=2.933429, (0 missing)
-##   Surrogate splits:
-##       Population  < 363.5 to the left,  agree=0.667, adj=0.25, (0 split)
-##       Income      < 39    to the left,  agree=0.644, adj=0.20, (0 split)
-##       Advertising < 17.5  to the left,  agree=0.644, adj=0.20, (0 split)
-##       CompPrice   < 106.5 to the left,  agree=0.622, adj=0.15, (0 split)
-##       Price       < 135.5 to the right, agree=0.622, adj=0.15, (0 split)
-## 
-## Node number 10: 10 observations
-##   predicted class=No   expected loss=0.3  P(node) =0.025
-##     class counts:     7     3
-##    probabilities: 0.700 0.300 
-## 
-## Node number 11: 36 observations
-##   predicted class=Yes  expected loss=0.1944444  P(node) =0.09
-##     class counts:     7    29
-##    probabilities: 0.194 0.806 
-## 
-## Node number 16: 96 observations
-##   predicted class=No   expected loss=0.0625  P(node) =0.24
-##     class counts:    90     6
-##    probabilities: 0.938 0.062 
-## 
-## Node number 17: 128 observations,    complexity param=0.02743902
-##   predicted class=No   expected loss=0.2734375  P(node) =0.32
-##     class counts:    93    35
-##    probabilities: 0.727 0.273 
-##   left son=34 (107 obs) right son=35 (21 obs)
-##   Primary splits:
-##       Price     < 109.5 to the right, improve=9.764582, (0 missing)
-##       ShelveLoc splits as  L-R,       improve=6.320022, (0 missing)
-##       Age       < 49.5  to the right, improve=2.575061, (0 missing)
-##       Income    < 108.5 to the right, improve=1.799546, (0 missing)
-##       CompPrice < 143.5 to the left,  improve=1.741982, (0 missing)
-## 
-## Node number 18: 20 observations
-##   predicted class=No   expected loss=0.25  P(node) =0.05
-##     class counts:    15     5
-##    probabilities: 0.750 0.250 
-## 
-## Node number 19: 25 observations
-##   predicted class=Yes  expected loss=0.2  P(node) =0.0625
-##     class counts:     5    20
-##    probabilities: 0.200 0.800 
-## 
-## Node number 34: 107 observations,    complexity param=0.01219512
-##   predicted class=No   expected loss=0.1869159  P(node) =0.2675
-##     class counts:    87    20
-##    probabilities: 0.813 0.187 
-##   left son=68 (65 obs) right son=69 (42 obs)
-##   Primary splits:
-##       Price     < 126.5 to the right, improve=2.9643900, (0 missing)
-##       CompPrice < 147.5 to the left,  improve=2.2337090, (0 missing)
-##       ShelveLoc splits as  L-R,       improve=2.2125310, (0 missing)
-##       Age       < 49.5  to the right, improve=2.1458210, (0 missing)
-##       Income    < 60.5  to the left,  improve=0.8025853, (0 missing)
-##   Surrogate splits:
-##       CompPrice   < 129.5 to the right, agree=0.664, adj=0.143, (0 split)
-##       Advertising < 3.5   to the right, agree=0.664, adj=0.143, (0 split)
-##       Population  < 53.5  to the right, agree=0.645, adj=0.095, (0 split)
-##       Age         < 77.5  to the left,  agree=0.636, adj=0.071, (0 split)
-##       US          splits as  RL,        agree=0.626, adj=0.048, (0 split)
-## 
-## Node number 35: 21 observations
-##   predicted class=Yes  expected loss=0.2857143  P(node) =0.0525
-##     class counts:     6    15
-##    probabilities: 0.286 0.714 
-## 
-## Node number 68: 65 observations
-##   predicted class=No   expected loss=0.09230769  P(node) =0.1625
-##     class counts:    59     6
-##    probabilities: 0.908 0.092 
-## 
-## Node number 69: 42 observations,    complexity param=0.01219512
-##   predicted class=No   expected loss=0.3333333  P(node) =0.105
-##     class counts:    28    14
-##    probabilities: 0.667 0.333 
-##   left son=138 (22 obs) right son=139 (20 obs)
-##   Primary splits:
-##       Age         < 49.5  to the right, improve=5.4303030, (0 missing)
-##       CompPrice   < 137.5 to the left,  improve=2.1000000, (0 missing)
-##       Advertising < 5.5   to the left,  improve=1.8666670, (0 missing)
-##       ShelveLoc   splits as  L-R,       improve=1.4291670, (0 missing)
-##       Population  < 382   to the right, improve=0.8578431, (0 missing)
-##   Surrogate splits:
-##       Income      < 46.5  to the left,  agree=0.595, adj=0.15, (0 split)
-##       Education   < 12.5  to the left,  agree=0.595, adj=0.15, (0 split)
-##       CompPrice   < 131.5 to the right, agree=0.571, adj=0.10, (0 split)
-##       Advertising < 5.5   to the left,  agree=0.571, adj=0.10, (0 split)
-##       Population  < 221.5 to the left,  agree=0.571, adj=0.10, (0 split)
-## 
-## Node number 138: 22 observations
-##   predicted class=No   expected loss=0.09090909  P(node) =0.055
-##     class counts:    20     2
-##    probabilities: 0.909 0.091 
-## 
-## Node number 139: 20 observations
-##   predicted class=Yes  expected loss=0.4  P(node) =0.05
-##     class counts:     8    12
-##    probabilities: 0.400 0.600
-```
-
-
 Once the tree gets more than a couple of nodes it can become hard to read the printed diagram. The `rpart.plot` package provides functions to let us easily visualize the decision tree. As the name implies, it only works with `rpart` trees.
 
 
@@ -341,7 +106,7 @@ class_tree_fit %>%
   rpart.plot()
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 We can see that the most important variable to predict high sales appears to be shelving location as it forms the first node.
 
@@ -471,7 +236,7 @@ using `autoplot()` shows which values of `cost_complexity` appear to produce the
 autoplot(tune_res)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-19-1.png" width="672" />
 
 We can now select the best performing value with `select_best()`, finalize the workflow by updating the value of `cost_complexity` and fit the model on the full training data set.
 
@@ -515,7 +280,7 @@ class_tree_final_fit %>%
   rpart.plot()
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-21-1.png" width="672" />
 
 ## Fitting Regression Trees
 
@@ -596,7 +361,7 @@ reg_tree_fit %>%
   rpart.plot()
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-27-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-26-1.png" width="672" />
 
 Notice how the result is a numeric variable instead of a class.
 
@@ -627,7 +392,7 @@ And it appears that higher complexity works are to be preferred according to our
 autoplot(tune_res)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-28-1.png" width="672" />
 
 We select the best-performing model according to `"rmse"` and fit the final model on the whole training data set.
 
@@ -695,7 +460,7 @@ reg_tree_final_fit %>%
   rpart.plot()
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-31-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-30-1.png" width="672" />
 
 ## Bagging and Random Forests
 
@@ -741,7 +506,7 @@ augment(bagging_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-35-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-34-1.png" width="672" />
 
 There isn't anything weird going on here so we are happy. Next, let us take a look at the variable importance
 
@@ -750,7 +515,7 @@ There isn't anything weird going on here so we are happy. Next, let us take a lo
 vip(bagging_fit)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-36-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-35-1.png" width="672" />
 
 Next, let us take a look at a random forest. By default, `randomForest()` `p / 3` variables when building a random forest of regression trees, and `sqrt(p)` variables when building a random forest of classification trees. Here we use `mtry = 6`.
 
@@ -793,7 +558,7 @@ augment(rf_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-40-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-39-1.png" width="672" />
 
 it looks fine. No discernable difference between this chart and the one we created for the bagging model. 
 
@@ -804,7 +569,7 @@ The variable importance plot is also quite similar to what we saw for the baggin
 vip(rf_fit)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-41-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-40-1.png" width="672" />
 
 you would normally want to perform hyperparameter tuning for the random forest model to get the best out of your forest. This exercise is left for the reader.
 
@@ -851,7 +616,7 @@ augment(boost_fit, new_data = Boston_test) %>%
   geom_point(alpha = 0.5)
 ```
 
-<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-45-1.png" width="672" />
+<img src="08-tree-based-methods_files/figure-html/unnamed-chunk-44-1.png" width="672" />
 
 You would normally want to perform hyperparameter tuning for the boosted tree model to get the best out of your model. This exercise is left for the reader. Look at the [Iterative search](https://www.tmwr.org/iterative-search.html) chapter of [Tidy Modeling with R](https://www.tmwr.org/) for inspiration.
 

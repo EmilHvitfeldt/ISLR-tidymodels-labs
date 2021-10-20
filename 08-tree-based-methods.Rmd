@@ -61,15 +61,6 @@ When we look at the model output we see a quite informative summary of the model
 class_tree_fit
 ```
 
-The `summary()` method provides even more information that can be useful.
-
-```{r}
-class_tree_fit %>%
-  extract_fit_engine() %>%
-  summary()
-```
-
-
 Once the tree gets more than a couple of nodes it can become hard to read the printed diagram. The `rpart.plot` package provides functions to let us easily visualize the decision tree. As the name implies, it only works with `rpart` trees.
 
 ```{r, warning=FALSE}
