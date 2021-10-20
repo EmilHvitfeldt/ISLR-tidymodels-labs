@@ -68,7 +68,7 @@ class_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  15ms 
+## Fit time:  17ms 
 ## n= 400 
 ## 
 ## node), split, n, loss, yval, (yprob)

@@ -50,25 +50,6 @@ tidy(ridge_fit)
 ```
 
 ```
-## Loading required package: Matrix
-```
-
-```
-## 
-## Attaching package: 'Matrix'
-```
-
-```
-## The following objects are masked from 'package:tidyr':
-## 
-##     expand, pack, unpack
-```
-
-```
-## Loaded glmnet 4.1-2
-```
-
-```
 ## # A tibble: 20 × 3
 ##    term          estimate penalty
 ##    <chr>            <dbl>   <dbl>

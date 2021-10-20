@@ -749,7 +749,6 @@ o we can plot the different PCs against each other. It is a good idea to compare
 nci60_pcs %>%
   ggplot(aes(.fittedPC1, .fittedPC2, color = label)) +
   geom_point() +
-  theme_minimal() +
   scale_color_manual(values = colors)
 ```
 
@@ -762,7 +761,6 @@ We see there is some local clustering of the different cancer types which is pro
 nci60_pcs %>%
   ggplot(aes(.fittedPC1, .fittedPC3, color = label)) +
   geom_point() +
-  theme_minimal() +
   scale_color_manual(values = colors)
 ```
 

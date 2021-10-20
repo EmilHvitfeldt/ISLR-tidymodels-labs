@@ -54,7 +54,7 @@ svm_linear_fit
 
 The `kernlab` models can be visualized using the `plot()` function if you load the `kernlab` package. 
 
-```{r}
+```{r, message=FALSE}
 library(kernlab)
 svm_linear_fit %>%
   extract_fit_engine() %>%

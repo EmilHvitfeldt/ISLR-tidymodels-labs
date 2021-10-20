@@ -60,7 +60,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  818ms 
+## Fit time:  939ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -81,32 +81,6 @@ The `kernlab` models can be visualized using the `plot()` function if you load t
 
 ```r
 library(kernlab)
-```
-
-```
-## 
-## Attaching package: 'kernlab'
-```
-
-```
-## The following object is masked from 'package:purrr':
-## 
-##     cross
-```
-
-```
-## The following object is masked from 'package:ggplot2':
-## 
-##     alpha
-```
-
-```
-## The following object is masked from 'package:scales':
-## 
-##     alpha
-```
-
-```r
 svm_linear_fit %>%
   extract_fit_engine() %>%
   plot()
@@ -128,7 +102,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  29ms 
+## Fit time:  30ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 

@@ -43,7 +43,7 @@ ridge_fit <- fit(ridge_spec, Salary ~ ., data = Hitters)
 
 The `glmnet` package will fit the model for all values of `penalty` at once, so let us see what the parameter estimate for the model is now that we have `penalty = 0`.
 
-```{r}
+```{r, message=FALSE}
 tidy(ridge_fit)
 ```
 

@@ -61,8 +61,7 @@ cor_Smarket %>%
   ggplot(aes(x, y, fill = r)) +
   geom_tile() +
   geom_text(aes(label = as.character(fashion(r)))) +
-  scale_fill_paletteer_c("scico::roma", limits = c(-1, 1), direction = -1) +
-  theme_minimal()
+  scale_fill_paletteer_c("scico::roma", limits = c(-1, 1), direction = -1)
 ```
 
 <img src="04-classification_files/figure-html/unnamed-chunk-5-1.png" width="672" />
@@ -107,7 +106,7 @@ lr_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  5ms 
+## Fit time:  9ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -414,7 +413,7 @@ lda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -604,8 +603,7 @@ The accuracy of the Naive Bayes is very similar to that of the QDA model. This s
 ggplot(Smarket, aes(Lag1, Lag2)) +
   geom_point(alpha = 0.1, size = 2) +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(title = "No apparent correlation between Lag1 and Lag2") +
-  theme_light() 
+  labs(title = "No apparent correlation between Lag1 and Lag2")
 ```
 
 ```
@@ -831,8 +829,7 @@ augment(pois_fit, new_data = Bikeshare, type.predict = "response") %>%
   geom_point(alpha = 0.1) +
   geom_abline(slope = 1, size = 1, color = "grey40") +
   labs(title = "Predicting the number of bikers per hour using Poission Regression",
-       x = "Actual", y = "Predicted") +
-  theme_light()
+       x = "Actual", y = "Predicted")
 ```
 
 <img src="04-classification_files/figure-html/unnamed-chunk-45-1.png" width="672" />
@@ -857,8 +854,7 @@ pois_fit_coef_mnths %>%
   geom_point(shape = 21, size = 3, stroke = 1.5, 
              fill = "black", color = "white") +
   labs(title = "Coefficient value from Poission Regression",
-       x = "Month", y = "Coefficient") +
-  theme_light()
+       x = "Month", y = "Coefficient")
 ```
 
 <img src="04-classification_files/figure-html/unnamed-chunk-46-1.png" width="672" />
@@ -881,8 +877,7 @@ pois_fit_coef_hr %>%
   geom_point(shape = 21, size = 3, stroke = 1.5, 
              fill = "black", color = "white") +
   labs(title = "Coefficient value from Poission Regression",
-       x = "Month", y = "Coefficient") +
-  theme_light()
+       x = "Month", y = "Coefficient")
 ```
 
 <img src="04-classification_files/figure-html/unnamed-chunk-47-1.png" width="672" />

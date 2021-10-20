@@ -48,8 +48,7 @@ cor_Smarket %>%
   ggplot(aes(x, y, fill = r)) +
   geom_tile() +
   geom_text(aes(label = as.character(fashion(r)))) +
-  scale_fill_paletteer_c("scico::roma", limits = c(-1, 1), direction = -1) +
-  theme_minimal()
+  scale_fill_paletteer_c("scico::roma", limits = c(-1, 1), direction = -1)
 ```
 
 If we plot `Year` against `Volume` we see that there is an upwards trend in `Volume` with time.
@@ -306,8 +305,7 @@ The accuracy of the Naive Bayes is very similar to that of the QDA model. This s
 ggplot(Smarket, aes(Lag1, Lag2)) +
   geom_point(alpha = 0.1, size = 2) +
   geom_smooth(method = "lm", se = FALSE) +
-  labs(title = "No apparent correlation between Lag1 and Lag2") +
-  theme_light() 
+  labs(title = "No apparent correlation between Lag1 and Lag2")
 ```
 
 ## K-Nearest Neighbors
@@ -461,8 +459,7 @@ augment(pois_fit, new_data = Bikeshare, type.predict = "response") %>%
   geom_point(alpha = 0.1) +
   geom_abline(slope = 1, size = 1, color = "grey40") +
   labs(title = "Predicting the number of bikers per hour using Poission Regression",
-       x = "Actual", y = "Predicted") +
-  theme_light()
+       x = "Actual", y = "Predicted")
 ```
 
 We can also look at the model coefficients to get a feel for the working of the model and comparing it with our own understanding.
@@ -484,8 +481,7 @@ pois_fit_coef_mnths %>%
   geom_point(shape = 21, size = 3, stroke = 1.5, 
              fill = "black", color = "white") +
   labs(title = "Coefficient value from Poission Regression",
-       x = "Month", y = "Coefficient") +
-  theme_light()
+       x = "Month", y = "Coefficient")
 ```
 
 We can similarly also look at the coefficients corresponding to the `hr` variable. Here the peaks occur at 8:00 AM and 5:00 PM, i.e. during normal office start and end times. 
@@ -505,8 +501,7 @@ pois_fit_coef_hr %>%
   geom_point(shape = 21, size = 3, stroke = 1.5, 
              fill = "black", color = "white") +
   labs(title = "Coefficient value from Poission Regression",
-       x = "Month", y = "Coefficient") +
-  theme_light()
+       x = "Month", y = "Coefficient")
 ```
 
 ## Extra - comparing multiple models
