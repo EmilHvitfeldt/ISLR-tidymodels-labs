@@ -36,6 +36,10 @@ ggplot(sim_data, aes(x1, x2, color = y)) +
 
 We can then create a linear SVM specification by setting `degree = 1` in a polynomial SVM model. We furthermore set `scaled = FALSE` in `set_engine()` to have the engine scale the data for us. Once we get to it later we can be performing this scaling in a recipe instead. 
 
+```{block, type='infobox'}
+`set_engine()` can be used to pass in additional arguments directly to the underlying engine. In this case, I'm passing in `scaled = FALSE` to `kernlab::ksvm()` which is the engine function.
+```
+
 ```{r}
 svm_linear_spec <- svm_poly(degree = 1) %>%
   set_mode("classification") %>%

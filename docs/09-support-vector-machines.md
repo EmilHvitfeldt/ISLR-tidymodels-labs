@@ -39,6 +39,10 @@ ggplot(sim_data, aes(x1, x2, color = y)) +
 
 We can then create a linear SVM specification by setting `degree = 1` in a polynomial SVM model. We furthermore set `scaled = FALSE` in `set_engine()` to have the engine scale the data for us. Once we get to it later we can be performing this scaling in a recipe instead. 
 
+<div class="infobox">
+<p><code>set_engine()</code> can be used to pass in additional arguments directly to the underlying engine. In this case, I’m passing in <code>scaled = FALSE</code> to <code>kernlab::ksvm()</code> which is the engine function.</p>
+</div>
+
 
 ```r
 svm_linear_spec <- svm_poly(degree = 1) %>%
@@ -60,7 +64,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  939ms 
+## Fit time:  670ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -86,7 +90,7 @@ svm_linear_fit %>%
   plot()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 what if we instead used a smaller value of the `cost` parameter?
 
@@ -102,7 +106,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  30ms 
+## Fit time:  26ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -142,7 +146,7 @@ tune_res <- tune_grid(
 autoplot(tune_res)
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 using the `tune_res` object and `select_best()` function allows us to find the value of `cost` that gives the best cross-validated accuracy. Finalize the workflow with `finalize_workflow()` and fit the new workflow on the data set.
 
@@ -202,7 +206,7 @@ sim_data2 %>%
   geom_point()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 We will try an SVM with a radial basis function. Such a kernel would allow us to capture the non-linearity in our data.
 
@@ -230,7 +234,7 @@ svm_rbf_fit %>%
   plot()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 But let us see how well this model generalizes to new data from the same generating process. 
 
@@ -295,7 +299,7 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
   autoplot()
 ```
 
-<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-20-1.png" width="672" />
+<img src="09-support-vector-machines_files/figure-html/unnamed-chunk-21-1.png" width="672" />
 
 A common metric is t calculate the area under this curve. This can be done using the `roc_auc()` function (`_auc` stands for **a**rea **u**nder **c**urve).
 
