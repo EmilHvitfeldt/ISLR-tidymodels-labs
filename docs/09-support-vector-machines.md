@@ -58,7 +58,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  596ms 
+## Fit time:  575ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -126,7 +126,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  25ms 
+## Fit time:  26ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -351,6 +351,8 @@ Khan_train <- bind_cols(
 ```
 ## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
 ## Using compatibility `.name_repair`.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
 ```
 
 ```r

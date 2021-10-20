@@ -60,7 +60,7 @@ lm_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat, data = data)
@@ -283,7 +283,7 @@ lm_fit2
 ```
 ## parsnip model object
 ## 
-## Fit time:  3ms 
+## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat + age, data = data)
@@ -346,7 +346,7 @@ lm_fit3
 ```
 ## parsnip model object
 ## 
-## Fit time:  2ms 
+## Fit time:  4ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ ., data = data)
@@ -384,7 +384,7 @@ lm_fit4
 ```
 ## parsnip model object
 ## 
-## Fit time:  1ms 
+## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat * age, data = data)

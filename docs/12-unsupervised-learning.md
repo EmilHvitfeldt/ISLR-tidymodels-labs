@@ -231,13 +231,13 @@ augment(USArrests_pca, newdata = USArrests[1:5, ])
 
 ```
 ## # A tibble: 5 × 10
-##   .rownames state      Murder Assault UrbanPop  Rape .fittedPC1 .fittedPC2 .fittedPC3
-##   <chr>     <chr>       <dbl>   <int>    <int> <dbl>      <dbl>      <dbl>      <dbl>
-## 1 1         Alabama      13.2     236       58  21.2     -0.976      1.12     -0.440 
-## 2 2         Alaska       10       263       48  44.5     -1.93       1.06      2.02  
-## 3 3         Arizona       8.1     294       80  31       -1.75      -0.738     0.0542
-## 4 4         Arkansas      8.8     190       50  19.5      0.140      1.11      0.113 
-## 5 5         California    9       276       91  40.6     -2.50      -1.53      0.593 
+##   .rownames state Murder Assault UrbanPop  Rape .fittedPC1 .fittedPC2 .fittedPC3
+##   <chr>     <chr>  <dbl>   <int>    <int> <dbl>      <dbl>      <dbl>      <dbl>
+## 1 1         Alab…   13.2     236       58  21.2     -0.976      1.12     -0.440 
+## 2 2         Alas…   10       263       48  44.5     -1.93       1.06      2.02  
+## 3 3         Ariz…    8.1     294       80  31       -1.75      -0.738     0.0542
+## 4 4         Arka…    8.8     190       50  19.5      0.140      1.11      0.113 
+## 5 5         Cali…    9       276       91  40.6     -2.50      -1.53      0.593 
 ## # … with 1 more variable: .fittedPC4 <dbl>
 ```
 
