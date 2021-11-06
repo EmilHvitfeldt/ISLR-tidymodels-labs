@@ -106,7 +106,7 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 <code class="sourceCode R"><span class="va">class_tree_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  17ms 
+## Fit time:  19ms 
 ## n= 400 
 ## 
 ## node), split, n, loss, yval, (yprob)
@@ -266,7 +266,7 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 <span class="va">reg_tree_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  13ms 
+## Fit time:  11ms 
 ## n= 379 
 ## 
 ## node), split, n, deviance, yval
@@ -435,7 +435,7 @@ We also set <code>importance = TRUE</code> in <code>set_engine()</code> to tell 
   <span class="fu">geom_abline</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-39-1.png" width="672"></div>
-<p>it looks fine. No discernable difference between this chart and the one we created for the bagging model.</p>
+<p>it looks fine. No discernible difference between this chart and the one we created for the bagging model.</p>
 <p>The variable importance plot is also quite similar to what we saw for the bagging model which isn’t surprising.</p>
 <div class="sourceCode" id="cb319"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/vip/man/vip.html">vip</a></span><span class="op">(</span><span class="va">rf_fit</span><span class="op">)</span></code></pre></div>
@@ -508,7 +508,7 @@ We also set <code>importance = TRUE</code> in <code>set_engine()</code> to tell 
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-10-19.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-11-05.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

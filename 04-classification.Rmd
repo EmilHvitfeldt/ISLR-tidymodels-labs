@@ -387,7 +387,7 @@ knn3_fit <- fit(knn3_wf, data = Caravan_train)
 knn5_fit <- fit(knn5_wf, data = Caravan_train)
 ```
 
-And we can calculate all the confusion matricies.
+And we can calculate all the confusion matrices.
 
 ```{r}
 augment(knn1_fit, new_data = Caravan_test) %>%

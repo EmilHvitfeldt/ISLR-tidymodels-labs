@@ -82,7 +82,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">mutate</span><span class="op">(</span>x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">y</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">x1</span> <span class="op">+</span> <span class="fl">1.5</span>, <span class="va">x1</span><span class="op">)</span>,
          x2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">y</span> <span class="op">==</span> <span class="fl">1</span>, <span class="va">x2</span> <span class="op">+</span> <span class="fl">1.5</span>, <span class="va">x2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>PLotting it shows that we are having two slightly overlapping classes</p>
+<p>Plotting it shows that we are having two slightly overlapping classes</p>
 <div class="sourceCode" id="cb327"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">sim_data</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, color <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -106,7 +106,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <span class="va">svm_linear_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  670ms 
+## Fit time:  781ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -136,7 +136,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <span class="va">svm_linear_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  26ms 
+## Fit time:  28ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -362,7 +362,7 @@ This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-10-19.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-11-05.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

@@ -130,7 +130,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lr_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  10ms 
+## Fit time:  7ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -336,7 +336,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="va">lda_fit</span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  4ms 
+## Fit time:  5ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -545,7 +545,7 @@ When fitting a classification with parsnip requires that the response variable i
 <code class="sourceCode R"><span class="va">knn1_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn1_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span>
 <span class="va">knn3_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn3_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span>
 <span class="va">knn5_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">knn5_wf</span>, data <span class="op">=</span> <span class="va">Caravan_train</span><span class="op">)</span></code></pre></div>
-<p>And we can calculate all the confusion matricies.</p>
+<p>And we can calculate all the confusion matrices.</p>
 <div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">knn1_fit</span>, new_data <span class="op">=</span> <span class="va">Caravan_test</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Purchase</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></code></pre></div>
@@ -755,7 +755,7 @@ You can combine multiple different metrics together with <code>metric_set()</cod
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-10-19.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-11-05.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

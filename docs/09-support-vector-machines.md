@@ -27,7 +27,7 @@ sim_data <- tibble(
          x2 = ifelse(y == 1, x2 + 1.5, x2))
 ```
 
-PLotting it shows that we are having two slightly overlapping classes
+Plotting it shows that we are having two slightly overlapping classes
 
 
 ```r
@@ -64,7 +64,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  670ms 
+## Fit time:  781ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -106,7 +106,7 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  26ms 
+## Fit time:  28ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 

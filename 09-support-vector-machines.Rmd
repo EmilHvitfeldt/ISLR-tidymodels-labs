@@ -27,7 +27,7 @@ sim_data <- tibble(
          x2 = ifelse(y == 1, x2 + 1.5, x2))
 ```
 
-PLotting it shows that we are having two slightly overlapping classes
+Plotting it shows that we are having two slightly overlapping classes
 
 ```{r}
 ggplot(sim_data, aes(x1, x2, color = y)) +

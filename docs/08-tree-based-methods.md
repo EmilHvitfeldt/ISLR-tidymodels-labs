@@ -68,7 +68,7 @@ class_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  17ms 
+## Fit time:  19ms 
 ## n= 400 
 ## 
 ## node), split, n, loss, yval, (yprob)
@@ -314,7 +314,7 @@ reg_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  13ms 
+## Fit time:  11ms 
 ## n= 379 
 ## 
 ## node), split, n, deviance, yval
@@ -560,7 +560,7 @@ augment(rf_fit, new_data = Boston_test) %>%
 
 <img src="08-tree-based-methods_files/figure-html/unnamed-chunk-39-1.png" width="672" />
 
-it looks fine. No discernable difference between this chart and the one we created for the bagging model. 
+it looks fine. No discernible difference between this chart and the one we created for the bagging model. 
 
 The variable importance plot is also quite similar to what we saw for the bagging model which isn't surprising. 
 
