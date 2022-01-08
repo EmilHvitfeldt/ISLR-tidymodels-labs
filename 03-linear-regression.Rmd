@@ -18,7 +18,7 @@ library(ISLR)
 
 ## Simple linear regression
 
-The `Boston` data set contain various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (`medv`) as the response with a variable indicating the percentage of the population that belongs to a lower status (`lstat`) as the predictor.
+The `Boston` data set contains various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (`medv`) as the response with a variable indicating the percentage of the population that belongs to a lower status (`lstat`) as the predictor.
 
 ```{block, type='infobox'}
 The `Boston` data set is quite outdated and contains some really unfortunate variables.
