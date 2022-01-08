@@ -114,7 +114,7 @@ bind_cols(
   select(medv, .pred)
 ```
 
-You can get the same results using the `augment()` function to same you a little bit of typing
+You can get the same results using the `augment()` function to save you a little bit of typing.
 
 ```{r}
 augment(lm_fit, new_data = Boston) %>% 
