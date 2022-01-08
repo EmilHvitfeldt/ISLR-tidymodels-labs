@@ -209,7 +209,7 @@ lm_wf_pow2 <- workflow() %>%
 lm_wf_pow2 %>% fit(Boston)
 ```
 
-you don't have to hand-craft every type of linear transformation since recipes have a bunch created already [here](https://recipes.tidymodels.org/reference/index.html#section-step-functions-individual-transformations) such as `step_log()` to take logarithms of variables.
+You don't have to hand-craft every type of linear transformation since recipes have a bunch created already [here](https://recipes.tidymodels.org/reference/index.html#section-step-functions-individual-transformations) such as `step_log()` to take logarithms of variables.
 
 ```{r}
 rec_spec_log <- recipe(medv ~ lstat, data = Boston) %>%
@@ -245,7 +245,7 @@ lm_spec %>%
   fit(Sales ~ . + Income:Advertising + Price:Age, data = Carseats)
 ```
 
-however, as with so many things, we can not always guarantee that the underlying engine knows how to deal with qualitative variables. recipes can be used to handle this as well. The `step_dummy()` will perform the same transformation of turning 1 qualitative with `C` levels into `C-1` indicator variables.
+However, as with so many things, we can not always guarantee that the underlying engine knows how to deal with qualitative variables. Recipes can be used to handle this as well. The `step_dummy()` will perform the same transformation of turning 1 qualitative with `C` levels into `C-1` indicator variables.
 While this might seem unnecessary right now, some of the engines, later on, do not handle qualitative variables and this step would be necessary. We are also using the `all_nominal_predictors()` selector to select all character and factor predictor variables. This allows us to select by type rather than having to type out the names.
 
 ```{r}
@@ -262,4 +262,4 @@ lm_wf %>% fit(Carseats)
 
 ## Writing functions
 
-This book will not talk about how to write functions in R. If you still wants to know how to write functions we recommend the [functions](https://r4ds.had.co.nz/functions.html) of R for Data Science.
+This book will not talk about how to write functions in R. If you still want to know how to write functions we recommend the [functions](https://r4ds.had.co.nz/functions.html) of R for Data Science.
