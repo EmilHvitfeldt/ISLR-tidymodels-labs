@@ -4,4 +4,4 @@
 set.seed(1234)
 ```
 
-[https://github.com/tidymodels/planning/tree/master/survival-analysis](survival analysis) is being worked on in tidymodels but is not yet ready to be included in this book yet.
+[Survival analysis](https://github.com/tidymodels/planning/tree/master/survival-analysis) is being worked on in tidymodels but is not yet ready to be included in this book yet.
