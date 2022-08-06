@@ -7,17 +7,21 @@
 <title>Chapter 3 Linear Regression | ISLR tidymodels Labs</title>
 <meta name="author" content="Emil Hvitfeldt">
 <meta name="description" content="This lab will go over how to perform linear regression. This will include simple linear regression and multiple linear regression in addition to how you can apply transformations to the...">
-<meta name="generator" content="bookdown 0.24 with bs4_book()">
+<meta name="generator" content="bookdown 0.27 with bs4_book()">
 <meta property="og:title" content="Chapter 3 Linear Regression | ISLR tidymodels Labs">
 <meta property="og:type" content="book">
 <meta property="og:description" content="This lab will go over how to perform linear regression. This will include simple linear regression and multiple linear regression in addition to how you can apply transformations to the...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 3 Linear Regression | ISLR tidymodels Labs">
 <meta name="twitter:description" content="This lab will go over how to perform linear regression. This will include simple linear regression and multiple linear regression in addition to how you can apply transformations to the...">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.11/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="style.css">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -70,29 +74,30 @@
 </h2>
 <p>We load tidymodels and ISLR and MASS for data sets.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span> <span class="co"># For Boston data set</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.statlearning.com">ISLR</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span> <span class="co"># For Boston data set</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.statlearning.com">ISLR</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="simple-linear-regression" class="section level2" number="3.2">
 <h2>
 <span class="header-section-number">3.2</span> Simple linear regression<a class="anchor" aria-label="anchor" href="#simple-linear-regression"><i class="fas fa-link"></i></a>
 </h2>
-<p>The <code>Boston</code> data set contain various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (<code>medv</code>) as the response with a variable indicating the percentage of the population that belongs to a lower status (<code>lstat</code>) as the predictor.</p>
+<p>The <code>Boston</code> data set contains various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (<code>medv</code>) as the response with a variable indicating the percentage of the population that belongs to a lower status (<code>lstat</code>) as the predictor.</p>
 <div class="infobox">
 <p>
-The <code>Boston</code> data set is quite outdated and contains some really unfortunate variables.
+The <code>Boston</code> data set is quite outdated and contains some
+really unfortunate variables.
 </p>
 </div>
 <p>We start by creating a parsnip specification for a linear regression model.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span></code></pre></div>
 <p>While it is unnecessary to set the mode for a linear regression since it can only be regression, we continue to do it in these labs to be explicit.</p>
 <p>The specification doesn’t perform any calculations by itself. It is just a specification of what we want to do.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_spec</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_spec</span></span></code></pre></div>
 <pre><code>## Linear Regression Model Specification (regression)
 ## 
 ## Computational engine: lm</code></pre>
@@ -100,13 +105,12 @@ The <code>Boston</code> data set is quite outdated and contains some really unfo
 The formula is written on the form <code>y ~ x</code> where <code>y</code> is the name of the response and <code>x</code> is the name of the predictors.
 The names used in the formula should match the names of the variables in the data set passed to <code>data</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span>
-  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>
-
-<span class="va">lm_fit</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_fit</span></span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  5ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat, data = data)
@@ -116,8 +120,8 @@ The names used in the formula should match the names of the variables in the dat
 ##       34.55        -0.95</code></pre>
 <p>The result of this fit is a parsnip model object. This object contains the underlying fit as well as some parsnip-specific information. If we want to look at the underlying fit object we can access it with <code>lm_fit$fit</code> or with</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">%&gt;%</span> 
-  <span class="fu">pluck</span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_fit</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">pluck</span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat, data = data)
@@ -127,9 +131,9 @@ The names used in the formula should match the names of the variables in the dat
 ##       34.55        -0.95</code></pre>
 <p>The <code>lm</code> object has a nice <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method that shows more information about the fit, including parameter estimates and lack-of-fit statistics.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_fit</span> <span class="op">%&gt;%</span> 
-  <span class="fu">pluck</span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_fit</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">pluck</span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat, data = data)
@@ -151,7 +155,7 @@ The names used in the formula should match the names of the variables in the dat
 <p>We can use packages from the <a href="https://broom.tidymodels.org/">broom</a> package to extract key information out of the model objects in tidy formats.</p>
 <p>the <code>tidy()</code> function returns the parameter estimates of a <code>lm</code> object</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 2 × 5
 ##   term        estimate std.error statistic   p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
@@ -159,7 +163,7 @@ The names used in the formula should match the names of the variables in the dat
 ## 2 lstat         -0.950    0.0387     -24.5 5.08e- 88</code></pre>
 <p>and <code>glance()</code> can be used to extract the model statistics.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">glance</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">glance</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 1 × 12
 ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
 ##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -167,11 +171,11 @@ The names used in the formula should match the names of the variables in the dat
 ## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
 <p>Suppose that we like the model fit and we want to generate predictions, we would typically use the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function like so:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Error in predict_numeric(object = object, new_data = new_data, ...): argument "new_data" is missing, with no default</code></pre>
 <p>But this produces an error when used on a parsnip model object. This is happening because we need to explicitly supply the data set that the predictions should be performed on via the <code>new_data</code> argument</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 506 × 1
 ##    .pred
 ##    &lt;dbl&gt;
@@ -189,7 +193,7 @@ The names used in the formula should match the names of the variables in the dat
 <p>Notice how the predictions are returned as a tibble. This will always be the case for parsnip models, no matter what engine is used. This is very useful since consistency allows us to combine data sets easily.</p>
 <p>We can also return other types of predicts by specifying the <code>type</code> argument. Setting <code>type = "conf_int"</code> return a 95% confidence interval.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 506 × 2
 ##    .pred_lower .pred_upper
 ##          &lt;dbl&gt;       &lt;dbl&gt;
@@ -211,11 +215,11 @@ Not all engines can return all types of predictions.
 </div>
 <p>If you want to evaluate the performance of a model, you might want to compare the observed value and the predicted value for a data set. You</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">bind_cols</span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>,
-  <span class="va">Boston</span>
-<span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">medv</span>, <span class="va">.pred</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">bind_cols</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>,</span>
+<span>  <span class="va">Boston</span></span>
+<span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">medv</span>, <span class="va">.pred</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 506 × 2
 ##     medv .pred
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -230,10 +234,10 @@ Not all engines can return all types of predictions.
 ##  9  16.5  6.12
 ## 10  18.9 18.3 
 ## # … with 496 more rows</code></pre>
-<p>You can get the same results using the <code>augment()</code> function to same you a little bit of typing</p>
+<p>You can get the same results using the <code>augment()</code> function to save you a little bit of typing.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">medv</span>, <span class="va">.pred</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">medv</span>, <span class="va">.pred</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 506 × 2
 ##     medv .pred
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -253,15 +257,14 @@ Not all engines can return all types of predictions.
 <h2>
 <span class="header-section-number">3.3</span> Multiple linear regression<a class="anchor" aria-label="anchor" href="#multiple-linear-regression"><i class="fas fa-link"></i></a>
 </h2>
-<p>The multiple linear regression model can be fit in much the same way as the <a href="linear-regression.html#simple-linear-regression">simple linear regression</a> model. The only difference is how we specify the predictors. We are using the same formula expression <code>y ~ x</code>, but we can specify multiple values by separating them with <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code>s.</p>
+<p>The multiple linear regression model can be fit in much the same way as the <a href="linear-regression.html#simple-linear-regression">simple linear regression</a> model. The only difference is how we specify the predictors. We are using the same formula expression <code>y ~ x</code>, but we can specify multiple values by separating them with <code>+</code>s.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_fit2</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> 
-  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>
-
-<span class="va">lm_fit2</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_fit2</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_fit2</span></span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  1ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat + age, data = data)
@@ -271,7 +274,7 @@ Not all engines can return all types of predictions.
 ##    33.22276     -1.03207      0.03454</code></pre>
 <p>Everything else works the same. From extracting parameter estimates</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit2</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 3 × 5
 ##   term        estimate std.error statistic   p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
@@ -280,7 +283,7 @@ Not all engines can return all types of predictions.
 ## 3 age           0.0345    0.0122      2.83 4.91e-  3</code></pre>
 <p>to predicting new values</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit2</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit2</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 506 × 1
 ##    .pred
 ##    &lt;dbl&gt;
@@ -297,13 +300,12 @@ Not all engines can return all types of predictions.
 ## # … with 496 more rows</code></pre>
 <p>A shortcut when using formulas is to use the form <code>y ~ .</code> which means; set <code>y</code> as the response and set the remaining variables as predictors. This is very useful if you have a lot of variables and you don’t want to type them out.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_fit3</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> 
-  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>
-
-<span class="va">lm_fit3</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_fit3</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_fit3</span></span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ ., data = data)
@@ -331,13 +333,12 @@ Not all engines can return all types of predictions.
 </ul>
 <p>with that out of the way let expand <code>lm_fit2</code> by adding an interaction term</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_fit4</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span>
-  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">*</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>
-
-<span class="va">lm_fit4</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_fit4</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">*</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_fit4</span></span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat * age, data = data)
@@ -349,14 +350,14 @@ Not all engines can return all types of predictions.
 <p>Sometimes we want to perform transformations, and we want those transformations to be applied, as part of the model fit as a pre-processing step. We will use the recipes package for this task.</p>
 <p>We use the <code>step_interact()</code> to specify the interaction term. Next, we create a workflow object to combine the linear regression model specification <code>lm_spec</code> with the pre-processing specification <code>rec_spec_interact</code> which can then be fitted much like a parsnip model specification.</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rec_spec_interact</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">step_interact</span><span class="op">(</span><span class="op">~</span> <span class="va">lstat</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>
-
-<span class="va">lm_wf_interact</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_interact</span><span class="op">)</span>
-
-<span class="va">lm_wf_interact</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rec_spec_interact</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">step_interact</span><span class="op">(</span><span class="op">~</span> <span class="va">lstat</span><span class="op">:</span><span class="va">age</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_wf_interact</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_interact</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_wf_interact</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## ══ Workflow [trained] ══════════════════════════════════════════════════════════
 ## Preprocessor: Recipe
 ## Model: linear_reg()
@@ -383,14 +384,14 @@ Not all engines can return all types of predictions.
 <p>Much like we could use recipes to create interaction terms between values are we able to apply transformations to individual variables as well. If you are familiar with the dplyr package then you know how to <code>mutate()</code> which works in much the same way using <code>step_mutate()</code>.</p>
 <p>You would want to keep as much of the pre-processing inside recipes such that the transformation will be applied consistently to new data.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rec_spec_pow2</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">step_mutate</span><span class="op">(</span>lstat2 <span class="op">=</span> <span class="va">lstat</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span>
-
-<span class="va">lm_wf_pow2</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_pow2</span><span class="op">)</span>
-
-<span class="va">lm_wf_pow2</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rec_spec_pow2</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">step_mutate</span><span class="op">(</span>lstat2 <span class="op">=</span> <span class="va">lstat</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_wf_pow2</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_pow2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_wf_pow2</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## ══ Workflow [trained] ══════════════════════════════════════════════════════════
 ## Preprocessor: Recipe
 ## Model: linear_reg()
@@ -408,16 +409,16 @@ Not all engines can return all types of predictions.
 ## Coefficients:
 ## (Intercept)        lstat       lstat2  
 ##    42.86201     -2.33282      0.04355</code></pre>
-<p>you don’t have to hand-craft every type of linear transformation since recipes have a bunch created already <a href="https://recipes.tidymodels.org/reference/index.html#section-step-functions-individual-transformations">here</a> such as <code>step_log()</code> to take logarithms of variables.</p>
+<p>You don’t have to hand-craft every type of linear transformation since recipes have a bunch created already <a href="https://recipes.tidymodels.org/reference/index.html#section-step-functions-individual-transformations">here</a> such as <code>step_log()</code> to take logarithms of variables.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rec_spec_log</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">step_log</span><span class="op">(</span><span class="va">lstat</span><span class="op">)</span>
-
-<span class="va">lm_wf_log</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_log</span><span class="op">)</span>
-
-<span class="va">lm_wf_log</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rec_spec_log</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">step_log</span><span class="op">(</span><span class="va">lstat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_wf_log</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_log</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_wf_log</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## ══ Workflow [trained] ══════════════════════════════════════════════════════════
 ## Preprocessor: Recipe
 ## Model: linear_reg()
@@ -448,20 +449,19 @@ Not all engines can return all types of predictions.
 </ul>
 <p>If you pass such a variable to <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> it will read it and generate dummy variables automatically using the following convention.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Carseats</span> <span class="op">%&gt;%</span>
-  <span class="fu">pull</span><span class="op">(</span><span class="va">ShelveLoc</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html">contrasts</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Carseats</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">pull</span><span class="op">(</span><span class="va">ShelveLoc</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html">contrasts</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##        Good Medium
 ## Bad       0      0
 ## Good      1      0
 ## Medium    0      1</code></pre>
 <p>So we have no problems including qualitative predictors when using <code>lm</code> as the engine.</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lm_spec</span> <span class="op">%&gt;%</span> 
-  <span class="fu">fit</span><span class="op">(</span><span class="va">Sales</span> <span class="op">~</span> <span class="va">.</span> <span class="op">+</span> <span class="va">Income</span><span class="op">:</span><span class="va">Advertising</span> <span class="op">+</span> <span class="va">Price</span><span class="op">:</span><span class="va">Age</span>, data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">lm_spec</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">Sales</span> <span class="op">~</span> <span class="va">.</span> <span class="op">+</span> <span class="va">Income</span><span class="op">:</span><span class="va">Advertising</span> <span class="op">+</span> <span class="va">Price</span><span class="op">:</span><span class="va">Age</span>, data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## parsnip model object
 ## 
-## Fit time:  4ms 
 ## 
 ## Call:
 ## stats::lm(formula = Sales ~ . + Income:Advertising + Price:Age, 
@@ -476,18 +476,18 @@ Not all engines can return all types of predictions.
 ##         -0.0579466          -0.0208525           0.1401597          -0.1575571  
 ## Income:Advertising           Price:Age  
 ##          0.0007510           0.0001068</code></pre>
-<p>however, as with so many things, we can not always guarantee that the underlying engine knows how to deal with qualitative variables. recipes can be used to handle this as well. The <code>step_dummy()</code> will perform the same transformation of turning 1 qualitative with <code>C</code> levels into <code>C-1</code> indicator variables.
+<p>However, as with so many things, we can not always guarantee that the underlying engine knows how to deal with qualitative variables. Recipes can be used to handle this as well. The <code>step_dummy()</code> will perform the same transformation of turning 1 qualitative with <code>C</code> levels into <code>C-1</code> indicator variables.
 While this might seem unnecessary right now, some of the engines, later on, do not handle qualitative variables and this step would be necessary. We are also using the <code>all_nominal_predictors()</code> selector to select all character and factor predictor variables. This allows us to select by type rather than having to type out the names.</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Sales</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">step_interact</span><span class="op">(</span><span class="op">~</span> <span class="va">Income</span><span class="op">:</span><span class="va">Advertising</span> <span class="op">+</span> <span class="va">Price</span><span class="op">:</span><span class="va">Age</span><span class="op">)</span>
-
-<span class="va">lm_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec</span><span class="op">)</span>
-
-<span class="va">lm_wf</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Carseats</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Sales</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">step_interact</span><span class="op">(</span><span class="op">~</span> <span class="va">Income</span><span class="op">:</span><span class="va">Advertising</span> <span class="op">+</span> <span class="va">Price</span><span class="op">:</span><span class="va">Age</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lm_wf</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Carseats</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## ══ Workflow [trained] ══════════════════════════════════════════════════════════
 ## Preprocessor: Recipe
 ## Model: linear_reg()
@@ -519,7 +519,7 @@ While this might seem unnecessary right now, some of the engines, later on, do n
 <h2>
 <span class="header-section-number">3.7</span> Writing functions<a class="anchor" aria-label="anchor" href="#writing-functions"><i class="fas fa-link"></i></a>
 </h2>
-<p>This book will not talk about how to write functions in R. If you still wants to know how to write functions we recommend the <a href="https://r4ds.had.co.nz/functions.html">functions</a> of R for Data Science.</p>
+<p>This book will not talk about how to write functions in R. If you still want to know how to write functions we recommend the <a href="https://r4ds.had.co.nz/functions.html">functions</a> of R for Data Science.</p>
 
 </div>
 </div>
@@ -554,7 +554,7 @@ While this might seem unnecessary right now, some of the engines, later on, do n
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2021-11-05.</p>
+    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2022-08-06.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

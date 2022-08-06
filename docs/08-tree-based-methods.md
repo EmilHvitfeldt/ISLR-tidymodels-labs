@@ -20,7 +20,8 @@ Boston <- as_tibble(Boston)
 The `Boston` data set contain various statistics for 506 neighborhoods in Boston. We will build a regression model that related the median value of owner-occupied homes (`medv`) as the response with the remaining variables as predictors. 
 
 <div class="infobox">
-<p>The <code>Boston</code> data set is quite outdated and contains some really unfortunate variables.</p>
+<p>The <code>Boston</code> data set is quite outdated and contains some
+really unfortunate variables.</p>
 </div>
 
 We will also use the `Carseats` data set from the `ISLR` package to demonstrate a classification model. We create a new variable `High` to denote if `Sales <= 8`, then the `Sales` predictor is removed as it is a perfect predictor of `High`.
@@ -68,7 +69,6 @@ class_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  19ms 
 ## n= 400 
 ## 
 ## node), split, n, loss, yval, (yprob)
@@ -314,7 +314,6 @@ reg_tree_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  11ms 
 ## n= 379 
 ## 
 ## node), split, n, deviance, yval

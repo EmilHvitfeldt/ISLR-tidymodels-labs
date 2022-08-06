@@ -29,7 +29,7 @@ Auto_split
 ```
 
 ```
-## <Analysis/Assess/Total>
+## <Training/Testing/Total>
 ## <194/198/392>
 ```
 
@@ -249,7 +249,8 @@ fit(poly_tuned_wf, data = Auto_train)
 ```
 
 ```
-## Error: You cannot `prep()` a tuneable recipe. Argument(s) with `tune()`: 'degree'. Do you want to use a tuning function such as `tune_grid()`?
+## Error in `recipes::prep()`:
+## ! You cannot `prep()` a tuneable recipe. Argument(s) with `tune()`: 'degree'. Do you want to use a tuning function such as `tune_grid()`?
 ```
 
 The next thing we need to create is the k-Fold data set. This can be done using the `vfold_cv()` function. Note that the function uses `v` instead of *k* which is the terminology of ISLR. we set `v = 10` as a common choice for *k*.

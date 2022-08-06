@@ -40,7 +40,10 @@ ggplot(sim_data, aes(x1, x2, color = y)) +
 We can then create a linear SVM specification by setting `degree = 1` in a polynomial SVM model. We furthermore set `scaled = FALSE` in `set_engine()` to have the engine scale the data for us. Once we get to it later we can be performing this scaling in a recipe instead. 
 
 <div class="infobox">
-<p><code>set_engine()</code> can be used to pass in additional arguments directly to the underlying engine. In this case, I’m passing in <code>scaled = FALSE</code> to <code>kernlab::ksvm()</code> which is the engine function.</p>
+<p><code>set_engine()</code> can be used to pass in additional arguments
+directly to the underlying engine. In this case, I’m passing in
+<code>scaled = FALSE</code> to <code>kernlab::ksvm()</code> which is the
+engine function.</p>
 </div>
 
 
@@ -64,7 +67,6 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  781ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -106,7 +108,6 @@ svm_linear_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  28ms 
 ## Support Vector Machine object of class "ksvm" 
 ## 
 ## SV type: C-svc  (classification) 
@@ -277,16 +278,16 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
 ## # A tibble: 202 × 3
 ##    .threshold specificity sensitivity
 ##         <dbl>       <dbl>       <dbl>
-##  1   -Inf            0          1    
-##  2      0.104        0          1    
-##  3      0.113        0.02       1    
-##  4      0.114        0.04       1    
-##  5      0.115        0.06       1    
-##  6      0.117        0.08       1    
-##  7      0.118        0.1        1    
-##  8      0.119        0.12       1    
-##  9      0.124        0.14       1    
-## 10      0.124        0.14       0.993
+##  1   -Inf          0            1    
+##  2      0.104      0            1    
+##  3      0.113      0.0200       1    
+##  4      0.114      0.0400       1    
+##  5      0.115      0.0600       1    
+##  6      0.117      0.0800       1    
+##  7      0.118      0.1          1    
+##  8      0.119      0.12         1    
+##  9      0.124      0.14         1    
+## 10      0.124      0.14         0.993
 ## # … with 192 more rows
 ```
 

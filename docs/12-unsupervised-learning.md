@@ -58,8 +58,8 @@ USArrests %>%
 ## 1   7.79    171.     65.5  21.2
 ```
 
-We will show how to perform PCA in two different ways in this section. First, by using `prcomp()` directly, using `broom` to extract the information we need, and secondly by using recipes.
-`prcomp()` Takes 1 required argument `x` which much be a fully numeric data.frame or matrix. Then we pass that to `prcomp()`. We also set `scale = TRUE` in `prcomp()` which will perform the scaling we need.
+We will show how to perform PCA in two different ways in this section. Firstly, by using `prcomp()` directly, using `broom::tidy()` to extract the information we need, and secondly by using recipes.
+`prcomp()` takes 1 required argument `x` which much be a fully numeric data.frame or matrix. Then we pass that to `prcomp()`. We also set `scale = TRUE` in `prcomp()` which will perform the scaling we need.
 
 
 ```r
@@ -82,8 +82,8 @@ USArrests_pca
 ## Rape     -0.5434321 -0.1673186  0.8177779  0.08902432
 ```
 
-now we can use our favorite broom function to extract information from this `prcomp` object. 
-We start with `tidy()`. `tidy()` can be used to extract a couple of different things, see `?broom:::tidy.prcomp()` for more information. `tidy()` will by default extract the scores of a PCA object in long tidy format. The score of is the location of the observation in PCA space. So we can 
+Now we can use our favorite broom function to extract information from this `prcomp` object. 
+We start with `tidy()`. `tidy()` can be used to extract a couple of different things, see `?broom:::tidy.prcomp()` for more information. `tidy()` will by default extract the scores of a PCA object in long tidy format. The score is the location of the observation in PCA space. So we can 
 
 
 ```r
@@ -167,7 +167,8 @@ This information tells us how each variable contributes to each principal compon
 tidy(USArrests_pca, matrix = "loadings") %>%
   ggplot(aes(value, column)) +
   facet_wrap(~ PC) +
-  geom_col()
+  geom_col() +
+  scale_x_continuous(labels = scales::percent)
 ```
 
 <img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-9-1.png" width="672" />
@@ -300,7 +301,7 @@ pca_rec %>%
 ## 6 Vermont         2.77   1.39   0.833 -0.143
 ```
 
-We can get back the same information as we could for `prcomp()` but we have to specify the slightly different inside `tidy()`. Here `id = "pca"` refers to the second step of `pca_rec`. We get the `scores` with `type = "coef"`
+We can get back the same information as we could for `prcomp()` but we have to specify the slightly different inside `tidy()`. Here `id = "pca"` refers to the second step of `pca_rec`. We get the `scores` with `type = "coef"`.
 
 
 ```r
@@ -386,7 +387,7 @@ recipe(~., data = USArrests) %>%
 ## # … with 40 more rows
 ```
 
-or using a `threshold` to specify how many components to keep by the variance explained. So by setting `threshold = 0.7` `step_pca()` will generate enough principal components to explain 70% of the variance.
+or using a `threshold` to specify how many components to keep by the variance explained. So by setting `threshold = 0.7`, `step_pca()` will generate enough principal components to explain 70% of the variance.
 
 
 ```r
@@ -443,7 +444,7 @@ x_df %>%
 
 <img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-22-1.png" width="672" />
 
-the `kmeans()` functions takes a matrix or data.frame and `centers` which is the number of clusters we want `kmeans()` to find. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
+The `kmeans()` function takes a matrix or data.frame and `centers` which is the number of clusters we want `kmeans()` to find. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
 
 
 ```r
@@ -511,7 +512,7 @@ glance(res_kmeans)
 ## 1  416.         96.4      320.     2
 ```
 
-Lastly, we can see what cluster each observation belongs to by using `augment()` which "predict" which cluster a given observation belongs to.
+Lastly, we can see what cluster each observation belongs to by using `augment()` which "predicts" which cluster a given observation belongs to.
 
 
 ```r
@@ -535,7 +536,7 @@ augment(res_kmeans, data = x_df)
 ## # … with 40 more rows
 ```
 
-we can visualize the result of `augment()` to see how well the clustering performed.
+We can visualize the result of `augment()` to see how well the clustering performed.
 
 
 ```r
@@ -583,7 +584,8 @@ Now that we have the total within-cluster sum-of-squares we can plot them agains
 multi_kmeans %>%
   ggplot(aes(k, tot.withinss)) +
   geom_point() +
-  geom_line()
+  geom_line() +
+  scale_x_continuous(breaks = seq(1,10))
 ```
 
 <img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-30-1.png" width="672" />
@@ -628,7 +630,7 @@ res_hclust_single <- x_df %>%
   hclust(method = "single")
 ```
 
-the [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) provides functions (`fviz_dend()`) to visualize the clustering created using `hclust()`. We use `fviz_dend()` to show the dendrogram.
+The [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) package provides functions (`fviz_dend()`) to visualize the clustering created using `hclust()`. We use `fviz_dend()` to show the dendrogram.
 
 
 ```r
@@ -681,7 +683,7 @@ x_df %>%
 ```
 
 <img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-35-1.png" width="672" />
-Another way of calculating distances is based on correlation. This only makes sense if has 3 or more variables.
+Another way of calculating distances is based on correlation. This only makes sense if the data set has 3 or more variables.
 
 
 ```r
@@ -742,7 +744,7 @@ We have 14 different labels, so we will make use of the `"Polychrome 36"` palett
 colors <- unname(palette.colors(n = 14, palette = "Polychrome 36"))
 ```
 
-o we can plot the different PCs against each other. It is a good idea to compare the first PCs against each other since they carry the most information. We will just compare the pairs 1-2 and 1-3 but you can do more yourself. It tends to be a good idea to stop once interesting things appear in the plots.
+Or we can plot the different PCs against each other. It is a good idea to compare the first PCs against each other since they carry the most information. We will just compare the pairs 1-2 and 1-3 but you can do more yourself. It tends to be a good idea to stop once interesting things appear in the plots.
 
 
 ```r
@@ -773,7 +775,9 @@ Lastly, we will plot the variance explained of each principal component. We can 
 tidy(nci60_pca, matrix = "eigenvalues") %>%
   ggplot(aes(PC, percent)) +
   geom_point() +
-  geom_line()
+  geom_line() +
+  scale_x_continuous(breaks = seq(0, 60, by = 5)) +
+  scale_y_continuous(labels = scales::percent)
 ```
 
 <img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-43-1.png" width="672" />
@@ -873,7 +877,7 @@ nci60_complete %>%
 
 <img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-48-1.png" width="672" />
 
-We now take the clustering id extracted with `cutree` and calculate which Label is the most common within each cluster.
+We now take the clustering id extracted with `cutree` and calculate which label is the most common one within each cluster.
 
 
 ```r
@@ -920,13 +924,13 @@ tidy(res_kmeans_scaled) %>%
 ## # A tibble: 4 × 3
 ##   cluster  size withinss
 ##   <fct>   <int>    <dbl>
-## 1 1          20  108801.
-## 2 2          27  154545.
-## 3 3           9   37150.
-## 4 4           8   44071.
+## 1 1           8   44071.
+## 2 2          20  108801.
+## 3 3          27  154545.
+## 4 4           9   37150.
 ```
 
-lastly, let us see how the two different methods we used compare against each other. Let us save the cluster ids in `cluster_kmeans` and `cluster_hclust` and then use `conf_mat()` in a different way to quickly generate a heatmap between the two methods.
+Lastly, let us see how the two different methods we used compare against each other. Let us save the cluster ids in `cluster_kmeans` and `cluster_hclust` and then use `conf_mat()` in a different way to quickly generate a heatmap between the two methods.
 
 
 ```r
@@ -945,7 +949,7 @@ tibble(
 
 There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).
 
-One last thing that is sometimes useful is to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of `nci60` and keep the 5 first components. (we could have started with `nci60` too if we added `step_rm()` and `step_normalize()`).
+One last thing is that it is sometimes useful to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of `nci60` and keep the 5 first components (we could have started with `nci60` too if we added `step_rm()` and `step_normalize()`).
 
 
 ```r

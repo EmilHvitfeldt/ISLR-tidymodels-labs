@@ -17,10 +17,11 @@ library(ISLR)
 
 ## Simple linear regression
 
-The `Boston` data set contain various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (`medv`) as the response with a variable indicating the percentage of the population that belongs to a lower status (`lstat`) as the predictor.
+The `Boston` data set contains various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (`medv`) as the response with a variable indicating the percentage of the population that belongs to a lower status (`lstat`) as the predictor.
 
 <div class="infobox">
-<p>The <code>Boston</code> data set is quite outdated and contains some really unfortunate variables.</p>
+<p>The <code>Boston</code> data set is quite outdated and contains some
+really unfortunate variables.</p>
 </div>
 
 We start by creating a parsnip specification for a linear regression model.
@@ -62,7 +63,6 @@ lm_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  5ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat, data = data)
@@ -245,7 +245,7 @@ bind_cols(
 ## # … with 496 more rows
 ```
 
-You can get the same results using the `augment()` function to same you a little bit of typing
+You can get the same results using the `augment()` function to save you a little bit of typing.
 
 
 ```r
@@ -285,7 +285,6 @@ lm_fit2
 ```
 ## parsnip model object
 ## 
-## Fit time:  1ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat + age, data = data)
@@ -348,7 +347,6 @@ lm_fit3
 ```
 ## parsnip model object
 ## 
-## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ ., data = data)
@@ -386,7 +384,6 @@ lm_fit4
 ```
 ## parsnip model object
 ## 
-## Fit time:  2ms 
 ## 
 ## Call:
 ## stats::lm(formula = medv ~ lstat * age, data = data)
@@ -474,7 +471,7 @@ lm_wf_pow2 %>% fit(Boston)
 ##    42.86201     -2.33282      0.04355
 ```
 
-you don't have to hand-craft every type of linear transformation since recipes have a bunch created already [here](https://recipes.tidymodels.org/reference/index.html#section-step-functions-individual-transformations) such as `step_log()` to take logarithms of variables.
+You don't have to hand-craft every type of linear transformation since recipes have a bunch created already [here](https://recipes.tidymodels.org/reference/index.html#section-step-functions-individual-transformations) such as `step_log()` to take logarithms of variables.
 
 
 ```r
@@ -543,7 +540,6 @@ lm_spec %>%
 ```
 ## parsnip model object
 ## 
-## Fit time:  4ms 
 ## 
 ## Call:
 ## stats::lm(formula = Sales ~ . + Income:Advertising + Price:Age, 
@@ -560,7 +556,7 @@ lm_spec %>%
 ##          0.0007510           0.0001068
 ```
 
-however, as with so many things, we can not always guarantee that the underlying engine knows how to deal with qualitative variables. recipes can be used to handle this as well. The `step_dummy()` will perform the same transformation of turning 1 qualitative with `C` levels into `C-1` indicator variables.
+However, as with so many things, we can not always guarantee that the underlying engine knows how to deal with qualitative variables. Recipes can be used to handle this as well. The `step_dummy()` will perform the same transformation of turning 1 qualitative with `C` levels into `C-1` indicator variables.
 While this might seem unnecessary right now, some of the engines, later on, do not handle qualitative variables and this step would be necessary. We are also using the `all_nominal_predictors()` selector to select all character and factor predictor variables. This allows us to select by type rather than having to type out the names.
 
 
@@ -607,4 +603,4 @@ lm_wf %>% fit(Carseats)
 
 ## Writing functions
 
-This book will not talk about how to write functions in R. If you still wants to know how to write functions we recommend the [functions](https://r4ds.had.co.nz/functions.html) of R for Data Science.
+This book will not talk about how to write functions in R. If you still want to know how to write functions we recommend the [functions](https://r4ds.had.co.nz/functions.html) of R for Data Science.

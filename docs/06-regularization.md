@@ -331,16 +331,16 @@ tune_res
 ## # A tibble: 10 × 4
 ##    splits           id     .metrics           .notes          
 ##    <list>           <chr>  <list>             <list>          
-##  1 <split [176/20]> Fold01 <tibble [100 × 5]> <tibble [0 × 1]>
-##  2 <split [176/20]> Fold02 <tibble [100 × 5]> <tibble [0 × 1]>
-##  3 <split [176/20]> Fold03 <tibble [100 × 5]> <tibble [0 × 1]>
-##  4 <split [176/20]> Fold04 <tibble [100 × 5]> <tibble [0 × 1]>
-##  5 <split [176/20]> Fold05 <tibble [100 × 5]> <tibble [0 × 1]>
-##  6 <split [176/20]> Fold06 <tibble [100 × 5]> <tibble [0 × 1]>
-##  7 <split [177/19]> Fold07 <tibble [100 × 5]> <tibble [0 × 1]>
-##  8 <split [177/19]> Fold08 <tibble [100 × 5]> <tibble [0 × 1]>
-##  9 <split [177/19]> Fold09 <tibble [100 × 5]> <tibble [0 × 1]>
-## 10 <split [177/19]> Fold10 <tibble [100 × 5]> <tibble [0 × 1]>
+##  1 <split [176/20]> Fold01 <tibble [100 × 5]> <tibble [0 × 3]>
+##  2 <split [176/20]> Fold02 <tibble [100 × 5]> <tibble [0 × 3]>
+##  3 <split [176/20]> Fold03 <tibble [100 × 5]> <tibble [0 × 3]>
+##  4 <split [176/20]> Fold04 <tibble [100 × 5]> <tibble [0 × 3]>
+##  5 <split [176/20]> Fold05 <tibble [100 × 5]> <tibble [0 × 3]>
+##  6 <split [176/20]> Fold06 <tibble [100 × 5]> <tibble [0 × 3]>
+##  7 <split [177/19]> Fold07 <tibble [100 × 5]> <tibble [0 × 3]>
+##  8 <split [177/19]> Fold08 <tibble [100 × 5]> <tibble [0 × 3]>
+##  9 <split [177/19]> Fold09 <tibble [100 × 5]> <tibble [0 × 3]>
+## 10 <split [177/19]> Fold10 <tibble [100 × 5]> <tibble [0 × 3]>
 ```
 
 The output of `tune_grid()` can be hard to read by itself unprocessed. `autoplot()` creates a great visualization 

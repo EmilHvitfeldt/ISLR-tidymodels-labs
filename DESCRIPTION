@@ -18,6 +18,7 @@ Imports:
     glmnet,
     infer,
     ISLR,
+    ISLR2,
     kernlab,
     kknn,
     klaR,

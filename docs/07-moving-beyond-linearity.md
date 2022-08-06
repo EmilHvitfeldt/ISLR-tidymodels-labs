@@ -2,9 +2,9 @@
 
 
 
-This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include; polynomials expansion, step functions, and splines.
+This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include: polynomials expansion, step functions, and splines.
 
-GAM section is WIP since they are now supported in [parsnip](https://github.com/tidymodels/parsnip/pull/512).
+The GAMs section is WIP since they are now supported in [parsnip](https://github.com/tidymodels/parsnip/pull/512).
 
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
 
@@ -214,7 +214,7 @@ Wage %>%
 
 <img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
-the regression curve is now a curve instead of a line as we would have gotten with a simple linear regression model. Notice furthermore that the confidence bands are tighter when there is a lot of data and they wider towards the ends of the data.
+The regression curve is now a curve instead of a line as we would have gotten with a simple linear regression model. Notice furthermore that the confidence bands are tighter when there is a lot of data and they wider towards the ends of the data.
 
 Let us take that one step further and see what happens to the regression line once we go past the domain it was trained on. the previous plot showed individuals within the age range 18-80. Let us see what happens once we push this to 18-100. This is not an impossible range but an unrealistic range.
 
@@ -269,7 +269,7 @@ lr_poly_wf <- workflow() %>%
   add_recipe(rec_poly)
 ```
 
-this polynomial logistic regression model workflow can now be fit and predicted with as usual
+This polynomial logistic regression model workflow can now be fit and predicted with as usual.
 
 
 ```r

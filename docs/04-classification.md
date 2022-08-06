@@ -106,7 +106,6 @@ lr_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  7ms 
 ## 
 ## Call:  stats::glm(formula = Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + 
 ##     Lag5 + Volume, family = stats::binomial, data = data)
@@ -413,7 +412,6 @@ lda_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  5ms 
 ## Call:
 ## lda(Direction ~ Lag1 + Lag2, data = data)
 ## 
@@ -553,7 +551,7 @@ And we are seeing another increase in accuracy. However this model still rarely 
 
 ## Naive Bayes
 
-We will now fit a Naive Bayes model to the `Smarket` data. For this, we will be using the `naive_bayes()` function to create the specification and also set the `usekernel` argument to `FALSE`. This means that we are assuming that the predictors `Lag1` and `Lag2` are drawn from Gaussian distributions.
+We will now fit a Naive Bayes model to the `Smarket` data. For this, we will be using the `naive_Bayes()` function to create the specification and also set the `usekernel` argument to `FALSE`. This means that we are assuming that the predictors `Lag1` and `Lag2` are drawn from Gaussian distributions.
 
 Once the model is specified, the fitting process is exactly like before
 
@@ -631,7 +629,6 @@ knn_fit
 ```
 ## parsnip model object
 ## 
-## Fit time:  36ms 
 ## 
 ## Call:
 ## kknn::train.kknn(formula = Direction ~ Lag1 + Lag2, data = data,     ks = min_rows(3, data, 5))
@@ -943,20 +940,20 @@ preds %>%
 
 ```
 ## # A tibble: 12 × 4
-##    model               .metric  .estimator .estimate
-##    <chr>               <chr>    <chr>          <dbl>
-##  1 KNN                 accuracy binary         0.5  
-##  2 LDA                 accuracy binary         0.560
-##  3 logistic regression accuracy binary         0.560
-##  4 QDA                 accuracy binary         0.599
-##  5 KNN                 sens     binary         0.387
-##  6 LDA                 sens     binary         0.315
-##  7 logistic regression sens     binary         0.315
-##  8 QDA                 sens     binary         0.270
-##  9 KNN                 spec     binary         0.589
-## 10 LDA                 spec     binary         0.752
-## 11 logistic regression spec     binary         0.752
-## 12 QDA                 spec     binary         0.858
+##    model               .metric     .estimator .estimate
+##    <chr>               <chr>       <chr>          <dbl>
+##  1 KNN                 accuracy    binary         0.5  
+##  2 LDA                 accuracy    binary         0.560
+##  3 logistic regression accuracy    binary         0.560
+##  4 QDA                 accuracy    binary         0.599
+##  5 KNN                 sensitivity binary         0.387
+##  6 LDA                 sensitivity binary         0.315
+##  7 logistic regression sensitivity binary         0.315
+##  8 QDA                 sensitivity binary         0.270
+##  9 KNN                 specificity binary         0.589
+## 10 LDA                 specificity binary         0.752
+## 11 logistic regression specificity binary         0.752
+## 12 QDA                 specificity binary         0.858
 ```
 
 The same technique can be used to create ROC curves.
