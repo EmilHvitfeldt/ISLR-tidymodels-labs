@@ -226,7 +226,7 @@ svm_rbf_fit <- svm_rbf_spec %>%
   fit(y ~ ., data = sim_data2)
 ```
 
-and plotting reveals that the model was able o separate the two classes, even though they were non-linearly separated.
+and plotting reveals that the model was able to separate the two classes, even though they were non-linearly separated.
 
 
 ```r
@@ -266,7 +266,7 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
 
 ## ROC Curves
 
-ROC curves can easily be created using the `roc_curve()` from the yardstick package. We use this function much the same way as we have done using the `accuracy()` function, but the main difference is that we pass the predicted class probability to `estimate` instead of passing the predicted class.
+ROC curves can easily be created using the `roc_curve()` function from the yardstick package. We use this function much the same way as we have done using the `accuracy()` function, but the main difference is that we pass the predicted class probability to `estimate` instead of passing the predicted class.
 
 
 ```r
@@ -355,7 +355,7 @@ dim(Khan_train)
 ## [1]   63 2309
 ```
 
-There is a very large number of predictors compared to the number of rows. This indicates that a linear kernel as the added flexibility we would get from a polynomial or radial kernel is unnecessary.
+There is a very large number of predictors compared to the number of rows. This indicates that a linear kernel will be preferable, as the added flexibility we would get from a polynomial or radial kernel is unnecessary.
 
 
 ```r
@@ -398,4 +398,4 @@ augment(khan_fit, new_data = Khan_test) %>%
 ##          4 0 0 0 5
 ```
 
-And it performs fairly well. A couple of misclassification but nothing too bad.
+And it performs fairly well. A couple of misclassifications but nothing too bad.

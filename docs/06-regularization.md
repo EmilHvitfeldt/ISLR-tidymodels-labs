@@ -484,11 +484,11 @@ lasso_final <- finalize_workflow(lasso_workflow, best_penalty)
 lasso_final_fit <- fit(lasso_final, data = Hitters_train)
 ```
 
-And we are done, by calculating the `rsq` value for the lasso model can we see that for this data it doesn't make much difference which kind of regularization we use as they have similar performance.
+And we are done, by calculating the `rsq` value for the lasso model can we see that for this data ridge regression outperform lasso regression.
 
 
 ```r
-augment(ridge_final_fit, new_data = Hitters_test) %>%
+augment(lasso_final_fit, new_data = Hitters_test) %>%
   rsq(truth = Salary, estimate = .pred)
 ```
 
@@ -496,7 +496,7 @@ augment(ridge_final_fit, new_data = Hitters_test) %>%
 ## # A tibble: 1 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rsq     standard       0.488
+## 1 rsq     standard       0.491
 ```
 
 ## Principal Components Regression

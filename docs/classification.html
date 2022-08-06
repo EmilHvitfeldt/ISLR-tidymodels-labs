@@ -355,8 +355,8 @@ When fitting a classification with parsnip requires that the response variable i
 ##             LD1
 ## Lag1 -0.6420190
 ## Lag2 -0.5135293</code></pre>
-<p>One of the things to look for in the LDA output is the group means. We see that there is a slight difference between the means of the two groups. These suggest that there is a tendency for the previous 2 days’ returns to be negative on days when the market increases, and a tendency for the previous day’ returns to be positive on days when the market declines.</p>
-<p>Predictions are done just the same as with logistic regression</p>
+<p>One of the things to look for in the LDA output is the group means. We see that there is a slight difference between the means of the two groups. These suggest that there is a tendency for the previous 2 days’ returns to be negative on days when the market increases, and a tendency for the previous day’s returns to be positive on days when the market declines.</p>
+<p>Predictions are done just the same as with logistic regression:</p>
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lda_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 252 × 1
@@ -404,7 +404,7 @@ When fitting a classification with parsnip requires that the response variable i
 ##   .metric  .estimator .estimate
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary         0.560</code></pre>
-<p>And we see no markedly difference performance between this model and the logistic regression model.</p>
+<p>And we see no markedly different performance between this model and the logistic regression model.</p>
 </div>
 <div id="quadratic-discriminant-analysis" class="section level2" number="4.4">
 <h2>
@@ -433,14 +433,14 @@ When fitting a classification with parsnip requires that the response variable i
 ##   .metric  .estimator .estimate
 ##   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;
 ## 1 accuracy binary         0.599</code></pre>
-<p>And we are seeing another increase in accuracy. However this model still rarely predicts <code>"Down'</code>. This make it appear that the quadratic form assumed by QDA captures the relationship more clearly.</p>
+<p>And we are seeing another increase in accuracy. However this model still rarely predicts <code>"Down"</code>. This make it appear that the quadratic form assumed by QDA captures the relationship more clearly.</p>
 </div>
 <div id="naive-bayes" class="section level2" number="4.5">
 <h2>
 <span class="header-section-number">4.5</span> Naive Bayes<a class="anchor" aria-label="anchor" href="#naive-bayes"><i class="fas fa-link"></i></a>
 </h2>
 <p>We will now fit a Naive Bayes model to the <code>Smarket</code> data. For this, we will be using the <code><a href="https://parsnip.tidymodels.org/reference/naive_Bayes.html">naive_Bayes()</a></code> function to create the specification and also set the <code>usekernel</code> argument to <code>FALSE</code>. This means that we are assuming that the predictors <code>Lag1</code> and <code>Lag2</code> are drawn from Gaussian distributions.</p>
-<p>Once the model is specified, the fitting process is exactly like before</p>
+<p>Once the model is specified, the fitting process is exactly like before:</p>
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nb_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/naive_Bayes.html">naive_Bayes</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_args.html">set_mode</a></span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -497,7 +497,7 @@ When fitting a classification with parsnip requires that the response variable i
 ## Minimal misclassification: 0.492986
 ## Best kernel: optimal
 ## Best k: 3</code></pre>
-<p>And evaluation is done the same way</p>
+<p>And evaluation is done the same way:</p>
 <div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/augment.html">augment</a></span><span class="op">(</span><span class="va">knn_fit</span>, new_data <span class="op">=</span> <span class="va">Smarket_test</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">conf_mat</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Direction</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> </span></code></pre></div>
@@ -575,7 +575,7 @@ When fitting a classification with parsnip requires that the response variable i
 <span class="header-section-number">4.7</span> Poisson Regression<a class="anchor" aria-label="anchor" href="#poisson-regression"><i class="fas fa-link"></i></a>
 </h2>
 <p>So far we have been using the <code>Smarket</code> data set to predict the stock price movement. We will now shift to a new data set, <code>Bikeshare</code>, and look at the number of bike rentals per hour in Washington, D.C.</p>
-<p>The variable of interest, <em>number of bike rentals per hour</em> can take on non-negative integer values. This makes Poisson Regression a suitable candidate to model the same.</p>
+<p>The variable of interest, <em>number of bike rentals per hour</em>, can take on non-negative integer values. This makes Poisson Regression a suitable candidate to model the same.</p>
 <p>We start with specifying the model using the <code><a href="https://parsnip.tidymodels.org/reference/poisson_reg.html">poisson_reg()</a></code> function.</p>
 <div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pois_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/poisson_reg.html">poisson_reg</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -689,7 +689,7 @@ When fitting a classification with parsnip requires that the response variable i
 ##  9 logistic regression Down      Up               0.491    0.509
 ## 10 logistic regression Up        Up               0.484    0.516
 ## # … with 998 more rows</code></pre>
-<p>we have seen how to use <code>accuracy()</code> a lot of times by now, but it is not the only metric to use for classification, and yardstick provides <a href="https://yardstick.tidymodels.org/reference/index.html#section-classification-metrics">many more</a>.
+<p>We have seen how to use <code>accuracy()</code> a lot of times by now, but it is not the only metric to use for classification, and yardstick provides <a href="https://yardstick.tidymodels.org/reference/index.html#section-classification-metrics">many more</a>.
 You can combine multiple different metrics together with <code>metric_set()</code></p>
 <div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">multi_metric</span> <span class="op">&lt;-</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">accuracy</span>, <span class="va">sensitivity</span>, <span class="va">specificity</span><span class="op">)</span></span></code></pre></div>
