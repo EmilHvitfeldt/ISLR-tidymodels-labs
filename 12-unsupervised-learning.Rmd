@@ -70,7 +70,7 @@ tidy(USArrests_pca, matrix = "loadings") %>%
   ggplot(aes(value, column)) +
   facet_wrap(~ PC) +
   geom_col() +
-  scale_y_continuous(labels = scales::percent)
+  scale_x_continuous(labels = scales::percent)
 ```
 
 Lastly, we can set `matrix = "eigenvalues"` and get back the explained standard deviation for each PC including as a percent and cumulative which is quite handy for plotting.
