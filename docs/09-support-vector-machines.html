@@ -280,11 +280,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>We can then create a linear SVM specification by setting <code>degree = 1</code> in a polynomial SVM model. We furthermore set <code>scaled = FALSE</code> in <code>set_engine()</code> to have the engine scale the data for us. Once we get to it later we can be performing this scaling in a recipe instead.</p>
-<div class="cell" type="infobox">
-<div class="infobox">
-<p>
-<code>set_engine()</code> can be used to pass in additional arguments directly to the underlying engine. In this case, I’m passing in <code>scaled = FALSE</code> to <code><a href="https://rdrr.io/pkg/kernlab/man/ksvm.html">kernlab::ksvm()</a></code> which is the engine function.
-</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>set_engine()</code> can be used to pass in additional arguments directly to the underlying engine. In this case, I’m passing in <code>scaled = FALSE</code> to <code><a href="https://rdrr.io/pkg/kernlab/man/ksvm.html">kernlab::ksvm()</a></code> which is the engine function.</p>
 </div>
 </div>
 <div class="cell">
@@ -324,7 +330,7 @@ Probability model included. </code></pre>
 <span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>what if we instead used a smaller value of the <code>cost</code> parameter?</p>
@@ -372,7 +378,7 @@ Probability model included. </code></pre>
 <span></span>
 <span><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>using the <code>tune_res</code> object and <code>select_best()</code> function allows us to find the value of <code>cost</code> that gives the best cross-validated accuracy. Finalize the workflow with <code>finalize_workflow()</code> and fit the new workflow on the data set.</p>
@@ -420,7 +426,7 @@ Prediction -1 1
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, color <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We will try an SVM with a radial basis function. Such a kernel would allow us to capture the non-linearity in our data.</p>
@@ -440,7 +446,7 @@ Prediction -1 1
 <span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>But let us see how well this model generalizes to new data from the same generating process.</p>
@@ -492,7 +498,7 @@ Prediction   1   2
 <span>  <span class="fu">roc_curve</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">y</span>, estimate <span class="op">=</span> <span class="va">.pred_1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<p><img src="09-support-vector-machines_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>A common metric is t calculate the area under this curve. This can be done using the <code>roc_auc()</code> function (<code>_auc</code> stands for <strong>a</strong>rea <strong>u</strong>nder <strong>c</strong>urve).</p>

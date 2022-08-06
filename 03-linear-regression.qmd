@@ -23,9 +23,9 @@ library(ISLR)
 
 The `Boston` data set contains various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (`medv`) as the response with a variable indicating the percentage of the population that belongs to a lower status (`lstat`) as the predictor.
 
-```{block}
+:::{.callout-important}
 The `Boston` data set is quite outdated and contains some really unfortunate variables.
-```
+:::
 
 We start by creating a parsnip specification for a linear regression model.
 
@@ -104,9 +104,9 @@ We can also return other types of predicts by specifying the `type` argument. Se
 predict(lm_fit, new_data = Boston, type = "conf_int")
 ```
 
-```{block}
+:::{.callout-note}
 Not all engines can return all types of predictions.
-```
+:::
 
 If you want to evaluate the performance of a model, you might want to compare the observed value and the predicted value for a data set. You 
 

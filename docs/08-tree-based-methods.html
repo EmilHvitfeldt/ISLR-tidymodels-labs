@@ -266,11 +266,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">Boston</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>Boston</code> data set contain various statistics for 506 neighborhoods in Boston. We will build a regression model that related the median value of owner-occupied homes (<code>medv</code>) as the response with the remaining variables as predictors.</p>
-<div class="cell" type="infobox">
-<div class="infobox">
-<p>
-The <code>Boston</code> data set is quite outdated and contains some really unfortunate variables.
-</p>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>Boston</code> data set is quite outdated and contains some really unfortunate variables.</p>
 </div>
 </div>
 <p>We will also use the <code>Carseats</code> data set from the <code>ISLR</code> package to demonstrate a classification model. We create a new variable <code>High</code> to denote if <code>Sales &lt;= 8</code>, then the <code>Sales</code> predictor is removed as it is a perfect predictor of <code>High</code>.</p>
@@ -336,7 +342,7 @@ node), split, n, loss, yval, (yprob)
 <span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We can see that the most important variable to predict high sales appears to be shelving location as it forms the first node.</p>
@@ -431,7 +437,7 @@ Prediction No Yes
 <div class="cell">
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We can now select the best performing value with <code>select_best()</code>, finalize the workflow by updating the value of <code>cost_complexity</code> and fit the model on the full training data set.</p>
@@ -469,7 +475,7 @@ node), split, n, loss, yval, (yprob)
 <span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section><section id="fitting-regression-trees" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="fitting-regression-trees">
@@ -534,7 +540,7 @@ node), split, n, deviance, yval
 <span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Notice how the result is a numeric variable instead of a class.</p>
@@ -559,7 +565,7 @@ node), split, n, deviance, yval
 <div class="cell">
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We select the best-performing model according to <code>"rmse"</code> and fit the final model on the whole training data set.</p>
@@ -621,7 +627,7 @@ node), split, n, deviance, yval
 <span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/rpart.plot/man/rpart.plot.html">rpart.plot</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section><section id="bagging-and-random-forests" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="bagging-and-random-forests">
@@ -654,14 +660,14 @@ node), split, n, deviance, yval
 <span>  <span class="fu">geom_abline</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>There isn’t anything weird going on here so we are happy. Next, let us take a look at the variable importance</p>
 <div class="cell">
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/vip/man/vip.html">vip</a></span><span class="op">(</span><span class="va">bagging_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Next, let us take a look at a random forest. By default, <code>randomForest()</code> <code>p / 3</code> variables when building a random forest of regression trees, and <code>sqrt(p)</code> variables when building a random forest of classification trees. Here we use <code>mtry = 6</code>.</p>
@@ -692,7 +698,7 @@ node), split, n, deviance, yval
 <span>  <span class="fu">geom_abline</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>it looks fine. No discernible difference between this chart and the one we created for the bagging model.</p>
@@ -700,7 +706,7 @@ node), split, n, deviance, yval
 <div class="cell">
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/vip/man/vip.html">vip</a></span><span class="op">(</span><span class="va">rf_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>you would normally want to perform hyperparameter tuning for the random forest model to get the best out of your forest. This exercise is left for the reader.</p>
@@ -734,7 +740,7 @@ node), split, n, deviance, yval
 <span>  <span class="fu">geom_abline</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid" width="672"></p>
+<p><img src="08-tree-based-methods_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>You would normally want to perform hyperparameter tuning for the boosted tree model to get the best out of your model. This exercise is left for the reader. Look at the <a href="https://www.tmwr.org/iterative-search.html">Iterative search</a> chapter of <a href="https://www.tmwr.org/">Tidy Modeling with R</a> for inspiration.</p>
