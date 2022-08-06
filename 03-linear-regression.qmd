@@ -1,6 +1,7 @@
 # Linear Regression
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 set.seed(1234)
 source("_common.R")
 ```
@@ -11,7 +12,8 @@ This lab will go over how to perform linear regression. This will include [simpl
 
 We load tidymodels and ISLR and MASS for data sets.
 
-```{r, message=FALSE}
+```{r}
+#| message: false
 library(MASS) # For Boston data set
 library(tidymodels)
 library(ISLR)
@@ -21,7 +23,7 @@ library(ISLR)
 
 The `Boston` data set contains various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (`medv`) as the response with a variable indicating the percentage of the population that belongs to a lower status (`lstat`) as the predictor.
 
-```{block, type='infobox'}
+```{block}
 The `Boston` data set is quite outdated and contains some really unfortunate variables.
 ```
 
@@ -83,7 +85,8 @@ glance(lm_fit)
 
 Suppose that we like the model fit and we want to generate predictions, we would typically use the `predict()` function like so:
 
-```{r, error=TRUE}
+```{r}
+#| error: true
 predict(lm_fit)
 ```
 
@@ -101,7 +104,7 @@ We can also return other types of predicts by specifying the `type` argument. Se
 predict(lm_fit, new_data = Boston, type = "conf_int")
 ```
 
-```{block, type='infobox'}
+```{block}
 Not all engines can return all types of predictions.
 ```
 

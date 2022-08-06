@@ -1,6 +1,7 @@
 # Linear Model Selection and Regularization
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 set.seed(1234)
 source("_common.R")
 ```
@@ -10,7 +11,8 @@ This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for mo
 
 We will be using the `Hitters` data set from the `ISLR` package. We wish to predict the baseball players `Salary` based on several different characteristics which are included in the data set. Since we wish to predict `Salary`, then we need to remove any missing data from that column. Otherwise, we won't be able to run the models.
 
-```{r, message=FALSE}
+```{r}
+#| message: false
 library(tidymodels)
 library(ISLR)
 
@@ -44,7 +46,8 @@ ridge_fit <- fit(ridge_spec, Salary ~ ., data = Hitters)
 
 The `glmnet` package will fit the model for all values of `penalty` at once, so let us see what the parameter estimate for the model is now that we have `penalty = 0`.
 
-```{r, message=FALSE}
+```{r}
+#| message: false
 tidy(ridge_fit)
 ```
 

@@ -1,6 +1,7 @@
 # Moving Beyond Linearity
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 set.seed(1234)
 source("_common.R")
 ```
@@ -11,7 +12,8 @@ The GAMs section is WIP since they are now supported in [parsnip](https://github
 
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
 
-```{r, message=FALSE}
+```{r}
+#| message: false
 library(tidymodels)
 library(ISLR)
 

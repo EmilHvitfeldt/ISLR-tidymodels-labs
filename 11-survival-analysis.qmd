@@ -1,6 +1,7 @@
 # Survival Analysis and Censored Data
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 set.seed(1234)
 source("_common.R")
 ```

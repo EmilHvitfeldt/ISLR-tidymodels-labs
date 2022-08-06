@@ -24,7 +24,9 @@ This book was written in [RStudio](http://www.rstudio.com/ide/) using [**quarto*
 
 This version of the book was built with `r R.version.string` and the following packages:
 
-```{r, echo = FALSE, results="asis"}
+```{r}
+#| echo: false
+#| results: asis
 deps <- desc::desc_get_deps()
 pkgs <- sort(deps$package[deps$type == "Imports"])
 pkgs <- sessioninfo::package_info(pkgs, dependencies = FALSE)

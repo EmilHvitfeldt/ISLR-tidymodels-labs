@@ -1,6 +1,7 @@
 # Support Vector Machines
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 set.seed(1234)
 source("_common.R")
 ```
@@ -8,7 +9,8 @@ source("_common.R")
 This lab will take a look at support vector machines, in doing so we will explore how changing the hyperparameters can help improve performance. 
 This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations, and [tune and dials](https://www.tidymodels.org/start/tuning/) to tune the hyperparameters of the model.
 
-```{r, message=FALSE}
+```{r}
+#| message: false
 library(tidymodels)
 library(ISLR)
 ```
@@ -37,7 +39,8 @@ ggplot(sim_data, aes(x1, x2, color = y)) +
 
 We can then create a linear SVM specification by setting `degree = 1` in a polynomial SVM model. We furthermore set `scaled = FALSE` in `set_engine()` to have the engine scale the data for us. Once we get to it later we can be performing this scaling in a recipe instead. 
 
-```{block, type='infobox'}
+```{block}
+#| type: infobox
 `set_engine()` can be used to pass in additional arguments directly to the underlying engine. In this case, I'm passing in `scaled = FALSE` to `kernlab::ksvm()` which is the engine function.
 ```
 
@@ -59,7 +62,8 @@ svm_linear_fit
 
 The `kernlab` models can be visualized using the `plot()` function if you load the `kernlab` package. 
 
-```{r, message=FALSE}
+```{r}
+#| message: false
 library(kernlab)
 svm_linear_fit %>%
   extract_fit_engine() %>%

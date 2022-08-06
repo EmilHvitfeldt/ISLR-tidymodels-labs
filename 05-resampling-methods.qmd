@@ -1,6 +1,7 @@
 # Resampling Methods
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 set.seed(1234)
 source("_common.R")
 ```
@@ -8,7 +9,8 @@ source("_common.R")
 This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter introduces a lot of new packages.
 This chapter will bring [rsample](https://www.tidymodels.org/start/resampling/) into view for creating resampled data frames as well as [yardstick](https://yardstick.tidymodels.org/) to calculate performance metrics. Finally, we will use [tune](https://tune.tidymodels.org/) to fit our models within resamples and [dials](https://dials.tidymodels.org/) to help with the selection of hyperparameter tuning values.
 
-```{r, message=FALSE}
+```{r}
+#| message: false
 library(tidymodels)
 library(ISLR)
 
@@ -148,7 +150,8 @@ poly_tuned_wf <- workflow() %>%
 
 This means that would not be able to fit this workflow right now as the value of `degree` is unspecified, and if we try we get an error:
 
-```{r, error=TRUE}
+```{r}
+#| error: true
 fit(poly_tuned_wf, data = Auto_train)
 ```
 

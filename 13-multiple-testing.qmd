@@ -1,6 +1,7 @@
 # Multiple Testing
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 set.seed(1234)
 ```
 

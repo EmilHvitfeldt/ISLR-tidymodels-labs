@@ -1,6 +1,7 @@
 # Classification
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 set.seed(1234)
 source("_common.R")
 ```
@@ -12,7 +13,8 @@ This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for mo
 
 We load the tidymodels for modeling functions, ISLR and ISLR2 for data sets, [discrim](https://discrim.tidymodels.org/) to give us access to discriminant analysis models such as LDA and QDA as well as the Naive Bayes model and [poissonreg](https://poissonreg.tidymodels.org/) for Poisson Regression.
 
-```{r, message=FALSE}
+```{r}
+#| message: false
 library(tidymodels)
 library(ISLR) # For the Smarket data set
 library(ISLR2) # For the Bikeshare data set
@@ -20,7 +22,8 @@ library(discrim)
 library(poissonreg)
 ```
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 select <- dplyr::select
 ```
 
@@ -452,7 +455,8 @@ pois_wf <- workflow() %>%
 
 With the workflow in place, we follow the same pattern to fit the model and look at the predictions.
 
-```{r fig.asp=1}
+```{r}
+#| fig.asp: 1.0
 pois_fit <- pois_wf %>% fit(data = Bikeshare)
 
 augment(pois_fit, new_data = Bikeshare, type.predict = "response") %>% 
@@ -467,7 +471,8 @@ We can also look at the model coefficients to get a feel for the working of the 
 
 Looking at the coefficients corresponding to the `mnth` variable, we note that it is lower in the winter months and higher in the summer months. This seems logical as we would expect the number of bike rentals to be higher during summertime.  
 
-```{r fig.asp=0.6}
+```{r}
+#| fig.asp: 0.6
 pois_fit_coef_mnths <- 
   tidy(pois_fit) %>% 
   filter(grepl("^mnth", term)) %>% 
@@ -487,7 +492,8 @@ pois_fit_coef_mnths %>%
 
 We can similarly also look at the coefficients corresponding to the `hr` variable. Here the peaks occur at 8:00 AM and 5:00 PM, i.e. during normal office start and end times. 
 
-```{r fig.asp=0.6}
+```{r}
+#| fig.asp: 0.6
 pois_fit_coef_hr <- 
   tidy(pois_fit) %>% 
   filter(grepl("^hr", term)) %>% 
