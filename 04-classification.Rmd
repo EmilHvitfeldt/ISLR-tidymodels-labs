@@ -501,7 +501,7 @@ pois_fit_coef_hr %>%
   geom_point(shape = 21, size = 3, stroke = 1.5, 
              fill = "black", color = "white") +
   labs(title = "Coefficient value from Poission Regression",
-       x = "hour", y = "Coefficient")
+       x = "hours", y = "Coefficient")
 ```
 
 ## Extra - comparing multiple models
