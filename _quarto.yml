@@ -1,11 +1,31 @@
-book_filename: "ISLR-tidymodels-labs"
-delete_merged_file: true
-language:
-  ui:
-    chapter_name: "Chapter "
+project:
+  type: book
+  output-dir: docs
 
-output_dir: "docs"
+book:
+  title: "ISLR tidymodels labs"
+  author: "Emil Hvitfeldt"
+  search: true
+  repo-url: https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs
+  repo-actions: [edit, issue]
+  sharing: [twitter, facebook]
+  date: "2022/08/06"
+  chapters:
+    - index.qmd
+    - 02-statistical-learning.qmd
+    - 03-linear-regression.qmd
+    - 04-classification.qmd
+    - 05-resampling-methods.qmd
+    - 06-regularization.qmd
+    - 07-moving-beyond-linearity.qmd
+    - 08-tree-based-methods.qmd
+    - 09-support-vector-machines.qmd
+    - 10-deep-learning.qmd
+    - 11-survival-analysis.qmd
+    - 12-unsupervised-learning.qmd
+    - 13-multiple-testing.qmd
 
-new_session: yes
-
-before_chapter_script: "_common.R"
+format:
+  html:
+    css: style.css
+    code-link: true

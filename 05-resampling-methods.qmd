@@ -2,6 +2,7 @@
 
 ```{r, echo=FALSE}
 set.seed(1234)
+source("_common.R")
 ```
 
 This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter introduces a lot of new packages.

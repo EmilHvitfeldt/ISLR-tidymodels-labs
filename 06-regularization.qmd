@@ -2,6 +2,7 @@
 
 ```{r, echo=FALSE}
 set.seed(1234)
+source("_common.R")
 ```
 
 This lab will take a look at regularization models and hyperparameter tuning. These models are related to the models we saw in chapter 3 and 4, with the difference that they contain a regularization term.

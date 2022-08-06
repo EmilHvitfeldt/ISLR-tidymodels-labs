@@ -2,6 +2,7 @@
 
 ```{r, echo=FALSE}
 set.seed(1234)
+source("_common.R")
 ```
 
 This lab will be our first experience with classification models. These models differ from the regression model we saw in the last chapter by the fact that the response variable is a qualitative variable instead of a continuous variable.

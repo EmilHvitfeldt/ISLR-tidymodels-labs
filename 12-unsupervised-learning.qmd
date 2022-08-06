@@ -2,6 +2,7 @@
 
 ```{r, echo=FALSE}
 set.seed(1234)
+source("_common.R")
 ```
 
 This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. One downside at this moment is that clustering is not well integrated into tidymodels at this time. But we are still able to use some of the features in tidymodels.

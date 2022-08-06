@@ -1,348 +1,550 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 1 Introduction | ISLR tidymodels Labs</title>
+<meta name="generator" content="quarto-1.0.38">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Emil Hvitfeldt">
-<meta name="description" content="tidymodels lab sections mirroring ISLR labs">
-<meta name="generator" content="bookdown 0.27 with bs4_book()">
-<meta property="og:title" content="Chapter 1 Introduction | ISLR tidymodels Labs">
-<meta property="og:type" content="book">
-<meta property="og:description" content="tidymodels lab sections mirroring ISLR labs">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 1 Introduction | ISLR tidymodels Labs">
-<meta name="twitter:description" content="tidymodels lab sections mirroring ISLR labs">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.0/transition.js"></script><script src="libs/bs3compat-0.4.0/tabs.js"></script><script src="libs/bs3compat-0.4.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
-    
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  </style>
-<link rel="stylesheet" href="style.css">
+<meta name="dcterms.date" content="2022-08-06">
+<title>ISLR tidymodels labs</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./02-statistical-learning.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script><link rel="stylesheet" href="style.css">
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body class="nav-sidebar floating">
 
-<div class="container-fluid">
-<div class="row">
-  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
-
-    <div class="d-flex align-items-start justify-content-between">
-      <h1>
-        <a href="index.html" title="">ISLR tidymodels Labs</a>
-      </h1>
-      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">ISLR tidymodels labs</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
     </div>
-
-    <div id="main-nav" class="collapse-lg">
-      <form role="search">
-        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
-</form>
-
-      <nav aria-label="Table of contents"><h2>Table of contents</h2>
-        <ul class="book-toc list-unstyled">
-<li><a class="active" href="index.html"><span class="header-section-number">1</span> Introduction</a></li>
-<li><a class="" href="statistical-learning.html"><span class="header-section-number">2</span> Statistical learning</a></li>
-<li><a class="" href="linear-regression.html"><span class="header-section-number">3</span> Linear Regression</a></li>
-<li><a class="" href="classification.html"><span class="header-section-number">4</span> Classification</a></li>
-<li><a class="" href="resampling-methods.html"><span class="header-section-number">5</span> Resampling Methods</a></li>
-<li><a class="" href="linear-model-selection-and-regularization.html"><span class="header-section-number">6</span> Linear Model Selection and Regularization</a></li>
-<li><a class="" href="moving-beyond-linearity.html"><span class="header-section-number">7</span> Moving Beyond Linearity</a></li>
-<li><a class="" href="tree-based-methods.html"><span class="header-section-number">8</span> Tree-Based Methods</a></li>
-<li><a class="" href="support-vector-machines.html"><span class="header-section-number">9</span> Support Vector Machines</a></li>
-<li><a class="" href="deep-learning.html"><span class="header-section-number">10</span> Deep learning</a></li>
-<li><a class="" href="survival-analysis-and-censored-data.html"><span class="header-section-number">11</span> Survival Analysis and Censored Data</a></li>
-<li><a class="" href="unsupervised-learning.html"><span class="header-section-number">12</span> Unsupervised Learning</a></li>
-<li><a class="" href="multiple-testing.html"><span class="header-section-number">13</span> Multiple Testing</a></li>
-</ul>
-
-        <div class="book-extra">
-          <p><a id="book-repo" href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs">View book source <i class="fab fa-github"></i></a></p>
-        </div>
-      </nav>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">ISLR tidymodels labs</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="" title="Share" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
+<li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=%7Curl%7C">
+            <i class="bi bi-bi-twitter pe-1"></i>
+          Twitter
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=%7Curl%7C">
+            <i class="bi bi-bi-facebook pe-1"></i>
+          Facebook
+          </a>
+        </li>
+    </ul>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><!--bookdown:title:end--><!--bookdown:title:start--><div id="introduction" class="section level1" number="1">
-<h1>
-<span class="header-section-number">1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction"><i class="fas fa-link"></i></a>
-</h1>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-statistical-learning.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-linear-regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-classification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Classification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05-resampling-methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Resampling Methods</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06-regularization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Linear Model Selection and Regularization</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07-moving-beyond-linearity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Moving Beyond Linearity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08-tree-based-methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Tree-Based Methods</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09-support-vector-machines.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Support Vector Machines</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10-deep-learning.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Deep learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-survival-analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Survival Analysis and Censored Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12-unsupervised-learning.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13-multiple-testing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Multiple Testing</span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">1</span> Introduction</a>
+  <ul class="collapse">
+<li><a href="#version-differences" id="toc-version-differences" class="nav-link" data-scroll-target="#version-differences">Version Differences</a></li>
+  <li><a href="#colophon" id="toc-colophon" class="nav-link" data-scroll-target="#colophon">Colophon</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title d-none d-lg-block">ISLR tidymodels labs</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Emil Hvitfeldt </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 6, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header><section id="introduction" class="level1" data-number="1"><h1 data-number="1">
+<span class="header-section-number">1</span> Introduction</h1>
 <p>This book aims to be a complement to the 2nd version <a href="https://www.statlearning.com/">An Introduction to Statistical Learning</a> book with translations of the labs into using the <a href="https://www.tidymodels.org/">tidymodels</a> set of packages.</p>
 <p>The labs will be mirrored quite closely to stay true to the original material.</p>
-<div id="version-differences" class="section level2 unnumbered">
-<h2>Version Differences<a class="anchor" aria-label="anchor" href="#version-differences"><i class="fas fa-link"></i></a>
-</h2>
+<section id="version-differences" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="version-differences">Version Differences</h2>
 <p>all listed changes will be relative to the 1st version.</p>
 <ul>
 <li>
-<a href="classification.html#naive-bayes">Naive Bayes</a> has been added to chapter 4 on <a href="classification.html#classification">Classification</a>
+<a href="./04-classification.html#naive-bayes">Naive Bayes</a> has been added to chapter 4 on <a href="./04-classification.html">Classification</a>
 </li>
 <li>
-<a href="classification.html#poisson-regression">Poisson Regression</a> has been added to chapter 4 on <a href="classification.html#classification">Classification</a>
+<a href="./04-classification.html#poisson-regression">Poisson Regression</a> has been added to chapter 4 on <a href="./04-classification.html">Classification</a>
 </li>
-<li>“Application to Caravan Insurance Data” section is no longer treated as its own section and is now part of the <a href="classification.html#k-nearest-neighbors">K-Nearest Neighbors</a> section</li>
+<li>“Application to Caravan Insurance Data” section is no longer treated as its own section and is now part of the <a href="./04-classification.html#k-nearest-neighbors">K-Nearest Neighbors</a> section</li>
 <li>
-<a href="tree-based-methods.html#bayesian-additive-regression-trees">Bayesian Additive Regression Trees</a> has been added to chapter 8 on <a href="tree-based-methods.html#tree-based-methods">Tree-Based Methods</a>
+<a href="./08-tree-based-methods.html#bayesian-additive-regression-trees">Bayesian Additive Regression Trees</a> has been added to chapter 8 on <a href="./08-tree-based-methods.html">Tree-Based Methods</a>
 </li>
-<li>chapter on <a href="unsupervised-learning.html#unsupervised-learning">Unsupervised Learning</a> has been renumbered to chapter 12 instead of 10</li>
+<li>chapter on <a href="./12-unsupervised-learning.html">Unsupervised Learning</a> has been renumbered to chapter 12 instead of 10</li>
 <li>
-<a href="unsupervised-learning.html#matrix-completion">Matrix Completion</a> has been added to chapter 12 on <a href="unsupervised-learning.html#unsupervised-learning">Unsupervised Learning</a>
+<a href="./12-unsupervised-learning.html#matrix-completion">Matrix Completion</a> has been added to chapter 12 on <a href="./12-unsupervised-learning.html">Unsupervised Learning</a>
 </li>
-<li>chapter on <a href="deep-learning.html#deep-learning">Deep learning</a> has been added as chapter 10</li>
-<li>chapter on <a href="survival-analysis-and-censored-data.html#survival-analysis-and-censored-data">Survival Analysis and Censored Data</a> as been added as chapter 11</li>
-<li>chapter on <a href="multiple-testing.html#multiple-testing">Multiple Testing</a> as been added as chapter 13</li>
-</ul>
-</div>
-<div id="colophon" class="section level2 unnumbered">
-<h2>Colophon<a class="anchor" aria-label="anchor" href="#colophon"><i class="fas fa-link"></i></a>
-</h2>
-<p>This book was written in <a href="http://www.rstudio.com/ide/">RStudio</a> using <a href="http://bookdown.org/"><strong>bookdown</strong></a>. The <a href="https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html">website</a> is hosted via <a href="https://pages.github.com/">GitHub Pages</a>, and the complete source is available on <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs">GitHub</a>.</p>
+<li>chapter on <a href="./10-deep-learning.html">Deep learning</a> has been added as chapter 10</li>
+<li>chapter on <a href="./11-survival-analysis.html">Survival Analysis and Censored Data</a> as been added as chapter 11</li>
+<li>chapter on <a href="./13-multiple-testing.html">Multiple Testing</a> as been added as chapter 13</li>
+</ul></section><section id="colophon" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="colophon">Colophon</h2>
+<p>This book was written in <a href="http://www.rstudio.com/ide/">RStudio</a> using <a href="https://quarto.org/"><strong>quarto</strong></a>. The <a href="https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html">website</a> is hosted via <a href="https://pages.github.com/">GitHub Pages</a>, and the complete source is available on <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs">GitHub</a>.</p>
 <p>This version of the book was built with R version 4.2.1 (2022-06-23) and the following packages:</p>
-<div class="inline-table"><table class="table table-sm">
+<div class="cell-output-display">
+<table class="table">
 <thead><tr class="header">
-<th align="left">package</th>
-<th align="left">version</th>
-<th align="left">source</th>
+<th style="text-align: left;">package</th>
+<th style="text-align: left;">version</th>
+<th style="text-align: left;">source</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">broom</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">broom</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">corrr</td>
-<td align="left">0.4.3</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">corrr</td>
+<td style="text-align: left;">0.4.3</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">dials</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">dials</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">discrim</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">discrim</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">downlit</td>
-<td align="left">0.4.2</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">downlit</td>
+<td style="text-align: left;">0.4.2</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">dplyr</td>
-<td align="left">1.0.9</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">dplyr</td>
+<td style="text-align: left;">1.0.9</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">factoextra</td>
-<td align="left">1.0.7</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">factoextra</td>
+<td style="text-align: left;">1.0.7</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">ggplot2</td>
-<td align="left">3.3.6</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">ggplot2</td>
+<td style="text-align: left;">3.3.6</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">glmnet</td>
-<td align="left">4.1-4</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">glmnet</td>
+<td style="text-align: left;">4.1-4</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">infer</td>
-<td align="left">1.0.2</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">infer</td>
+<td style="text-align: left;">1.0.2</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">ISLR</td>
-<td align="left">1.4</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">ISLR</td>
+<td style="text-align: left;">1.4</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">ISLR2</td>
-<td align="left">1.3-1</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">ISLR2</td>
+<td style="text-align: left;">1.3-1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">kernlab</td>
-<td align="left">0.9-31</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">kernlab</td>
+<td style="text-align: left;">0.9-31</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">kknn</td>
-<td align="left">1.3.1</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">kknn</td>
+<td style="text-align: left;">1.3.1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">klaR</td>
-<td align="left">1.7-1</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">klaR</td>
+<td style="text-align: left;">1.7-1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">MASS</td>
-<td align="left">7.3-57</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">MASS</td>
+<td style="text-align: left;">7.3-57</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">mclust</td>
-<td align="left">5.4.10</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">mclust</td>
+<td style="text-align: left;">5.4.10</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">modeldata</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">modeldata</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">paletteer</td>
-<td align="left">1.4.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">paletteer</td>
+<td style="text-align: left;">1.4.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">parsnip</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">parsnip</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">patchwork</td>
-<td align="left">1.1.1</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">patchwork</td>
+<td style="text-align: left;">1.1.1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">proxy</td>
-<td align="left">0.4-27</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">proxy</td>
+<td style="text-align: left;">0.4-27</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">purrr</td>
-<td align="left">0.3.4</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">purrr</td>
+<td style="text-align: left;">0.3.4</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">randomForest</td>
-<td align="left">4.7-1.1</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">randomForest</td>
+<td style="text-align: left;">4.7-1.1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">readr</td>
-<td align="left">2.1.2</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">readr</td>
+<td style="text-align: left;">2.1.2</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">recipes</td>
-<td align="left">1.0.1</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">recipes</td>
+<td style="text-align: left;">1.0.1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">rpart</td>
-<td align="left">4.1.16</td>
-<td align="left">CRAN (R 4.2.1)</td>
+<td style="text-align: left;">rpart</td>
+<td style="text-align: left;">4.1.16</td>
+<td style="text-align: left;">CRAN (R 4.2.1)</td>
 </tr>
 <tr class="even">
-<td align="left">rpart.plot</td>
-<td align="left">3.1.1</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">rpart.plot</td>
+<td style="text-align: left;">3.1.1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">rsample</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">rsample</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">scico</td>
-<td align="left">1.3.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">scico</td>
+<td style="text-align: left;">1.3.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">tibble</td>
-<td align="left">3.1.8</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">tibble</td>
+<td style="text-align: left;">3.1.8</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">tidymodels</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.1)</td>
+<td style="text-align: left;">tidymodels</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.1)</td>
 </tr>
 <tr class="odd">
-<td align="left">tidyr</td>
-<td align="left">1.2.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">tidyr</td>
+<td style="text-align: left;">1.2.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">tidyverse</td>
-<td align="left">1.3.2</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">tidyverse</td>
+<td style="text-align: left;">1.3.2</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">tune</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.1)</td>
+<td style="text-align: left;">tune</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.1)</td>
 </tr>
 <tr class="even">
-<td align="left">vip</td>
-<td align="left">0.3.2</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">vip</td>
+<td style="text-align: left;">0.3.2</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
-<td align="left">workflows</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">workflows</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">workflowsets</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.1)</td>
+<td style="text-align: left;">workflowsets</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.1)</td>
 </tr>
 <tr class="odd">
-<td align="left">xgboost</td>
-<td align="left">1.6.0.1</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">xgboost</td>
+<td style="text-align: left;">1.6.0.1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
-<td align="left">yardstick</td>
-<td align="left">1.0.0</td>
-<td align="left">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">yardstick</td>
+<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 </tbody>
-</table></div>
-</div>
-</div>
-  <div class="chapter-nav">
-<div class="empty"></div>
-<div class="next"><a href="statistical-learning.html"><span class="header-section-number">2</span> Statistical learning</a></div>
-</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
-    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
-<li><a class="nav-link" href="#version-differences">Version Differences</a></li>
-<li><a class="nav-link" href="#colophon">Colophon</a></li>
-</ul>
-
-      <div class="book-extra">
-        <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/blob/master/index.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/master/index.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
-        </ul>
-</div>
-    </nav>
+</table>
 </div>
 
-</div>
-</div> <!-- .container -->
 
-<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
-
-  <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>ISLR tidymodels Labs</strong>" was written by Emil Hvitfeldt. It was last built on 2022-08-06.</p>
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
   </div>
-
-  <div class="col-12 col-md-6 mt-3">
-    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  <div class="nav-page nav-page-next">
+      <a href="./02-statistical-learning.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical learning</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
+</nav>
+</div> <!-- /content -->
 
-</div></div>
-</footer>
-</body>
-</html>
+
+
+</body></html>

@@ -2,6 +2,7 @@
 
 ```{r, echo=FALSE}
 set.seed(1234)
+source("_common.R")
 ```
 
 This lab will take a look at support vector machines, in doing so we will explore how changing the hyperparameters can help improve performance. 

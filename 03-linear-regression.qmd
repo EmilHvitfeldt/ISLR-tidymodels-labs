@@ -2,9 +2,10 @@
 
 ```{r, echo=FALSE}
 set.seed(1234)
+source("_common.R")
 ```
 
-This lab will go over how to perform linear regression. This will include [simple linear regression] and [multiple linear regression] in addition to how you can apply transformations to the predictors. This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
+This lab will go over how to perform linear regression. This will include [simple linear regression](03-linear-regression.qmd#simple-linear-regression) and [multiple linear regression](03-linear-regression.qmd#multiple-linear-regression) in addition to how you can apply transformations to the predictors. This chapter will use [parsnip](https://www.tidymodels.org/start/models/) for model fitting and [recipes and workflows](https://www.tidymodels.org/start/recipes/) to perform the transformations.
  
 ## Libraries
 
@@ -123,7 +124,7 @@ augment(lm_fit, new_data = Boston) %>%
 
 ## Multiple linear regression
 
-The multiple linear regression model can be fit in much the same way as the [simple linear regression] model. The only difference is how we specify the predictors. We are using the same formula expression `y ~ x`, but we can specify multiple values by separating them with `+`s.
+The multiple linear regression model can be fit in much the same way as the [simple linear regression](03-linear-regression.qmd#simple-linear-regression) model. The only difference is how we specify the predictors. We are using the same formula expression `y ~ x`, but we can specify multiple values by separating them with `+`s.
 
 ```{r}
 lm_fit2 <- lm_spec %>% 
