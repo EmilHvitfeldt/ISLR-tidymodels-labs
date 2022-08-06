@@ -27,5 +27,6 @@ book:
 
 format:
   html:
-    css: style.css
+    theme: style.scss
+    fontsize: 1.2em
     code-link: true
