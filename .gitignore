@@ -4,6 +4,4 @@
 .httr-oauth
 .DS_Store
 _bookdown_files
-docs
-
 /.quarto/
