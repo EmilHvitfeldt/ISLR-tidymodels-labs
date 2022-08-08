@@ -561,13 +561,13 @@ Coefficients:
 <p>For more formula syntax look at <code><a href="https://rdrr.io/r/stats/formula.html">?formula</a></code>.</p>
 </section><section id="interaction-terms" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="interaction-terms">
 <span class="header-section-number">3.4</span> Interaction terms</h2>
-<p>Adding interaction terms are quite easy to do using formula expressions. However, the syntax used to describe them isn’t accepted by all engines so we will go over how to include interaction terms using recipes as well.</p>
+<p>Adding interaction terms is quite easy to do using formula expressions. However, the syntax used to describe them isn’t accepted by all engines so we will go over how to include interaction terms using recipes as well.</p>
 <p>There are two ways on including an interaction term; <code>x:y</code> and <code>x * y</code></p>
 <ul>
 <li>
 <code>x:y</code> will include the interaction between <code>x</code> and <code>y</code>,</li>
 <li>
-<code>x * y</code> will include the interaction between <code>x</code> and <code>y</code>, <code>x</code>, and <code>y</code>, e.i. it is short for <code>x:y + x + y</code>.</li>
+<code>x * y</code> will include the interaction between <code>x</code> and <code>y</code>, <code>x</code>, and <code>y</code>, i.e.&nbsp;it is short for <code>x:y + x + y</code>.</li>
 </ul>
 <p>with that out of the way let expand <code>lm_fit2</code> by adding an interaction term</p>
 <div class="cell">
