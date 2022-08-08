@@ -161,12 +161,12 @@ For more formula syntax look at `?formula`.
 
 ## Interaction terms
 
-Adding interaction terms are quite easy to do using formula expressions. However, the syntax used to describe them isn't accepted by all engines so we will go over how to include interaction terms using recipes as well.
+Adding interaction terms is quite easy to do using formula expressions. However, the syntax used to describe them isn't accepted by all engines so we will go over how to include interaction terms using recipes as well.
 
 There are two ways on including an interaction term; `x:y` and `x * y`
 
 - `x:y` will include the interaction between `x` and `y`,
-- `x * y` will include the interaction between `x` and `y`, `x`, and `y`, e.i. it is short for `x:y + x + y`.
+- `x * y` will include the interaction between `x` and `y`, `x`, and `y`, i.e. it is short for `x:y + x + y`.
 
 with that out of the way let expand `lm_fit2` by adding an interaction term
 
