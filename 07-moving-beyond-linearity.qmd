@@ -102,6 +102,12 @@ regression_lines
 We will then use `ggplot2` to visualize the fitted line and confidence interval. The green line is the regression curve and the dashed blue lines are the confidence interval.
 
 ```{r}
+#| fig-alt: |
+#|   Scatter chart, age against the x-axis and wage against y-axis.
+#|   Fairly normally distributed around wage == 100, with some
+#|   another blob around wage == 275. A curve in dark green follows
+#|   the middle of the data with two dottled curves follows closely
+#|   around.
 Wage %>%
   ggplot(aes(age, wage)) +
   geom_point(alpha = 0.2) +
@@ -118,6 +124,14 @@ The regression curve is now a curve instead of a line as we would have gotten wi
 Let us take that one step further and see what happens to the regression line once we go past the domain it was trained on. the previous plot showed individuals within the age range 18-80. Let us see what happens once we push this to 18-100. This is not an impossible range but an unrealistic range.
 
 ```{r}
+#| fig-alt: |
+#|   Scatter chart, age against the x-axis and wage against y-axis.
+#|   Fairly normally distributed around wage == 100, with some
+#|   another blob around wage == 275. A curve in dark green follows
+#|   the middle of the data with two dottled curves follows closely
+#|   around. The range for age has been increased beyond the data
+#|   points and the green curve trails negative and the dotted lines
+#|   quickly move away from the green curve.
 wide_age_range <- tibble(age = seq(18, 100))
 
 regression_lines <- bind_cols(
@@ -181,6 +195,15 @@ predict(lr_poly_fit, new_data = Wage, type = "conf_int")
 We can use these to visualize the probability curve for the classification model.
 
 ```{r}
+#| warning: false
+#| fig-alt: |
+#|   Line chart with age on the x-axis and .pred_High on the
+#|   y-axis. The green curve starts at zero for low values age.
+#|   A local maxima is seen at 35 and 60. Curve goes back to zero
+#|   around 80. Two blue dotted lines representing the confidence
+#|   interval around the green curve. This confidence interval
+#|   is around 1% away from the green curve excepts when age is
+#|   larger than 60, where it quickly widens.
 regression_lines <- bind_cols(
   augment(lr_poly_fit, new_data = age_range, type = "prob"),
   predict(lr_poly_fit, new_data = age_range, type = "conf_int")
@@ -248,6 +271,12 @@ predict(spline_fit, new_data = Wage)
 Lastly, we can plot the basic spline on top of the data.
 
 ```{r}
+#| fig-alt: |
+#|   Scatter chart, age against the x-axis and wage against y-axis.
+#|   Fairly normally distributed around wage == 100, with some
+#|   another blob around wage == 275. A curve in dark green follows
+#|   the middle of the data with two dottled curves follows closely
+#|   around.
 regression_lines <- bind_cols(
   augment(spline_fit, new_data = age_range),
   predict(spline_fit, new_data = age_range, type = "conf_int")
@@ -256,7 +285,7 @@ regression_lines <- bind_cols(
 Wage %>%
   ggplot(aes(age, wage)) +
   geom_point(alpha = 0.2) +
-  geom_line(aes(y = .pred), data = regression_lines, color = "blue") +
+  geom_line(aes(y = .pred), data = regression_lines, color = "darkgreen") +
   geom_line(aes(y = .pred_lower), data = regression_lines, 
             linetype = "dashed", color = "blue") +
   geom_line(aes(y = .pred_upper), data = regression_lines, 

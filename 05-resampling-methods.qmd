@@ -191,6 +191,11 @@ It can be helpful to add `control = control_grid(verbose = TRUE)`, this will pri
 `autoplot()` gives a visual overview of the performance of different hyperparameter pairs.
 
 ```{r}
+#| fig-alt: |
+#|   Facetted connected scatter chart. polynomial degree along the
+#|   x-axis. Performance values along the y-axis. The facets are
+#|   rmse and rsq. Both gets fairly even results for 2 and more
+#|   degrees. Best performance is seen when degree == 1.
 autoplot(tune_res)
 ```
 

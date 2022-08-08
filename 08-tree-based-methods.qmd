@@ -68,6 +68,10 @@ Once the tree gets more than a couple of nodes it can become hard to read the pr
 
 ```{r}
 #| warning: false
+#| fig-alt: |
+#|   Decision tree chart. A total of 10 splits. Color is used to
+#|   represent the prediction of High, blue values represent No
+#|   green represent Yes.
 class_tree_fit %>%
   extract_fit_engine() %>%
   rpart.plot()
@@ -153,6 +157,11 @@ tune_res <- tune_grid(
 using `autoplot()` shows which values of `cost_complexity` appear to produce the highest accuracy
 
 ```{r}
+#| fig-alt: |
+#|   Connected scatter chart. Cost-complexity along the x-axis,
+#|   accuracy along the y-axis. The accuracy stays constant for
+#|   low values of cost-complexity. When cost-complexity is larger
+#|   than 0.01 the accuracy shoots up and down rapidly.
 autoplot(tune_res)
 ```
 
@@ -172,6 +181,10 @@ At last, we can visualize the model, and we see that the better-performing model
 
 ```{r}
 #| warning: false
+#| fig-alt: |
+#|   Decision tree chart. A total of 2 splits. Color is used to
+#|   represent the prediction of High, blue values represent No
+#|   green represent Yes.
 class_tree_final_fit %>%
   extract_fit_engine() %>%
   rpart.plot()
@@ -214,6 +227,10 @@ and the `rpart.plot()` function works for the regression decision tree as well
 
 ```{r}
 #| warning: false
+#| fig-alt: |
+#|   Decision tree chart. A total of 8 splits. Color is used to
+#|   represent medv. Light blue colors represent small values, dark
+#|   blue represent high values.
 reg_tree_fit %>%
   extract_fit_engine() %>%
   rpart.plot()
@@ -243,6 +260,13 @@ tune_res <- tune_grid(
 And it appears that higher complexity works are to be preferred according to our cross-validation
 
 ```{r}
+#| fig-alt: |
+#|   Facetted connected scatter chart. Cost-complexity along the
+#|   x-axis. Performance values along the y-axis. The facets are
+#|   rmse and rsq. Both are fairly constant for low values of
+#|   cost-complexity, rmse starts moderately increasing and rsq
+#|   starts moderately decreasing once the cost-complexity
+#|   gets larger.
 autoplot(tune_res)
 ```
 
@@ -262,6 +286,10 @@ Visualizing the model reveals a much more complex tree than what we saw in the l
 
 ```{r}
 #| warning: false
+#| fig-alt: |
+#|   Decision tree chart. A total of 14 splits. Color is used to
+#|   represent medv. Light blue colors represent small values, dark
+#|   blue represent high values.
 reg_tree_final_fit %>%
   extract_fit_engine() %>%
   rpart.plot()
@@ -294,6 +322,11 @@ augment(bagging_fit, new_data = Boston_test) %>%
 We can also create a quick scatterplot between the true and predicted value to see if we can make any diagnostics.
 
 ```{r}
+#| fig-alt: |
+#|   Scatter chart. medv along the x-axis and .pred along the
+#|   y-axis. A diagonal line have been added, most of the points
+#|   follows fairly close to the line, with points for high values
+#|   of medv being under the line.
 augment(bagging_fit, new_data = Boston_test) %>%
   ggplot(aes(medv, .pred)) +
   geom_abline() +
@@ -303,6 +336,10 @@ augment(bagging_fit, new_data = Boston_test) %>%
 There isn't anything weird going on here so we are happy. Next, let us take a look at the variable importance
 
 ```{r}
+#| fig-alt: |
+#|   Horizontal bar chart. Importance along the x-axis, predictors
+#|   along the y-axis. Highest values are rm, lstat, nox and dis.
+#|   Lowest are indus, black and age.
 vip(bagging_fit)
 ```
 
@@ -330,6 +367,11 @@ augment(rf_fit, new_data = Boston_test) %>%
 We can likewise plot the true value against the predicted value
 
 ```{r}
+#| fig-alt: |
+#|   Scatter chart. medv along the x-axis and .pred along the
+#|   y-axis. A diagonal line have been added, most of the points
+#|   follows fairly close to the line, with points for high values
+#|   of medv being under the line.
 augment(rf_fit, new_data = Boston_test) %>%
   ggplot(aes(medv, .pred)) +
   geom_abline() +
@@ -341,6 +383,10 @@ it looks fine. No discernible difference between this chart and the one we creat
 The variable importance plot is also quite similar to what we saw for the bagging model which isn't surprising. 
 
 ```{r}
+#| fig-alt: |
+#|   Horizontal bar chart. Importance along the x-axis, predictors
+#|   along the y-axis. Highest values are rm, lstat, nox and dis.
+#|   Lowest are black, indus and age.
 vip(rf_fit)
 ```
 
@@ -372,6 +418,11 @@ augment(boost_fit, new_data = Boston_test) %>%
 We can look at the scatterplot and we don't see anything weird going on.
 
 ```{r}
+#| fig-alt: |
+#|   Scatter chart. medv along the x-axis and .pred along the
+#|   y-axis. A diagonal line have been added, most of the points
+#|   follows fairly close to the line, with points for high values
+#|   of medv being under the line.
 augment(boost_fit, new_data = Boston_test) %>%
   ggplot(aes(medv, .pred)) +
   geom_abline() +

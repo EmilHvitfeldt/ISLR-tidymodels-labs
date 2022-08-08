@@ -63,6 +63,13 @@ The `kernlab` models can be visualized using the `plot()` function if you load t
 
 ```{r}
 #| message: false
+#| fig-alt: |
+#|   Scatter chart of sim_data with x2 on the x-axis and x1 on the
+#|   y-axis. A gradient going from red through white to blue,
+#|   is overlaid. Blue values occur when both x1 and x2 sum to more
+#|   than 2 and red values when x1 and x2 sum to less than 2.
+#|   The gradient does not appear to seperate the two classes
+#|   which is represented by shapes.
 library(kernlab)
 svm_linear_fit %>%
   extract_fit_engine() %>%
@@ -84,6 +91,12 @@ Now that a smaller value of the cost parameter is being used, we obtain a larger
 Let us set up a `tune_grid()` section to find the value of `cost` that leads to the highest accuracy for the SVM model.
 
 ```{r}
+#| fig-alt: |
+#|   Facetted connected scatter chart. x-axis shows different
+#|   values of cost, and the y-axis show the performance metric
+#|   value. The facets correspond to the two performance metrics
+#|   accuracy and roc_auc. Both charts show a constant value for 
+#|   all values of cost, expect for once where the accuracy skipes.
 svm_linear_wf <- workflow() %>%
   add_model(svm_linear_spec %>% set_args(cost = tune())) %>%
   add_formula(y ~ .)
@@ -137,6 +150,10 @@ augment(svm_linear_fit, new_data = sim_data_test) %>%
 We will now see how we can fit an SVM using a non-linear kernel. Let us start by generating some data, but this time generate with a non-linear class boundary.
 
 ```{r}
+#| fig-alt: |
+#|   Scatter plot of sim_data2. Data is in a oblong shape with
+#|   points in the middle having color and both ends having
+#|   another color.
 set.seed(1)
 sim_data2 <- tibble(
   x1 = rnorm(200) + rep(c(2, -2, 0), c(100, 50, 50)),
@@ -167,6 +184,12 @@ svm_rbf_fit <- svm_rbf_spec %>%
 and plotting reveals that the model was able to separate the two classes, even though they were non-linearly separated.
 
 ```{r}
+#| fig-alt: |
+#|   Scatter chart of sim_data with x2 on the x-axis and x1 on the
+#|   y-axis. A gradient going from red through white to blue,
+#|   is overlaid. The grading is blue in the middle of the data
+#|   and red at the edges, with a non-linear seperation between
+#|   the colors.
 svm_rbf_fit %>%
   extract_fit_engine() %>%
   plot()
@@ -202,6 +225,12 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
 This produces the different values of `specificity` and `sensitivity` for each threshold. We can get a quick visualization by passing the results of `roc_curve()` into `autoplot()`
 
 ```{r}
+#| message: false
+#| fig-alt: |
+#|   A ROC curve plot. 1-specificity along the x-axis and
+#|   sensitivity along the y-axis. A dotted line is drawn
+#|   along the diagonal. The line quite closely follows
+#|   the upper left side.
 augment(svm_rbf_fit, new_data = sim_data2_test) %>%
   roc_curve(truth = y, estimate = .pred_1) %>%
   autoplot()
@@ -219,6 +248,7 @@ augment(svm_rbf_fit, new_data = sim_data2_test) %>%
 We now examine the Khan data set, which consists of several tissue samples corresponding to four distinct types of small round blue cell tumors. For each tissue sample, gene expression measurements are available. The data set comes in the `Khan` list which we will wrangle a little bit to create two tibbles, 1 for the training data and 1 for the testing data.
 
 ```{r}
+#| warning: false
 Khan_train <- bind_cols(
   y = factor(Khan$ytrain),
   as_tibble(Khan$xtrain)

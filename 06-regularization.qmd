@@ -67,9 +67,13 @@ tidy(ridge_fit, penalty = 50)
 We can visualize how the magnitude of the coefficients are being regularized towards zero as the penalty goes up. 
 
 ```{r}
+#| fig-alt: |
+#|   Multiple line chart. Log Lambda along the x-axis, Coefficients
+#|   along the y-axis. The curves starts at different places along
+#|   the y-axis but slowly converge towards 0 as the Log Lambda 
+#|   value increase.
 ridge_fit %>%
-  extract_fit_engine() %>%
-  plot(xvar = "lambda")
+  autoplot()
 ```
 
 Prediction is done like normal, if we use `predict()` by itself, then `penalty = 0` as we set in the model specification is used.
@@ -159,6 +163,13 @@ tune_res
 The output of `tune_grid()` can be hard to read by itself unprocessed. `autoplot()` creates a great visualization 
 
 ```{r}
+#| fig-alt: |
+#|   Facetted connected scatter chart. regularization along the
+#|   x-axis. Performance values along the y-axis. The facets are
+#|   rmse and rsq. Both are fairly constant for low values of
+#|   regularization, rmse starts moderately increasing and rsq
+#|   starts moderately decreasing once the regularization
+#|   gets larger.
 autoplot(tune_res)
 ```
 Here we see that the amount of regularization affects the performance metrics differently. Note how there are areas where the amount of regularization doesn't have any meaningful influence on the coefficient estimates. We can also see the raw metrics that created this chart by calling `collect_matrics()`. 
@@ -228,6 +239,13 @@ penalty_grid <- grid_regular(penalty(range = c(-2, 2)), levels = 50)
 And we can use `tune_grid()` again.
 
 ```{r}
+#| fig-alt: |
+#|   Facetted connected scatter chart. regularization along the
+#|   x-axis. Performance values along the y-axis. The facets are
+#|   rmse and rsq. Both are fairly constant for low values of
+#|   regularization, rmse starts moderately increasing and rsq
+#|   starts moderately decreasing once the regularization
+#|   gets larger.
 tune_res <- tune_grid(
   lasso_workflow,
   resamples = Hitters_fold, 
@@ -308,6 +326,11 @@ tune_res <- tune_grid(
 The results look a little shaky here.
 
 ```{r}
+#| fig-alt: |
+#|   Facetted connected scatter chart. regularization along the
+#|   x-axis. Performance values along the y-axis. The facets are
+#|   rmse and rsq. Very variable, appears to produce best values
+#|   for threshold == 0.5.
 autoplot(tune_res)
 ```
 

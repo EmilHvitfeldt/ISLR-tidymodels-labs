@@ -33,6 +33,9 @@ To look at the correlation, we will use the [corrr](https://corrr.tidymodels.org
 Then we pass that to `rplot()` to quickly visualize the correlation matrix. I have also changed the `colours` argument to better see what is going on.
 
 ```{r}
+#| fig-alt: |
+#|   Correlation chart. Most values are very close to 0.
+#|   Year and Volume appear quite correlated.
 library(corrr)
 cor_Smarket <- Smarket %>%
   select(-Direction) %>%
@@ -46,6 +49,9 @@ And we see that these variables are more or less uncorrelated with each other. T
 If you want to create heatmap styled correlation chart you can also create it manually.
 
 ```{r}
+#| fig-alt: |
+#|   Correlation chart. Most values are very close to 0.
+#|   Year and Volume appear quite correlated.
 library(paletteer)
 cor_Smarket %>%
   stretch() %>%
@@ -58,6 +64,10 @@ cor_Smarket %>%
 If we plot `Year` against `Volume` we see that there is an upwards trend in `Volume` with time.
 
 ```{r}
+#| fig-alt: |
+#|   Jittered scatter chart. Jittered around year along the
+#|   x-axis. Volume along the y-axis. Fairly wide scattering
+#|   along volume. Slight increase in volumne as year increase.
 ggplot(Smarket, aes(Year, Volume)) +
   geom_jitter(height = 0)
 ```
@@ -129,6 +139,10 @@ A good performing model would ideally have high numbers along the diagonal (up-l
 if you want a more visual representation of the confusion matrix you can pipe the result of `conf_mat()` into `autoplot()` to generate a ggplot2 chart.
 
 ```{r}
+#| fig-alt: |
+#|   Confusion matrix chart. Truth along the x-axis,
+#|   prediction along the y-axis. Up is predicted vastly
+#|   more than Down, regardless of the true value.
 augment(lr_fit, new_data = Smarket) %>%
   conf_mat(truth = Direction, estimate = .pred_class) %>%
   autoplot(type = "heatmap")
@@ -306,6 +320,10 @@ augment(nb_fit, new_data = Smarket_test) %>%
 The accuracy of the Naive Bayes is very similar to that of the QDA model. This seems reasonable since the below scatter plot shows that there is no apparent relationship between `Lag1` vs `Lag2` and thus the Naive Bayes' assumption of independently distributed predictors is not unreasonable.
 
 ```{r}
+#| message: false
+#| fig-alt: |
+#|   Scatter chart. Lag1 along the x-axis and Lag2 along the
+#|   y-axis. No apparent correlation between Lag1 and Lag2.
 ggplot(Smarket, aes(Lag1, Lag2)) +
   geom_point(alpha = 0.1, size = 2) +
   geom_smooth(method = "lm", se = FALSE) +
@@ -457,6 +475,10 @@ With the workflow in place, we follow the same pattern to fit the model and look
 
 ```{r}
 #| fig.asp: 1.0
+#| fig.alt: |
+#|   Scatter chart. bikers along the x-axis and .pred along
+#|   the y-axis. A diagonal line has been added. Points are
+#|   scattered around the diagonal. More closely for low values.
 pois_fit <- pois_wf %>% fit(data = Bikeshare)
 
 augment(pois_fit, new_data = Bikeshare, type.predict = "response") %>% 
@@ -473,6 +495,10 @@ Looking at the coefficients corresponding to the `mnth` variable, we note that i
 
 ```{r}
 #| fig.asp: 0.6
+#| fig.alt: |
+#|   Line chart. months along the x-axis, coefficient along the
+#|   y-axis. Coefficient values for January and February are low
+#|   Rest of the months are high.
 pois_fit_coef_mnths <- 
   tidy(pois_fit) %>% 
   filter(grepl("^mnth", term)) %>% 
@@ -494,6 +520,10 @@ We can similarly also look at the coefficients corresponding to the `hr` variabl
 
 ```{r}
 #| fig.asp: 0.6
+#| fig.alt: |
+#|   Line chart. hours along the x-axis, coefficient along the
+#|   y-axis. Coefficient values for hour between 1 and 7 are
+#|   low, the rest are higher.
 pois_fit_coef_hr <- 
   tidy(pois_fit) %>% 
   filter(grepl("^hr", term)) %>% 
@@ -552,6 +582,13 @@ preds %>%
 The same technique can be used to create ROC curves.
 
 ```{r}
+#| fig-alt: |
+#|   A ROC curve plot. 1-specificity along the x-axis and
+#|   sensitivity along the y-axis. A dotted line is drawn
+#|   along the diagonal. One curve for each of the 4 models
+#|   KNN, LDA, QDA and Logistic regression is drawn.
+#|   The curves are all fairly close th the diagonal for
+#|   all models with KNN doing the absolutely worst.
 preds %>%
   group_by(model) %>%
   roc_curve(Direction, .pred_Down) %>%

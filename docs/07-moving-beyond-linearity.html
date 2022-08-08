@@ -420,7 +420,7 @@ attr(,"class")
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
 <span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" alt="Scatter chart, age against the x-axis and wage against y-axis. Fairly normally distributed around wage == 100, with some another blob around wage == 275. A curve in dark green follows the middle of the data with two dottled curves follows closely around." width="672"></p>
 </div>
 </div>
 <p>The regression curve is now a curve instead of a line as we would have gotten with a simple linear regression model. Notice furthermore that the confidence bands are tighter when there is a lot of data and they wider towards the ends of the data.</p>
@@ -443,7 +443,7 @@ attr(,"class")
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
 <span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" alt="Scatter chart, age against the x-axis and wage against y-axis. Fairly normally distributed around wage == 100, with some another blob around wage == 275. A curve in dark green follows the middle of the data with two dottled curves follows closely around. The range for age has been increased beyond the data points and the green curve trails negative and the dotted lines quickly move away from the green curve." width="672"></p>
 </div>
 </div>
 <p>And we see that the curve starts diverging once we get to 93 the predicted <code>wage</code> is negative. The confidence bands also get wider and wider as we get farther away from the data.</p>
@@ -541,16 +541,13 @@ attr(,"class")
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper_High</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"blue"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_jitter</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="op">(</span><span class="va">high</span> <span class="op">==</span> <span class="st">"High"</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">Wage</span>, </span>
 <span>              shape <span class="op">=</span> <span class="st">"|"</span>, height <span class="op">=</span> <span class="fl">0</span>, width <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 8 row(s) containing missing values (geom_path).</code></pre>
-</div>
 <div class="cell-output-display">
-<p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" alt="Line chart with age on the x-axis and .pred_High on the y-axis. The green curve starts at zero for low values age. A local maxima is seen at 35 and 60. Curve goes back to zero around 80. Two blue dotted lines representing the confidence interval around the green curve. This confidence interval is around 1% away from the green curve excepts when age is larger than 60, where it quickly widens." width="672"></p>
 </div>
 </div>
 <p>Next, let us take a look at the step function and how to fit a model using it as a preprocessor. You can create step functions in a couple of different ways. <code>step_discretize()</code> will convert a numeric variable into a factor variable with <code>n</code> bins, <code>n</code> here is specified with <code>num_breaks</code>. These will have approximately the same number of points in them according to the training data set.</p>
 <div class="cell">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_discretize</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_discretize</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">step_discretize</span><span class="op">(</span><span class="va">age</span>, num_breaks <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">discretize_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -584,7 +581,7 @@ Residual Deviance: 710.4    AIC: 718.4</code></pre>
 </div>
 <p>If you already know where you want the step function to break then you can use <code>step_cut()</code> and supply the breaks manually.</p>
 <div class="cell">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_cut</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_cut</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">step_cut</span><span class="op">(</span><span class="va">age</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cut_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -620,12 +617,12 @@ Residual Deviance: 704.3    AIC: 712.3</code></pre>
 <span class="header-section-number">7.2</span> Splines</h2>
 <p>In order to fit regression splines, or in other words, use splines as preprocessors when fitting a linear model, we use <code>step_bs()</code> to construct the matrices of basis functions. The <code>bs()</code> function is used and arguments such as <code>knots</code> can be passed to <code>bs()</code> by using passing a named list to <code>options</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_spline</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">wage</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_spline</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">wage</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">step_bs</span><span class="op">(</span><span class="va">age</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>knots <span class="op">=</span> <span class="fl">25</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We already have the linear regression specification <code>lm_spec</code> so we can create the workflow, fit the model and predict with it like we have seen how to do in the previous chapters.</p>
 <div class="cell">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spline_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spline_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spline</span><span class="op">)</span></span>
 <span></span>
@@ -651,7 +648,7 @@ Residual Deviance: 704.3    AIC: 712.3</code></pre>
 </div>
 <p>Lastly, we can plot the basic spline on top of the data.</p>
 <div class="cell">
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span></span>
 <span>  <span class="fu">augment</span><span class="op">(</span><span class="va">spline_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">spline_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -659,13 +656,13 @@ Residual Deviance: 704.3    AIC: 712.3</code></pre>
 <span><span class="va">Wage</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">age</span>, <span class="va">wage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, color <span class="op">=</span> <span class="st">"darkgreen"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_lower</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
 <span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
 <span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" alt="Scatter chart, age against the x-axis and wage against y-axis. Fairly normally distributed around wage == 100, with some another blob around wage == 275. A curve in dark green follows the middle of the data with two dottled curves follows closely around." width="672"></p>
 </div>
 </div>
 </section><section id="gams" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="gams">

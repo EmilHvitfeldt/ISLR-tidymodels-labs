@@ -8,6 +8,10 @@ source("_common.R")
 
 This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. One downside at this moment is that clustering is not well integrated into tidymodels at this time. But we are still able to use some of the features in tidymodels.
 
+:::{.callout-note}
+Work is being done integrating clustering into tidymodels. See [tidyclust](https://github.com/EmilHvitfeldt/tidyclust) package for more information. The package is not yet stable enough to teach with.
+:::
+
 ```{r}
 #| message: false
 library(tidymodels)
@@ -69,6 +73,15 @@ tidy(USArrests_pca, matrix = "loadings")
 This information tells us how each variable contributes to each principal component. If you don't have too many principal components you can visualize the contribution without filtering
 
 ```{r}
+#| fig-alt: |
+#|   Facetted barchart of the principal component loadings.
+#|   The 4 variables are shown across the y-axis and the amount
+#|   of the loading is show as the bar height across the x-axis.
+#|   The 4 variables: UnbanPop, Rape, Murder and Assault are more
+#|   or less evenly represented in the first loading, with 
+#|   UnbanPop least. Second loading has UnbanPop highest, third
+#|   loading has Rape highest. Murder and Assult highest in forth
+#|   and final loading.
 tidy(USArrests_pca, matrix = "loadings") %>%
   ggplot(aes(value, column)) +
   facet_wrap(~ PC) +
@@ -85,6 +98,11 @@ tidy(USArrests_pca, matrix = "eigenvalues")
 If we want to see how the percent standard deviation explained drops off for each PC we can easily get that by using `tidy()` with `matrix = "eigenvalues"`.
 
 ```{r}
+#| fig-alt: |
+#|   Bar chart of percent standard deviation explained for the
+#|   4 principal components. First PC is a little over 60%, second
+#|   is at around 25%, third is a little under 10% and forth is at
+#|   around 5%.
 tidy(USArrests_pca, matrix = "eigenvalues") %>%
   ggplot(aes(PC, percent)) +
   geom_col()
@@ -179,9 +197,14 @@ x_df <- tibble(
 And we can plot it with ggplot2 to see that the groups are really there. Note that we didn't include this grouping information in `x_df` as we are trying to emulate a situation where we don't know of the possible underlying clusters.
 
 ```{r}
+#| fig-alt: |
+#|  Scatter chart of x_df data set with V1 on the x-axis and V2
+#|  on the y-axis. Colors correspending to the two groups in the
+#|  data. The data neatly seperates into gaussian clusters.
 x_df %>%
   ggplot(aes(V1, V2, color = rep(c("A", "B"), each = 25))) +
-  geom_point()
+  geom_point() +
+  labs(color = "groups")
 ```
 
 The `kmeans()` function takes a matrix or data.frame and `centers` which is the number of clusters we want `kmeans()` to find. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
@@ -218,6 +241,12 @@ augment(res_kmeans, data = x_df)
 We can visualize the result of `augment()` to see how well the clustering performed.
 
 ```{r}
+#| fig-alt: |
+#|  Scatter chart of augmented data set with V1 on the x-axis and V2
+#|  on the y-axis. Colors correspending to the .cluster variables.
+#|  Left-most cluster is one color, right-most cluster is another
+#|  color and the points between them in each real cluster is
+#|  contained in a third color.
 augment(res_kmeans, data = x_df) %>%
   ggplot(aes(V1, V2, color = .cluster)) +
   geom_point()
@@ -239,6 +268,8 @@ multi_kmeans
 Now that we have the total within-cluster sum-of-squares we can plot them against `k` so we can use the [elbow method](https://en.wikipedia.org/wiki/Elbow_method_(clustering)) to find the optimal number of clusters.
 
 ```{r}
+#| fig-alt: |
+#|  Elbow Chart. Sharp dropoff when k is equal to 2.
 multi_kmeans %>%
   ggplot(aes(k, tot.withinss)) +
   geom_point() +
@@ -258,6 +289,10 @@ final_kmeans <- multi_kmeans %>%
 And we can finish by visualizing the clusters it found.
 
 ```{r}
+#| fig-alt: |
+#|  Scatter chart of augmented data set with V1 on the x-axis and V2
+#|  on the y-axis. Colors correspending to the two cluster in the
+#|  data. These results align closely with the true clusters.
 augment(final_kmeans, data = x_df) %>%
   ggplot(aes(V1, V2, color = .cluster)) +
   geom_point()
@@ -284,14 +319,36 @@ res_hclust_single <- x_df %>%
 The [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) package provides functions (`fviz_dend()`) to visualize the clustering created using `hclust()`. We use `fviz_dend()` to show the dendrogram.
 
 ```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Both left and right side looks more
+#|  or less even.
 fviz_dend(res_hclust_complete, main = "complete", k = 2)
+```
+
+```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Both left and right side looks more
+#|  or less even.
 fviz_dend(res_hclust_average, main = "average", k = 2)
+```
+
+```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Left side has 1 leaf and the right
+#|  side contain the remaining leaves.
 fviz_dend(res_hclust_single, main = "single", k = 2)
 ```
 
 If we don't know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We can perform scaling by using `scale()` before `dist()`.
 
 ```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Both left and right side looks more
+#|  or less even.
 x_df %>%
   scale() %>%
   dist() %>%
@@ -301,6 +358,11 @@ x_df %>%
 Another way of calculating distances is based on correlation. This only makes sense if the data set has 3 or more variables.
 
 ```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Not colored, has a couple of splits
+#|  early on at high correlations values such as 0.9, 0.5 and 0.3.
+#|  The remaining splits occur at very low values.
 # correlation based distance
 set.seed(2)
 x <- matrix(rnorm(30 * 3), ncol = 3)
@@ -350,6 +412,11 @@ colors <- unname(palette.colors(n = 14, palette = "Polychrome 36"))
 Or we can plot the different PCs against each other. It is a good idea to compare the first PCs against each other since they carry the most information. We will just compare the pairs 1-2 and 1-3 but you can do more yourself. It tends to be a good idea to stop once interesting things appear in the plots.
 
 ```{r}
+#| fig-alt: |
+#|  Scatter plot of nci60_pcs across the first 2 principal
+#|  components. Colors by label which has 14 unique values.
+#|  Observations with same label appears fairly close together
+#|  for most labels.
 nci60_pcs %>%
   ggplot(aes(.fittedPC1, .fittedPC2, color = label)) +
   geom_point() +
@@ -359,6 +426,11 @@ nci60_pcs %>%
 We see there is some local clustering of the different cancer types which is promising, it is not perfect but let us see what happens when we compare PC1 against PC3 now. 
 
 ```{r}
+#| fig-alt: |
+#|  Scatter plot of nci60_pcs across the first and third principal
+#|  components. Colors by label which has 14 unique values.
+#|  Observations with same label appears fairly close together
+#|  for most labels.
 nci60_pcs %>%
   ggplot(aes(.fittedPC1, .fittedPC3, color = label)) +
   geom_point() +
@@ -368,6 +440,12 @@ nci60_pcs %>%
 Lastly, we will plot the variance explained of each principal component. We can use `tidy()` with `matrix = "eigenvalues"` to accomplish this easily, so we start with the percentage of each PC
 
 ```{r}
+#| fig-alt: |
+#|  Connected line chart of percent variance explained for each
+#|  principal components, with percent variance explained on the
+#|  y-axis and PCs on the x-axis. 11% for PC1, 7% for PC2, 6% for 
+#|  PC3, 4% for PC4 and the remaining 60 PCs more or less linearly
+#|  goes towards 0%.
 tidy(nci60_pca, matrix = "eigenvalues") %>%
   ggplot(aes(PC, percent)) +
   geom_point() +
@@ -381,6 +459,10 @@ with the first PC having a little more than 10% and a fairly fast drop.
 And we can get the cumulative variance explained just the same.
 
 ```{r}
+#| fig-alt: |
+#|  Connected line chart of cumulative percent variance explained
+#|  for each principal components, with percent variance explained
+#|  on the y-axis and PCs on the x-axis.
 tidy(nci60_pca, matrix = "eigenvalues") %>%
   ggplot(aes(PC, cumulative)) +
   geom_point() +
@@ -418,14 +500,36 @@ nci60_single <- nci60_scaled %>%
 We then visualize them to see if any of them have some good natural separations.
 
 ```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Not colored, has most of the splits
+#|  happen at larger hights.
 fviz_dend(nci60_complete, main = "Complete")
+```
+
+```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Not colored, has most of the splits
+#|  happen at larger hights.
 fviz_dend(nci60_average, main = "Average")
+```
+
+```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Not colored, has most of the splits
+#|  happen at larger hight, very close together, with a few splits
+#|  a lower heights.
 fviz_dend(nci60_single, main = "Single")
 ```
 
 We now color according to `k = 4` and we get the following separations.
 
 ```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Colors for 4 clusters.
 nci60_complete %>%
   fviz_dend(k = 4, main = "hclust(complete) on nci60")
 ```
@@ -461,6 +565,9 @@ tidy(res_kmeans_scaled) %>%
 Lastly, let us see how the two different methods we used compare against each other. Let us save the cluster ids in `cluster_kmeans` and `cluster_hclust` and then use `conf_mat()` in a different way to quickly generate a heatmap between the two methods.
 
 ```{r}
+#| fig-alt: |
+#|  Confusion matrix, truth along x-axis and prediction along
+#|  y-axis. No agreement between labels.
 cluster_kmeans <- res_kmeans_scaled$cluster
 cluster_hclust <- cutree(nci60_complete, k = 4)
 
@@ -486,6 +593,9 @@ nci60_pca <- recipe(~., nci60_scaled) %>%
 We can now use `hclust()` on this reduced data set, and sometimes we get quite good results since the clustering method doesn't have to work in high dimensions.
 
 ```{r}
+#| warning: false
+#| fig-alt: |
+#|  Dendrogram visualization. Colors to produce 4 clusters.
 nci60_pca %>%
   dist() %>%
   hclust() %>%
