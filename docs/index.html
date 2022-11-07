@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.38">
+<meta name="generator" content="quarto-1.1.251">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Emil Hvitfeldt">
 <meta name="dcterms.date" content="2022-08-06">
@@ -10,10 +10,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -161,11 +166,11 @@ ul.task-list{list-style: none;}
     </ul>
 </div>
 </nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
 <li>
-<a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">1</span> Introduction</a>
+<a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a>
   <ul class="collapse">
 <li><a href="#version-differences" id="toc-version-differences" class="nav-link" data-scroll-target="#version-differences">Version Differences</a></li>
   <li><a href="#colophon" id="toc-colophon" class="nav-link" data-scroll-target="#colophon">Colophon</a></li>
@@ -236,18 +241,18 @@ ul.task-list{list-style: none;}
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">broom</td>
-<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">1.0.1</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">corrr</td>
-<td style="text-align: left;">0.4.3</td>
+<td style="text-align: left;">0.4.4</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">dials</td>
-<td style="text-align: left;">1.0.0</td>
-<td style="text-align: left;">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">1.1.0</td>
+<td style="text-align: left;">CRAN (R 4.2.1)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">discrim</td>
@@ -261,7 +266,7 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="even">
 <td style="text-align: left;">dplyr</td>
-<td style="text-align: left;">1.0.9</td>
+<td style="text-align: left;">1.0.10</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
@@ -271,8 +276,8 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="even">
 <td style="text-align: left;">ggplot2</td>
-<td style="text-align: left;">3.3.6</td>
-<td style="text-align: left;">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">3.4.0</td>
+<td style="text-align: left;">CRAN (R 4.2.1)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">glmnet</td>
@@ -281,7 +286,7 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="even">
 <td style="text-align: left;">infer</td>
-<td style="text-align: left;">1.0.2</td>
+<td style="text-align: left;">1.0.3</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
@@ -312,31 +317,31 @@ ul.task-list{list-style: none;}
 <tr class="even">
 <td style="text-align: left;">MASS</td>
 <td style="text-align: left;">7.3-57</td>
-<td style="text-align: left;">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">CRAN (R 4.2.1)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">mclust</td>
-<td style="text-align: left;">5.4.10</td>
+<td style="text-align: left;">6.0.0</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">modeldata</td>
-<td style="text-align: left;">1.0.0</td>
-<td style="text-align: left;">CRAN (R 4.2.0)</td>
+<td style="text-align: left;">1.0.1</td>
+<td style="text-align: left;">CRAN (R 4.2.1)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">paletteer</td>
-<td style="text-align: left;">1.4.0</td>
+<td style="text-align: left;">1.5.0</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">parsnip</td>
-<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">1.0.2</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">patchwork</td>
-<td style="text-align: left;">1.1.1</td>
+<td style="text-align: left;">1.1.2</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
@@ -346,7 +351,7 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="odd">
 <td style="text-align: left;">purrr</td>
-<td style="text-align: left;">0.3.4</td>
+<td style="text-align: left;">0.3.5</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
@@ -356,12 +361,12 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="odd">
 <td style="text-align: left;">readr</td>
-<td style="text-align: left;">2.1.2</td>
+<td style="text-align: left;">2.1.3</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">recipes</td>
-<td style="text-align: left;">1.0.1</td>
+<td style="text-align: left;">1.0.2</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
@@ -376,12 +381,12 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="odd">
 <td style="text-align: left;">rsample</td>
-<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">1.1.0</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">scico</td>
-<td style="text-align: left;">1.3.0</td>
+<td style="text-align: left;">1.3.1</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
@@ -392,11 +397,11 @@ ul.task-list{list-style: none;}
 <tr class="even">
 <td style="text-align: left;">tidymodels</td>
 <td style="text-align: left;">1.0.0</td>
-<td style="text-align: left;">CRAN (R 4.2.1)</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tidyr</td>
-<td style="text-align: left;">1.2.0</td>
+<td style="text-align: left;">1.2.1</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
@@ -406,8 +411,8 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tune</td>
-<td style="text-align: left;">1.0.0</td>
-<td style="text-align: left;">CRAN (R 4.2.1)</td>
+<td style="text-align: left;">1.0.1</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">vip</td>
@@ -416,13 +421,13 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="odd">
 <td style="text-align: left;">workflows</td>
-<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">1.1.0</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">workflowsets</td>
 <td style="text-align: left;">1.0.0</td>
-<td style="text-align: left;">CRAN (R 4.2.1)</td>
+<td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">xgboost</td>
@@ -431,7 +436,7 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="even">
 <td style="text-align: left;">yardstick</td>
-<td style="text-align: left;">1.0.0</td>
+<td style="text-align: left;">1.1.0</td>
 <td style="text-align: left;">CRAN (R 4.2.0)</td>
 </tr>
 </tbody>
@@ -508,7 +513,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
