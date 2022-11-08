@@ -15,7 +15,6 @@ Work is being done integrating clustering into tidymodels. See [tidyclust](https
 ```{r}
 #| message: false
 library(tidymodels)
-library(tidyverse)
 library(factoextra)
 library(patchwork)
 library(proxy)

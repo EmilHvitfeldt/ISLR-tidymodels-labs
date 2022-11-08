@@ -40,7 +40,6 @@ Imports:
     tibble,
     tidymodels,
     tidyr,
-    tidyverse,
     tune,
     vip,
     workflows,
