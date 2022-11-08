@@ -16,7 +16,6 @@ Work is being done integrating clustering into tidymodels. See [tidyclust](https
 #| message: false
 library(tidymodels)
 library(tidyverse)
-library(magrittr)
 library(factoextra)
 library(patchwork)
 library(proxy)
@@ -380,8 +379,7 @@ We will now explore the `NCI60` data set. It is genomic data set, containing can
 ```{r}
 data(NCI60, package = "ISLR")
 nci60 <- NCI60$data %>%
-  as_tibble() %>%
-  set_colnames(., paste0("V_", 1:ncol(.))) %>%
+  as_tibble(.name_repair = ~ paste0("V_", .x)) %>%
   mutate(label = factor(NCI60$labs)) %>%
   relocate(label)
 ```
