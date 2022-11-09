@@ -38,6 +38,7 @@ Imports:
     rsample,
     scico,
     tibble,
+    tidyclust,
     tidymodels,
     tidyr,
     tune,

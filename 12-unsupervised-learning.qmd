@@ -6,15 +6,12 @@ set.seed(1234)
 source("_common.R")
 ```
 
-This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. One downside at this moment is that clustering is not well integrated into tidymodels at this time. But we are still able to use some of the features in tidymodels.
-
-:::{.callout-note}
-Work is being done integrating clustering into tidymodels. See [tidyclust](https://github.com/EmilHvitfeldt/tidyclust) package for more information. The package is not yet stable enough to teach with.
-:::
+This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. Dimensionality reduction will be handled mostly as a preprocessor which is done with [recipes](https://recipes.tidymodels.org/) package, and clustering is done with the [tidyclust](https://github.com/emilhvitfeldt/tidyclust) package.
 
 ```{r}
 #| message: false
 library(tidymodels)
+library(tidyclust)
 library(factoextra)
 library(patchwork)
 library(proxy)
@@ -181,7 +178,9 @@ This section is WIP.
 
 ## Kmeans Clustering
 
-The `kmeans()` function can be used to perform K-means clustering in R. But before we get to that let us create a synthetic data set that we know has groups.
+We will be using the tidyclust package to perform these clustering tasks. It was a similar interface to parsnip, and it interfaces well with the rest of tidymodels.
+
+Before we get going let us create a synthetic data set that we know has groups.
 
 ```{r}
 set.seed(2)
@@ -205,35 +204,60 @@ x_df %>%
   labs(color = "groups")
 ```
 
-The `kmeans()` function takes a matrix or data.frame and `centers` which is the number of clusters we want `kmeans()` to find. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
+Now that we have the data, it is time to create a cluster specification. Since we want to perform K-means clustering, we will use the `k_means()` function from tidyclust. We use the `num_clusters` argument to specify how many centroids the K-means algorithm need to use. We also set a mode and engine, which this time are set to the same as the defaults. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
+
+```{r}
+kmeans_spec <- k_means(num_clusters = 3) %>%
+  set_mode("partition") %>%
+  set_engine("stats") %>%
+  set_args(nstart = 20)
+
+kmeans_spec
+```
+
+Once we have this specification we can fit it to our data. We remember to set a seed because the K-means algorithm starts with random initialization
 
 ```{r}
 set.seed(1234)
-res_kmeans <- kmeans(x_df, centers = 3, nstart = 20)
+kmeans_fit <- kmeans_spec %>%
+  fit(~., data = x_df)
 ```
 
 This fitted model has a lot of different kinds of information.
 
 ```{r}
-res_kmeans
+kmeans_fit
 ```
 
-And we can use [broom](https://broom.tidymodels.org/) functions to extract information in tidy formats. The `tidy()` function returns information for each cluster, including their position, size and within-cluster sum-of-squares.
+An otherall function to inspect your fitted tidyclust models is `extract_fit_summary()` which returns all different kind of information
 
 ```{r}
-tidy(res_kmeans)
+extract_fit_summary(kmeans_fit)
 ```
 
-The `glance()` function returns model wise metrics. One of these is `tot.withinss` which is the total within-cluster sum-of-squares that we seek to minimize when we perform K-means clustering.
+We can also extract some of these quantities directly using `extract_centroids()`
 
 ```{r}
-glance(res_kmeans)
+extract_centroids(kmeans_fit)
 ```
 
-Lastly, we can see what cluster each observation belongs to by using `augment()` which "predicts" which cluster a given observation belongs to.
+and `extract_cluster_assignment()`
 
 ```{r}
-augment(res_kmeans, data = x_df)
+extract_cluster_assignment(kmeans_fit)
+```
+
+prediction in a clustering model isn't well defined. But we can think of it as "what cluster would these observations be in if they were part of the data set". For the k-means case, it looks at which centroid these observations are closest to.
+
+```{r}
+predict(kmeans_fit, new_data = x_df)
+```
+
+
+Lastly, we can see what cluster each observation belongs to by using `augment()`, which does the same thing as `predict()` but add it to the orginial data set. This makes it handy for EDA and plotting the results.
+
+```{r}
+augment(kmeans_fit, new_data = x_df)
 ```
 
 We can visualize the result of `augment()` to see how well the clustering performed.
@@ -241,47 +265,61 @@ We can visualize the result of `augment()` to see how well the clustering perfor
 ```{r}
 #| fig-alt: |
 #|  Scatter chart of augmented data set with V1 on the x-axis and V2
-#|  on the y-axis. Colors correspending to the .cluster variables.
+#|  on the y-axis. Colors correspending to the .pred_cluster variables.
 #|  Left-most cluster is one color, right-most cluster is another
 #|  color and the points between them in each real cluster is
 #|  contained in a third color.
-augment(res_kmeans, data = x_df) %>%
-  ggplot(aes(V1, V2, color = .cluster)) +
+augment(kmeans_fit, new_data = x_df) %>%
+  ggplot(aes(V1, V2, color = .pred_cluster)) +
   geom_point()
 ```
 
-This is all well and good, but it would be nice if we could try out a number of different clusters and then find the best one. We will use the `mutate()` and `map()` combo to fit multiple models and extract information from them. We remember to set a seed to ensure reproducibility.
+This is all well and good, but it would be nice if we could try out a number of different clusters and then find the best one. For this we will use `tune_cluster()`. `tune_cluster()` works pretty much like `tune_grid()` expect that it works with cluster models.
+
+```{r}
+kmeans_spec_tuned <- kmeans_spec %>% 
+  set_args(num_clusters = tune())
+
+kmeans_wf <- workflow() %>%
+  add_model(kmeans_spec_tuned) %>%
+  add_formula(~.)
+```
+
+now we can use this workflow with `tune_cluster()` to fit it many times for different values of `num_clusters`.
 
 ```{r}
 set.seed(1234)
-multi_kmeans <- tibble(k = 1:10) %>%
-  mutate(
-    model = purrr::map(k, ~ kmeans(x_df, centers = .x, nstart = 20)),
-    tot.withinss = purrr::map_dbl(model, ~ glance(.x)$tot.withinss)
-  )
+x_boots <- bootstraps(x_df, times = 10)
 
-multi_kmeans
+num_clusters_grid <- tibble(num_clusters = seq(1, 10))
+
+tune_res <- tune_cluster(
+  object = kmeans_wf,
+  resamples = x_boots,
+  grid = num_clusters_grid
+)
 ```
 
-Now that we have the total within-cluster sum-of-squares we can plot them against `k` so we can use the [elbow method](https://en.wikipedia.org/wiki/Elbow_method_(clustering)) to find the optimal number of clusters.
+And we can use `collect_metrics()` as before
 
 ```{r}
-#| fig-alt: |
-#|  Elbow Chart. Sharp dropoff when k is equal to 2.
-multi_kmeans %>%
-  ggplot(aes(k, tot.withinss)) +
-  geom_point() +
-  geom_line() +
-  scale_x_continuous(breaks = seq(1,10))
+tune_res %>%
+  collect_metrics()
 ```
 
-We see an elbow at `k = 2` which makes us happy since the data set is specifically created to have 2 clusters. We can now extract the model where `k = 2` from `multi_kmeans`.
+Now that we have the total within-cluster sum-of-squares we can plot them against `k` so we can use the [elbow method](https://en.wikipedia.org/wiki/Elbow_method_(clustering)) to find the optimal number of clusters. This actually pops right out if we use `autoplot()` on the results.
 
 ```{r}
-final_kmeans <- multi_kmeans %>%
-  filter(k == 2) %>%
-  pull(model) %>%
-  pluck(1)
+tune_res %>%
+  autoplot()
+```
+
+We see an elbow when the number of clusters is equal to 2 which makes us happy since the data set is specifically created to have 2 clusters. We can now construct the final kmeans model
+
+```{r}
+final_kmeans <- kmeans_wf %>%
+  update_model(kmeans_spec %>% set_args(num_clusters = 2)) %>%
+  fit(x_df)
 ```
 
 And we can finish by visualizing the clusters it found.
@@ -291,8 +329,8 @@ And we can finish by visualizing the clusters it found.
 #|  Scatter chart of augmented data set with V1 on the x-axis and V2
 #|  on the y-axis. Colors correspending to the two cluster in the
 #|  data. These results align closely with the true clusters.
-augment(final_kmeans, data = x_df) %>%
-  ggplot(aes(V1, V2, color = .cluster)) +
+augment(final_kmeans, new_data = x_df) %>%
+  ggplot(aes(V1, V2, color = .pred_cluster)) +
   geom_point()
 ```
 
