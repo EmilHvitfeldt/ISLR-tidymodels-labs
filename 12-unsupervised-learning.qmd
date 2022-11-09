@@ -336,30 +336,31 @@ augment(final_kmeans, new_data = x_df) %>%
 
 ## Hierarchical Clustering
 
-The `hclust()` function is one way to perform hierarchical clustering in R. It only needs one input and that is a dissimilarity structure as produced by `dist()`. Furthermore, we can specify a couple of things, including the agglomeration method. Let us cluster this data in a couple of different ways to see how the choice of agglomeration method changes the clustering. 
+The `hclust()` function is one way to perform hierarchical clustering in R. It only needs one input and that is a dissimilarity structure as produced by `dist()`. Furthermore, we can specify a couple of things,
+
+We will use the `hier_clust()` function from tidyclust to perform hierarchical clustering. We will keep all the defaults except for the agglomeration method. Let us cluster this data in a couple of different ways to see how the choice of agglomeration method changes the clustering. 
 
 ```{r}
-res_hclust_complete <- x_df %>%
-  dist() %>%
-  hclust(method = "complete")
+res_hclust_complete <- hier_clust(linkage_method = "complete") %>%
+  fit(~., data = x_df)
 
-res_hclust_average <- x_df %>%
-  dist() %>%
-  hclust(method = "average")
+res_hclust_average <- hier_clust(linkage_method = "average") %>%
+  fit(~., data = x_df)
 
-res_hclust_single <- x_df %>%
-  dist() %>%
-  hclust(method = "single")
+res_hclust_single <- hier_clust(linkage_method = "single") %>%
+  fit(~., data = x_df)
 ```
 
-The [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) package provides functions (`fviz_dend()`) to visualize the clustering created using `hclust()`. We use `fviz_dend()` to show the dendrogram.
+The [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) package provides functions (`fviz_dend()`) to visualize the clustering created using `hclust()`. We use `fviz_dend()` to show the dendrogram. We need to use the `extract_fit_engine()` to extract the underlying model object that `fviz_dend()` expects.
 
 ```{r}
 #| warning: false
 #| fig-alt: |
 #|  Dendrogram visualization. Both left and right side looks more
 #|  or less even.
-fviz_dend(res_hclust_complete, main = "complete", k = 2)
+res_hclust_complete %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "complete", k = 2)
 ```
 
 ```{r}
@@ -367,7 +368,9 @@ fviz_dend(res_hclust_complete, main = "complete", k = 2)
 #| fig-alt: |
 #|  Dendrogram visualization. Both left and right side looks more
 #|  or less even.
-fviz_dend(res_hclust_average, main = "average", k = 2)
+res_hclust_average %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "average", k = 2)
 ```
 
 ```{r}
@@ -375,38 +378,31 @@ fviz_dend(res_hclust_average, main = "average", k = 2)
 #| fig-alt: |
 #|  Dendrogram visualization. Left side has 1 leaf and the right
 #|  side contain the remaining leaves.
-fviz_dend(res_hclust_single, main = "single", k = 2)
+res_hclust_single %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "single", k = 2)
 ```
 
-If we don't know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We can perform scaling by using `scale()` before `dist()`.
+If we don't know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We will use a recipe and workflow to do this.
 
 ```{r}
 #| warning: false
 #| fig-alt: |
 #|  Dendrogram visualization. Both left and right side looks more
 #|  or less even.
-x_df %>%
-  scale() %>%
-  dist() %>%
-  hclust(method = "complete") %>%
+hier_rec <- recipe(~., data = x_df) %>%
+  step_normalize(all_numeric_predictors())
+
+hier_wf <- workflow() %>%
+  add_recipe(hier_rec) %>%
+  add_model(hier_clust(linkage_method = "complete"))
+
+hier_fit <- hier_wf %>%
+  fit(data = x_df) 
+
+hier_fit %>%
+  extract_fit_engine() %>%
   fviz_dend(k = 2)
-```
-Another way of calculating distances is based on correlation. This only makes sense if the data set has 3 or more variables.
-
-```{r}
-#| warning: false
-#| fig-alt: |
-#|  Dendrogram visualization. Not colored, has a couple of splits
-#|  early on at high correlations values such as 0.9, 0.5 and 0.3.
-#|  The remaining splits occur at very low values.
-# correlation based distance
-set.seed(2)
-x <- matrix(rnorm(30 * 3), ncol = 3)
-
-x %>%
-  proxy::dist(method = "correlation") %>%
-  hclust(method = "complete") %>%
-  fviz_dend()
 ```
 
 ## PCA on the NCI60 Data

@@ -879,69 +879,67 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 </div>
 </section><section id="hierarchical-clustering" class="level2" data-number="12.4"><h2 data-number="12.4" class="anchored" data-anchor-id="hierarchical-clustering">
 <span class="header-section-number">12.4</span> Hierarchical Clustering</h2>
-<p>The <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code> function is one way to perform hierarchical clustering in R. It only needs one input and that is a dissimilarity structure as produced by <code>dist()</code>. Furthermore, we can specify a couple of things, including the agglomeration method. Let us cluster this data in a couple of different ways to see how the choice of agglomeration method changes the clustering.</p>
+<p>The <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code> function is one way to perform hierarchical clustering in R. It only needs one input and that is a dissimilarity structure as produced by <code>dist()</code>. Furthermore, we can specify a couple of things,</p>
+<p>We will use the <code><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust()</a></code> function from tidyclust to perform hierarchical clustering. We will keep all the defaults except for the agglomeration method. Let us cluster this data in a couple of different ways to see how the choice of agglomeration method changes the clustering.</p>
 <div class="cell">
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_hclust_complete</span> <span class="op">&lt;-</span> <span class="va">x_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_hclust_complete</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust</a></span><span class="op">(</span>linkage_method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, data <span class="op">=</span> <span class="va">x_df</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res_hclust_average</span> <span class="op">&lt;-</span> <span class="va">x_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
+<span><span class="va">res_hclust_average</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust</a></span><span class="op">(</span>linkage_method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, data <span class="op">=</span> <span class="va">x_df</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res_hclust_single</span> <span class="op">&lt;-</span> <span class="va">x_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">res_hclust_single</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust</a></span><span class="op">(</span>linkage_method <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, data <span class="op">=</span> <span class="va">x_df</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The <a href="https://rpkgs.datanovia.com/factoextra/index.html">factoextra</a> package provides functions (<code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code>) to visualize the clustering created using <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code>. We use <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code> to show the dendrogram.</p>
+<p>The <a href="https://rpkgs.datanovia.com/factoextra/index.html">factoextra</a> package provides functions (<code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code>) to visualize the clustering created using <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code>. We use <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code> to show the dendrogram. We need to use the <code><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine()</a></code> to extract the underlying model object that <code><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend()</a></code> expects.</p>
 <div class="cell">
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_complete</span>, main <span class="op">=</span> <span class="st">"complete"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_hclust_complete</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"complete"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" alt="Dendrogram visualization. Both left and right side looks more or less even." width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_average</span>, main <span class="op">=</span> <span class="st">"average"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_hclust_average</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"average"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" alt="Dendrogram visualization. Both left and right side looks more or less even." width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">res_hclust_single</span>, main <span class="op">=</span> <span class="st">"single"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res_hclust_single</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"single"</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid" alt="Dendrogram visualization. Left side has 1 leaf and the right side contain the remaining leaves." width="672"></p>
 </div>
 </div>
-<p>If we don’t know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We can perform scaling by using <code><a href="https://rdrr.io/r/base/scale.html">scale()</a></code> before <code>dist()</code>.</p>
+<p>If we don’t know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We will use a recipe and workflow to do this.</p>
 <div class="cell">
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">x_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hier_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, data <span class="op">=</span> <span class="va">x_df</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">hier_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">hier_rec</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust</a></span><span class="op">(</span>linkage_method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">hier_fit</span> <span class="op">&lt;-</span> <span class="va">hier_wf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">x_df</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">hier_fit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" alt="Dendrogram visualization. Both left and right side looks more or less even." width="672"></p>
-</div>
-</div>
-<p>Another way of calculating distances is based on correlation. This only makes sense if the data set has 3 or more variables.</p>
-<div class="cell">
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># correlation based distance</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">proxy</span><span class="fu">::</span><span class="fu">dist</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"correlation"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has a couple of splits early on at high correlations values such as 0.9, 0.5 and 0.3. The remaining splits occur at very low values." width="672"></p>
 </div>
 </div>
 </section><section id="pca-on-the-nci60-data" class="level2" data-number="12.5"><h2 data-number="12.5" class="anchored" data-anchor-id="pca-on-the-nci60-data">
 <span class="header-section-number">12.5</span> PCA on the NCI60 Data</h2>
 <p>We will now explore the <code>NCI60</code> data set. It is genomic data set, containing cancer cell line microarray data, which consists of 6830 gene expression measurements on 64 cancer cell lines. The data comes as a list containing a matrix and its labels. We do a little work to turn the data into a tibble we will use for the rest of the chapter.</p>
 <div class="cell">
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">NCI60</span>, package <span class="op">=</span> <span class="st">"ISLR"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">NCI60</span>, package <span class="op">=</span> <span class="st">"ISLR"</span><span class="op">)</span></span>
 <span><span class="va">nci60</span> <span class="op">&lt;-</span> <span class="va">NCI60</span><span class="op">$</span><span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">as_tibble</span><span class="op">(</span>.name_repair <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"V_"</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">NCI60</span><span class="op">$</span><span class="va">labs</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -949,69 +947,69 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 </div>
 <p>We do not expect to use the <code>label</code> variable doing the analysis since we are emulating an unsupervised analysis. Since we are an exploratory task we will be fine with using <code><a href="https://rdrr.io/r/stats/prcomp.html">prcomp()</a></code> since we don’t need to apply these transformations to anything else. We remove <code>label</code> and remember to set <code>scale = TRUE</code> to perform scaling of all the variables.</p>
 <div class="cell">
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op">&lt;-</span> <span class="va">nci60</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op">&lt;-</span> <span class="va">nci60</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">label</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span>scale <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>For visualization purposes, we will now join up the labels into the result of <code>augment(nci60_pca)</code> so we can visualize how close similar labeled points are to each other.</p>
 <div class="cell">
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pcs</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pcs</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html">augment</a></span><span class="op">(</span><span class="va">nci60_pca</span><span class="op">)</span>,</span>
 <span>  <span class="va">nci60</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">select</span><span class="op">(</span><span class="va">label</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We have 14 different labels, so we will make use of the <code>"Polychrome 36"</code> palette to help us better differentiate between the labels.</p>
 <div class="cell">
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/palette.html">palette.colors</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">14</span>, palette <span class="op">=</span> <span class="st">"Polychrome 36"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/palette.html">palette.colors</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">14</span>, palette <span class="op">=</span> <span class="st">"Polychrome 36"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Or we can plot the different PCs against each other. It is a good idea to compare the first PCs against each other since they carry the most information. We will just compare the pairs 1-2 and 1-3 but you can do more yourself. It tends to be a good idea to stop once interesting things appear in the plots.</p>
 <div class="cell">
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pcs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pcs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">.fittedPC1</span>, <span class="va">.fittedPC2</span>, color <span class="op">=</span> <span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">colors</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid" alt="Scatter plot of nci60_pcs across the first 2 principal components. Colors by label which has 14 unique values. Observations with same label appears fairly close together for most labels." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid" alt="Scatter plot of nci60_pcs across the first 2 principal components. Colors by label which has 14 unique values. Observations with same label appears fairly close together for most labels." width="672"></p>
 </div>
 </div>
 <p>We see there is some local clustering of the different cancer types which is promising, it is not perfect but let us see what happens when we compare PC1 against PC3 now.</p>
 <div class="cell">
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pcs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pcs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">.fittedPC1</span>, <span class="va">.fittedPC3</span>, color <span class="op">=</span> <span class="va">label</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">colors</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid" alt="Scatter plot of nci60_pcs across the first and third principal components. Colors by label which has 14 unique values. Observations with same label appears fairly close together for most labels." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid" alt="Scatter plot of nci60_pcs across the first and third principal components. Colors by label which has 14 unique values. Observations with same label appears fairly close together for most labels." width="672"></p>
 </div>
 </div>
 <p>Lastly, we will plot the variance explained of each principal component. We can use <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> with <code>matrix = "eigenvalues"</code> to accomplish this easily, so we start with the percentage of each PC</p>
 <div class="cell">
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">nci60_pca</span>, matrix <span class="op">=</span> <span class="st">"eigenvalues"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">nci60_pca</span>, matrix <span class="op">=</span> <span class="st">"eigenvalues"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">PC</span>, <span class="va">percent</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span>, by <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html">percent</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid" alt="Connected line chart of percent variance explained for each principal components, with percent variance explained on the y-axis and PCs on the x-axis. 11% for PC1, 7% for PC2, 6% for PC3, 4% for PC4 and the remaining 60 PCs more or less linearly goes towards 0%." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid" alt="Connected line chart of percent variance explained for each principal components, with percent variance explained on the y-axis and PCs on the x-axis. 11% for PC1, 7% for PC2, 6% for PC3, 4% for PC4 and the remaining 60 PCs more or less linearly goes towards 0%." width="672"></p>
 </div>
 </div>
 <p>with the first PC having a little more than 10% and a fairly fast drop.</p>
 <p>And we can get the cumulative variance explained just the same.</p>
 <div class="cell">
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">nci60_pca</span>, matrix <span class="op">=</span> <span class="st">"eigenvalues"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">nci60_pca</span>, matrix <span class="op">=</span> <span class="st">"eigenvalues"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">PC</span>, <span class="va">cumulative</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid" alt="Connected line chart of cumulative percent variance explained for each principal components, with percent variance explained on the y-axis and PCs on the x-axis." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid" alt="Connected line chart of cumulative percent variance explained for each principal components, with percent variance explained on the y-axis and PCs on the x-axis." width="672"></p>
 </div>
 </div>
 </section><section id="clustering-on-nci60-dataset" class="level2" data-number="12.6"><h2 data-number="12.6" class="anchored" data-anchor-id="clustering-on-nci60-dataset">
 <span class="header-section-number">12.6</span> Clustering on nci60 dataset</h2>
 <p>Let us now see what happens if we perform clustering on the <code>nci60</code> data set. Before we start it would be good if we create a scaled version of this data set. We can use the recipes package to perform those transformations.</p>
 <div class="cell">
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_scaled</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_scaled</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">label</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">prep</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -1019,7 +1017,7 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 </div>
 <p>Now we start by fitting multiple hierarchical clustering models using different agglomeration methods.</p>
 <div class="cell">
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_complete</span> <span class="op">&lt;-</span> <span class="va">nci60_scaled</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_complete</span> <span class="op">&lt;-</span> <span class="va">nci60_scaled</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span></span>
 <span></span>
@@ -1033,34 +1031,34 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 </div>
 <p>We then visualize them to see if any of them have some good natural separations.</p>
 <div class="cell">
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_complete</span>, main <span class="op">=</span> <span class="st">"Complete"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_complete</span>, main <span class="op">=</span> <span class="st">"Complete"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has most of the splits happen at larger hights." width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_average</span>, main <span class="op">=</span> <span class="st">"Average"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has most of the splits happen at larger hights." width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_average</span>, main <span class="op">=</span> <span class="st">"Average"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_single</span>, main <span class="op">=</span> <span class="st">"Single"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-55-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has most of the splits happen at larger hights." width="672"></p>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_single</span>, main <span class="op">=</span> <span class="st">"Single"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has most of the splits happen at larger hight, very close together, with a few splits a lower heights." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-55-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has most of the splits happen at larger hight, very close together, with a few splits a lower heights." width="672"></p>
 </div>
 </div>
 <p>We now color according to <code>k = 4</code> and we get the following separations.</p>
 <div class="cell">
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_complete</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_complete</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, main <span class="op">=</span> <span class="st">"hclust(complete) on nci60"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid" alt="Dendrogram visualization. Colors for 4 clusters." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid" alt="Dendrogram visualization. Colors for 4 clusters." width="672"></p>
 </div>
 </div>
 <p>We now take the clustering id extracted with <code>cutree</code> and calculate which label is the most common one within each cluster.</p>
 <div class="cell">
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
 <span>  label <span class="op">=</span> <span class="va">nci60</span><span class="op">$</span><span class="va">label</span>,</span>
 <span>  cluster_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">nci60_complete</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -1083,12 +1081,12 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 </div>
 <p>We can also see what happens if we try to fit a K-means clustering. We liked 4 clusters from earlier so let’s stick with that.</p>
 <div class="cell">
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">res_kmeans_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html">kmeans</a></span><span class="op">(</span><span class="va">nci60_scaled</span>, centers <span class="op">=</span> <span class="fl">4</span>, nstart <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can again use <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> to extract cluster information, note that we only look at <code>cluster</code>, <code>size</code>, and <code>withinss</code> as there are thousands of other variables denoting the location of the cluster.</p>
 <div class="cell">
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">res_kmeans_scaled</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">res_kmeans_scaled</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">cluster</span>, <span class="va">size</span>, <span class="va">withinss</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 3
@@ -1102,7 +1100,7 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 </div>
 <p>Lastly, let us see how the two different methods we used compare against each other. Let us save the cluster ids in <code>cluster_kmeans</code> and <code>cluster_hclust</code> and then use <code>conf_mat()</code> in a different way to quickly generate a heatmap between the two methods.</p>
 <div class="cell">
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cluster_kmeans</span> <span class="op">&lt;-</span> <span class="va">res_kmeans_scaled</span><span class="op">$</span><span class="va">cluster</span></span>
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cluster_kmeans</span> <span class="op">&lt;-</span> <span class="va">res_kmeans_scaled</span><span class="op">$</span><span class="va">cluster</span></span>
 <span><span class="va">cluster_hclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">nci60_complete</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tibble</span><span class="op">(</span></span>
@@ -1112,25 +1110,25 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 <span>  <span class="fu">conf_mat</span><span class="op">(</span><span class="va">kmeans</span>, <span class="va">hclust</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid" alt="Confusion matrix, truth along x-axis and prediction along y-axis. No agreement between labels." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid" alt="Confusion matrix, truth along x-axis and prediction along y-axis. No agreement between labels." width="672"></p>
 </div>
 </div>
 <p>There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).</p>
 <p>One last thing is that it is sometimes useful to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of <code>nci60</code> and keep the 5 first components (we could have started with <code>nci60</code> too if we added <code>step_rm()</code> and <code>step_normalize()</code>).</p>
 <div class="cell">
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, <span class="va">nci60_scaled</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, <span class="va">nci60_scaled</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">prep</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">bake</span><span class="op">(</span>new_data <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now use <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code> on this reduced data set, and sometimes we get quite good results since the clustering method doesn’t have to work in high dimensions.</p>
 <div class="cell">
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, main <span class="op">=</span> <span class="st">"hclust on first five PCs"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-63-1.png" class="img-fluid" alt="Dendrogram visualization. Colors to produce 4 clusters." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-62-1.png" class="img-fluid" alt="Dendrogram visualization. Colors to produce 4 clusters." width="672"></p>
 </div>
 </div>
 
