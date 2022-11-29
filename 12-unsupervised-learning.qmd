@@ -502,30 +502,31 @@ tidy(nci60_pca, matrix = "eigenvalues") %>%
 
 ## Clustering on nci60 dataset
 
-Let us now see what happens if we perform clustering on the `nci60` data set. Before we start it would be good if we create a scaled version of this data set. We can use the recipes package to perform those transformations. 
+Let us now see what happens if we perform clustering on the `nci60` data set. Before we start it would be good if we create a scaled version of this data set. We can use the recipes package to perform those transformations. And a workflow to be able to combine it with the cluster model later
 
 ```{r}
-nci60_scaled <- recipe(~ ., data = nci60) %>%
+nci60_rec <- recipe(~ ., data = nci60) %>%
   step_rm(label) %>%
-  step_normalize(all_predictors()) %>%
-  prep() %>%
-  bake(new_data = NULL)
+  step_normalize(all_predictors())
+
+nci60_wf <- workflow() %>%
+  add_recipe(nci60_rec)
 ```
 
 Now we start by fitting multiple hierarchical clustering models using different agglomeration methods.
 
 ```{r}
-nci60_complete <- nci60_scaled %>%
-    dist() %>%
-    hclust(method = "complete")
+nci60_complete <- nci60_wf %>%
+  add_model(hier_clust(linkage_method = "complete")) %>%
+  fit(data = nci60)
 
-nci60_average <- nci60_scaled %>%
-    dist() %>%
-    hclust(method = "average")
+nci60_average <- nci60_wf %>%
+  add_model(hier_clust(linkage_method = "average")) %>%
+  fit(data = nci60)
 
-nci60_single <- nci60_scaled %>%
-    dist() %>%
-    hclust(method = "single")
+nci60_single <- nci60_wf %>%
+  add_model(hier_clust(linkage_method = "single")) %>%
+  fit(data = nci60)
 ```
 
 We then visualize them to see if any of them have some good natural separations.
@@ -535,7 +536,9 @@ We then visualize them to see if any of them have some good natural separations.
 #| fig-alt: |
 #|  Dendrogram visualization. Not colored, has most of the splits
 #|  happen at larger hights.
-fviz_dend(nci60_complete, main = "Complete")
+nci60_complete %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "Complete")
 ```
 
 ```{r}
@@ -543,7 +546,9 @@ fviz_dend(nci60_complete, main = "Complete")
 #| fig-alt: |
 #|  Dendrogram visualization. Not colored, has most of the splits
 #|  happen at larger hights.
-fviz_dend(nci60_average, main = "Average")
+nci60_average %>% 
+  extract_fit_engine() %>%
+  fviz_dend(main = "Average")
 ```
 
 ```{r}
@@ -552,7 +557,9 @@ fviz_dend(nci60_average, main = "Average")
 #|  Dendrogram visualization. Not colored, has most of the splits
 #|  happen at larger hight, very close together, with a few splits
 #|  a lower heights.
-fviz_dend(nci60_single, main = "Single")
+nci60_single %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "Single")
 ```
 
 We now color according to `k = 4` and we get the following separations.
@@ -562,18 +569,17 @@ We now color according to `k = 4` and we get the following separations.
 #| fig-alt: |
 #|  Dendrogram visualization. Colors for 4 clusters.
 nci60_complete %>%
+  extract_fit_engine() %>%
   fviz_dend(k = 4, main = "hclust(complete) on nci60")
 ```
 
-We now take the clustering id extracted with `cutree` and calculate which label is the most common one within each cluster.
+We now take find the clustering and calculate which label is the most common one within each cluster.
 
 ```{r}
-tibble(
-  label = nci60$label,
-  cluster_id = cutree(nci60_complete, k = 4)
-) %>%
-  count(label, cluster_id) %>%
-  group_by(cluster_id) %>%
+predict(nci60_complete, new_data = nci60, num_clusters = 4) %>%
+  mutate(label = nci60$label) %>%
+  count(label, .pred_cluster) %>%
+  group_by(.pred_cluster) %>%
   mutate(prop = n / sum(n)) %>%
   slice_max(n = 1, order_by = prop) %>%
   ungroup()
@@ -583,14 +589,23 @@ We can also see what happens if we try to fit a K-means clustering. We liked 4 c
 
 ```{r}
 set.seed(2)
-res_kmeans_scaled <- kmeans(nci60_scaled, centers = 4, nstart = 50)
+nci60_kmeans <- nci60_wf %>%
+  add_model(k_means(num_clusters = 4)) %>%
+  fit(data = nci60)
 ```
 
-We can again use `tidy()` to extract cluster information, note that we only look at `cluster`, `size`, and `withinss` as there are thousands of other variables denoting the location of the cluster.
+and we can now extract the centroids
 
 ```{r}
-tidy(res_kmeans_scaled) %>%
-  select(cluster, size, withinss)
+nci60_kmeans %>%
+  extract_centroids()
+```
+
+and the cluster assignments
+
+```{r}
+nci60_kmeans %>%
+  extract_cluster_assignment(nci60_kmeans)
 ```
 
 Lastly, let us see how the two different methods we used compare against each other. Let us save the cluster ids in `cluster_kmeans` and `cluster_hclust` and then use `conf_mat()` in a different way to quickly generate a heatmap between the two methods.
@@ -599,12 +614,12 @@ Lastly, let us see how the two different methods we used compare against each ot
 #| fig-alt: |
 #|  Confusion matrix, truth along x-axis and prediction along
 #|  y-axis. No agreement between labels.
-cluster_kmeans <- res_kmeans_scaled$cluster
-cluster_hclust <- cutree(nci60_complete, k = 4)
+cluster_kmeans <- predict(nci60_kmeans, nci60)
+cluster_hclust <- predict(nci60_complete, nci60, num_clusters = 4)
 
 tibble(
-  kmeans = factor(cluster_kmeans),
-  hclust = factor(cluster_hclust)
+  kmeans = cluster_kmeans$.pred_cluster,
+  hclust = cluster_hclust$.pred_cluster
 ) %>%
   conf_mat(kmeans, hclust) %>%
   autoplot(type = "heatmap")
@@ -612,23 +627,33 @@ tibble(
 
 There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).
 
-One last thing is that it is sometimes useful to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of `nci60` and keep the 5 first components (we could have started with `nci60` too if we added `step_rm()` and `step_normalize()`).
+One last thing is that it is sometimes useful to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of `nci60` and keep the 5 first components 
 
 ```{r}
-nci60_pca <- recipe(~., nci60_scaled) %>%
-  step_pca(all_predictors(), num_comp = 5) %>%
-  prep() %>%
-  bake(new_data = NULL)
+nci60_pca_rec <- recipe(~ ., data = nci60) %>%
+  step_rm(label) %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors(), num_comp = 5)
+
+nci60_pca_wf <- workflow() %>%
+  add_recipe(nci60_pca_rec)
 ```
 
-We can now use `hclust()` on this reduced data set, and sometimes we get quite good results since the clustering method doesn't have to work in high dimensions.
+and now fit this new workflow
+
+```{r}
+nci60_pca <- nci60_pca_wf %>%
+  add_model(hier_clust(linkage_method = "complete")) %>%
+  fit(data = nci60)
+```
+
+we can now visualize on this reduced data set, and sometimes we get quite good results since the clustering method doesn't have to work in high dimensions.
 
 ```{r}
 #| warning: false
 #| fig-alt: |
 #|  Dendrogram visualization. Colors to produce 4 clusters.
 nci60_pca %>%
-  dist() %>%
-  hclust() %>%
+  extract_fit_engine() %>%
   fviz_dend(k = 4, main = "hclust on first five PCs")
 ```
