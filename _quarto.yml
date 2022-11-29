@@ -2,6 +2,9 @@ project:
   type: book
   output-dir: docs
 
+execute:
+  freeze: true
+
 book:
   title: "ISLR tidymodels labs"
   author: "Emil Hvitfeldt"

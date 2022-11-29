@@ -6,17 +6,12 @@ set.seed(1234)
 source("_common.R")
 ```
 
-This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. One downside at this moment is that clustering is not well integrated into tidymodels at this time. But we are still able to use some of the features in tidymodels.
-
-:::{.callout-note}
-Work is being done integrating clustering into tidymodels. See [tidyclust](https://github.com/EmilHvitfeldt/tidyclust) package for more information. The package is not yet stable enough to teach with.
-:::
+This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. Dimensionality reduction will be handled mostly as a preprocessor which is done with [recipes](https://recipes.tidymodels.org/) package, and clustering is done with the [tidyclust](https://github.com/emilhvitfeldt/tidyclust) package.
 
 ```{r}
 #| message: false
 library(tidymodels)
-library(tidyverse)
-library(magrittr)
+library(tidyclust)
 library(factoextra)
 library(patchwork)
 library(proxy)
@@ -183,7 +178,9 @@ This section is WIP.
 
 ## Kmeans Clustering
 
-The `kmeans()` function can be used to perform K-means clustering in R. But before we get to that let us create a synthetic data set that we know has groups.
+We will be using the tidyclust package to perform these clustering tasks. It was a similar interface to parsnip, and it interfaces well with the rest of tidymodels.
+
+Before we get going let us create a synthetic data set that we know has groups.
 
 ```{r}
 set.seed(2)
@@ -207,35 +204,60 @@ x_df %>%
   labs(color = "groups")
 ```
 
-The `kmeans()` function takes a matrix or data.frame and `centers` which is the number of clusters we want `kmeans()` to find. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
+Now that we have the data, it is time to create a cluster specification. Since we want to perform K-means clustering, we will use the `k_means()` function from tidyclust. We use the `num_clusters` argument to specify how many centroids the K-means algorithm need to use. We also set a mode and engine, which this time are set to the same as the defaults. We also set `nstart = 20`, this allows the algorithm to have multiple initial starting positions, which we use in the hope of finding global maxima instead of local maxima.
+
+```{r}
+kmeans_spec <- k_means(num_clusters = 3) %>%
+  set_mode("partition") %>%
+  set_engine("stats") %>%
+  set_args(nstart = 20)
+
+kmeans_spec
+```
+
+Once we have this specification we can fit it to our data. We remember to set a seed because the K-means algorithm starts with random initialization
 
 ```{r}
 set.seed(1234)
-res_kmeans <- kmeans(x_df, centers = 3, nstart = 20)
+kmeans_fit <- kmeans_spec %>%
+  fit(~., data = x_df)
 ```
 
 This fitted model has a lot of different kinds of information.
 
 ```{r}
-res_kmeans
+kmeans_fit
 ```
 
-And we can use [broom](https://broom.tidymodels.org/) functions to extract information in tidy formats. The `tidy()` function returns information for each cluster, including their position, size and within-cluster sum-of-squares.
+An otherall function to inspect your fitted tidyclust models is `extract_fit_summary()` which returns all different kind of information
 
 ```{r}
-tidy(res_kmeans)
+extract_fit_summary(kmeans_fit)
 ```
 
-The `glance()` function returns model wise metrics. One of these is `tot.withinss` which is the total within-cluster sum-of-squares that we seek to minimize when we perform K-means clustering.
+We can also extract some of these quantities directly using `extract_centroids()`
 
 ```{r}
-glance(res_kmeans)
+extract_centroids(kmeans_fit)
 ```
 
-Lastly, we can see what cluster each observation belongs to by using `augment()` which "predicts" which cluster a given observation belongs to.
+and `extract_cluster_assignment()`
 
 ```{r}
-augment(res_kmeans, data = x_df)
+extract_cluster_assignment(kmeans_fit)
+```
+
+prediction in a clustering model isn't well defined. But we can think of it as "what cluster would these observations be in if they were part of the data set". For the k-means case, it looks at which centroid these observations are closest to.
+
+```{r}
+predict(kmeans_fit, new_data = x_df)
+```
+
+
+Lastly, we can see what cluster each observation belongs to by using `augment()`, which does the same thing as `predict()` but add it to the orginial data set. This makes it handy for EDA and plotting the results.
+
+```{r}
+augment(kmeans_fit, new_data = x_df)
 ```
 
 We can visualize the result of `augment()` to see how well the clustering performed.
@@ -243,47 +265,61 @@ We can visualize the result of `augment()` to see how well the clustering perfor
 ```{r}
 #| fig-alt: |
 #|  Scatter chart of augmented data set with V1 on the x-axis and V2
-#|  on the y-axis. Colors correspending to the .cluster variables.
+#|  on the y-axis. Colors correspending to the .pred_cluster variables.
 #|  Left-most cluster is one color, right-most cluster is another
 #|  color and the points between them in each real cluster is
 #|  contained in a third color.
-augment(res_kmeans, data = x_df) %>%
-  ggplot(aes(V1, V2, color = .cluster)) +
+augment(kmeans_fit, new_data = x_df) %>%
+  ggplot(aes(V1, V2, color = .pred_cluster)) +
   geom_point()
 ```
 
-This is all well and good, but it would be nice if we could try out a number of different clusters and then find the best one. We will use the `mutate()` and `map()` combo to fit multiple models and extract information from them. We remember to set a seed to ensure reproducibility.
+This is all well and good, but it would be nice if we could try out a number of different clusters and then find the best one. For this we will use `tune_cluster()`. `tune_cluster()` works pretty much like `tune_grid()` expect that it works with cluster models.
+
+```{r}
+kmeans_spec_tuned <- kmeans_spec %>% 
+  set_args(num_clusters = tune())
+
+kmeans_wf <- workflow() %>%
+  add_model(kmeans_spec_tuned) %>%
+  add_formula(~.)
+```
+
+now we can use this workflow with `tune_cluster()` to fit it many times for different values of `num_clusters`.
 
 ```{r}
 set.seed(1234)
-multi_kmeans <- tibble(k = 1:10) %>%
-  mutate(
-    model = purrr::map(k, ~ kmeans(x_df, centers = .x, nstart = 20)),
-    tot.withinss = purrr::map_dbl(model, ~ glance(.x)$tot.withinss)
-  )
+x_boots <- bootstraps(x_df, times = 10)
 
-multi_kmeans
+num_clusters_grid <- tibble(num_clusters = seq(1, 10))
+
+tune_res <- tune_cluster(
+  object = kmeans_wf,
+  resamples = x_boots,
+  grid = num_clusters_grid
+)
 ```
 
-Now that we have the total within-cluster sum-of-squares we can plot them against `k` so we can use the [elbow method](https://en.wikipedia.org/wiki/Elbow_method_(clustering)) to find the optimal number of clusters.
+And we can use `collect_metrics()` as before
 
 ```{r}
-#| fig-alt: |
-#|  Elbow Chart. Sharp dropoff when k is equal to 2.
-multi_kmeans %>%
-  ggplot(aes(k, tot.withinss)) +
-  geom_point() +
-  geom_line() +
-  scale_x_continuous(breaks = seq(1,10))
+tune_res %>%
+  collect_metrics()
 ```
 
-We see an elbow at `k = 2` which makes us happy since the data set is specifically created to have 2 clusters. We can now extract the model where `k = 2` from `multi_kmeans`.
+Now that we have the total within-cluster sum-of-squares we can plot them against `k` so we can use the [elbow method](https://en.wikipedia.org/wiki/Elbow_method_(clustering)) to find the optimal number of clusters. This actually pops right out if we use `autoplot()` on the results.
 
 ```{r}
-final_kmeans <- multi_kmeans %>%
-  filter(k == 2) %>%
-  pull(model) %>%
-  pluck(1)
+tune_res %>%
+  autoplot()
+```
+
+We see an elbow when the number of clusters is equal to 2 which makes us happy since the data set is specifically created to have 2 clusters. We can now construct the final kmeans model
+
+```{r}
+final_kmeans <- kmeans_wf %>%
+  update_model(kmeans_spec %>% set_args(num_clusters = 2)) %>%
+  fit(x_df)
 ```
 
 And we can finish by visualizing the clusters it found.
@@ -293,37 +329,38 @@ And we can finish by visualizing the clusters it found.
 #|  Scatter chart of augmented data set with V1 on the x-axis and V2
 #|  on the y-axis. Colors correspending to the two cluster in the
 #|  data. These results align closely with the true clusters.
-augment(final_kmeans, data = x_df) %>%
-  ggplot(aes(V1, V2, color = .cluster)) +
+augment(final_kmeans, new_data = x_df) %>%
+  ggplot(aes(V1, V2, color = .pred_cluster)) +
   geom_point()
 ```
 
 ## Hierarchical Clustering
 
-The `hclust()` function is one way to perform hierarchical clustering in R. It only needs one input and that is a dissimilarity structure as produced by `dist()`. Furthermore, we can specify a couple of things, including the agglomeration method. Let us cluster this data in a couple of different ways to see how the choice of agglomeration method changes the clustering. 
+The `hclust()` function is one way to perform hierarchical clustering in R. It only needs one input and that is a dissimilarity structure as produced by `dist()`. Furthermore, we can specify a couple of things,
+
+We will use the `hier_clust()` function from tidyclust to perform hierarchical clustering. We will keep all the defaults except for the agglomeration method. Let us cluster this data in a couple of different ways to see how the choice of agglomeration method changes the clustering. 
 
 ```{r}
-res_hclust_complete <- x_df %>%
-  dist() %>%
-  hclust(method = "complete")
+res_hclust_complete <- hier_clust(linkage_method = "complete") %>%
+  fit(~., data = x_df)
 
-res_hclust_average <- x_df %>%
-  dist() %>%
-  hclust(method = "average")
+res_hclust_average <- hier_clust(linkage_method = "average") %>%
+  fit(~., data = x_df)
 
-res_hclust_single <- x_df %>%
-  dist() %>%
-  hclust(method = "single")
+res_hclust_single <- hier_clust(linkage_method = "single") %>%
+  fit(~., data = x_df)
 ```
 
-The [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) package provides functions (`fviz_dend()`) to visualize the clustering created using `hclust()`. We use `fviz_dend()` to show the dendrogram.
+The [factoextra](https://rpkgs.datanovia.com/factoextra/index.html) package provides functions (`fviz_dend()`) to visualize the clustering created using `hclust()`. We use `fviz_dend()` to show the dendrogram. We need to use the `extract_fit_engine()` to extract the underlying model object that `fviz_dend()` expects.
 
 ```{r}
 #| warning: false
 #| fig-alt: |
 #|  Dendrogram visualization. Both left and right side looks more
 #|  or less even.
-fviz_dend(res_hclust_complete, main = "complete", k = 2)
+res_hclust_complete %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "complete", k = 2)
 ```
 
 ```{r}
@@ -331,7 +368,9 @@ fviz_dend(res_hclust_complete, main = "complete", k = 2)
 #| fig-alt: |
 #|  Dendrogram visualization. Both left and right side looks more
 #|  or less even.
-fviz_dend(res_hclust_average, main = "average", k = 2)
+res_hclust_average %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "average", k = 2)
 ```
 
 ```{r}
@@ -339,38 +378,31 @@ fviz_dend(res_hclust_average, main = "average", k = 2)
 #| fig-alt: |
 #|  Dendrogram visualization. Left side has 1 leaf and the right
 #|  side contain the remaining leaves.
-fviz_dend(res_hclust_single, main = "single", k = 2)
+res_hclust_single %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "single", k = 2)
 ```
 
-If we don't know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We can perform scaling by using `scale()` before `dist()`.
+If we don't know the importance of the different predictors in data set it could be beneficial to scale the data such that each variable has the same influence. We will use a recipe and workflow to do this.
 
 ```{r}
 #| warning: false
 #| fig-alt: |
 #|  Dendrogram visualization. Both left and right side looks more
 #|  or less even.
-x_df %>%
-  scale() %>%
-  dist() %>%
-  hclust(method = "complete") %>%
+hier_rec <- recipe(~., data = x_df) %>%
+  step_normalize(all_numeric_predictors())
+
+hier_wf <- workflow() %>%
+  add_recipe(hier_rec) %>%
+  add_model(hier_clust(linkage_method = "complete"))
+
+hier_fit <- hier_wf %>%
+  fit(data = x_df) 
+
+hier_fit %>%
+  extract_fit_engine() %>%
   fviz_dend(k = 2)
-```
-Another way of calculating distances is based on correlation. This only makes sense if the data set has 3 or more variables.
-
-```{r}
-#| warning: false
-#| fig-alt: |
-#|  Dendrogram visualization. Not colored, has a couple of splits
-#|  early on at high correlations values such as 0.9, 0.5 and 0.3.
-#|  The remaining splits occur at very low values.
-# correlation based distance
-set.seed(2)
-x <- matrix(rnorm(30 * 3), ncol = 3)
-
-x %>%
-  proxy::dist(method = "correlation") %>%
-  hclust(method = "complete") %>%
-  fviz_dend()
 ```
 
 ## PCA on the NCI60 Data
@@ -380,8 +412,7 @@ We will now explore the `NCI60` data set. It is genomic data set, containing can
 ```{r}
 data(NCI60, package = "ISLR")
 nci60 <- NCI60$data %>%
-  as_tibble() %>%
-  set_colnames(., paste0("V_", 1:ncol(.))) %>%
+  as_tibble(.name_repair = ~ paste0("V_", .x)) %>%
   mutate(label = factor(NCI60$labs)) %>%
   relocate(label)
 ```
@@ -471,30 +502,31 @@ tidy(nci60_pca, matrix = "eigenvalues") %>%
 
 ## Clustering on nci60 dataset
 
-Let us now see what happens if we perform clustering on the `nci60` data set. Before we start it would be good if we create a scaled version of this data set. We can use the recipes package to perform those transformations. 
+Let us now see what happens if we perform clustering on the `nci60` data set. Before we start it would be good if we create a scaled version of this data set. We can use the recipes package to perform those transformations. And a workflow to be able to combine it with the cluster model later
 
 ```{r}
-nci60_scaled <- recipe(~ ., data = nci60) %>%
+nci60_rec <- recipe(~ ., data = nci60) %>%
   step_rm(label) %>%
-  step_normalize(all_predictors()) %>%
-  prep() %>%
-  bake(new_data = NULL)
+  step_normalize(all_predictors())
+
+nci60_wf <- workflow() %>%
+  add_recipe(nci60_rec)
 ```
 
 Now we start by fitting multiple hierarchical clustering models using different agglomeration methods.
 
 ```{r}
-nci60_complete <- nci60_scaled %>%
-    dist() %>%
-    hclust(method = "complete")
+nci60_complete <- nci60_wf %>%
+  add_model(hier_clust(linkage_method = "complete")) %>%
+  fit(data = nci60)
 
-nci60_average <- nci60_scaled %>%
-    dist() %>%
-    hclust(method = "average")
+nci60_average <- nci60_wf %>%
+  add_model(hier_clust(linkage_method = "average")) %>%
+  fit(data = nci60)
 
-nci60_single <- nci60_scaled %>%
-    dist() %>%
-    hclust(method = "single")
+nci60_single <- nci60_wf %>%
+  add_model(hier_clust(linkage_method = "single")) %>%
+  fit(data = nci60)
 ```
 
 We then visualize them to see if any of them have some good natural separations.
@@ -504,7 +536,9 @@ We then visualize them to see if any of them have some good natural separations.
 #| fig-alt: |
 #|  Dendrogram visualization. Not colored, has most of the splits
 #|  happen at larger hights.
-fviz_dend(nci60_complete, main = "Complete")
+nci60_complete %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "Complete")
 ```
 
 ```{r}
@@ -512,7 +546,9 @@ fviz_dend(nci60_complete, main = "Complete")
 #| fig-alt: |
 #|  Dendrogram visualization. Not colored, has most of the splits
 #|  happen at larger hights.
-fviz_dend(nci60_average, main = "Average")
+nci60_average %>% 
+  extract_fit_engine() %>%
+  fviz_dend(main = "Average")
 ```
 
 ```{r}
@@ -521,7 +557,9 @@ fviz_dend(nci60_average, main = "Average")
 #|  Dendrogram visualization. Not colored, has most of the splits
 #|  happen at larger hight, very close together, with a few splits
 #|  a lower heights.
-fviz_dend(nci60_single, main = "Single")
+nci60_single %>%
+  extract_fit_engine() %>%
+  fviz_dend(main = "Single")
 ```
 
 We now color according to `k = 4` and we get the following separations.
@@ -531,18 +569,17 @@ We now color according to `k = 4` and we get the following separations.
 #| fig-alt: |
 #|  Dendrogram visualization. Colors for 4 clusters.
 nci60_complete %>%
+  extract_fit_engine() %>%
   fviz_dend(k = 4, main = "hclust(complete) on nci60")
 ```
 
-We now take the clustering id extracted with `cutree` and calculate which label is the most common one within each cluster.
+We now take find the clustering and calculate which label is the most common one within each cluster.
 
 ```{r}
-tibble(
-  label = nci60$label,
-  cluster_id = cutree(nci60_complete, k = 4)
-) %>%
-  count(label, cluster_id) %>%
-  group_by(cluster_id) %>%
+predict(nci60_complete, new_data = nci60, num_clusters = 4) %>%
+  mutate(label = nci60$label) %>%
+  count(label, .pred_cluster) %>%
+  group_by(.pred_cluster) %>%
   mutate(prop = n / sum(n)) %>%
   slice_max(n = 1, order_by = prop) %>%
   ungroup()
@@ -552,14 +589,23 @@ We can also see what happens if we try to fit a K-means clustering. We liked 4 c
 
 ```{r}
 set.seed(2)
-res_kmeans_scaled <- kmeans(nci60_scaled, centers = 4, nstart = 50)
+nci60_kmeans <- nci60_wf %>%
+  add_model(k_means(num_clusters = 4)) %>%
+  fit(data = nci60)
 ```
 
-We can again use `tidy()` to extract cluster information, note that we only look at `cluster`, `size`, and `withinss` as there are thousands of other variables denoting the location of the cluster.
+and we can now extract the centroids
 
 ```{r}
-tidy(res_kmeans_scaled) %>%
-  select(cluster, size, withinss)
+nci60_kmeans %>%
+  extract_centroids()
+```
+
+and the cluster assignments
+
+```{r}
+nci60_kmeans %>%
+  extract_cluster_assignment(nci60_kmeans)
 ```
 
 Lastly, let us see how the two different methods we used compare against each other. Let us save the cluster ids in `cluster_kmeans` and `cluster_hclust` and then use `conf_mat()` in a different way to quickly generate a heatmap between the two methods.
@@ -568,12 +614,12 @@ Lastly, let us see how the two different methods we used compare against each ot
 #| fig-alt: |
 #|  Confusion matrix, truth along x-axis and prediction along
 #|  y-axis. No agreement between labels.
-cluster_kmeans <- res_kmeans_scaled$cluster
-cluster_hclust <- cutree(nci60_complete, k = 4)
+cluster_kmeans <- predict(nci60_kmeans, nci60)
+cluster_hclust <- predict(nci60_complete, nci60, num_clusters = 4)
 
 tibble(
-  kmeans = factor(cluster_kmeans),
-  hclust = factor(cluster_hclust)
+  kmeans = cluster_kmeans$.pred_cluster,
+  hclust = cluster_hclust$.pred_cluster
 ) %>%
   conf_mat(kmeans, hclust) %>%
   autoplot(type = "heatmap")
@@ -581,23 +627,33 @@ tibble(
 
 There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).
 
-One last thing is that it is sometimes useful to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of `nci60` and keep the 5 first components (we could have started with `nci60` too if we added `step_rm()` and `step_normalize()`).
+One last thing is that it is sometimes useful to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of `nci60` and keep the 5 first components 
 
 ```{r}
-nci60_pca <- recipe(~., nci60_scaled) %>%
-  step_pca(all_predictors(), num_comp = 5) %>%
-  prep() %>%
-  bake(new_data = NULL)
+nci60_pca_rec <- recipe(~ ., data = nci60) %>%
+  step_rm(label) %>%
+  step_normalize(all_predictors()) %>%
+  step_pca(all_predictors(), num_comp = 5)
+
+nci60_pca_wf <- workflow() %>%
+  add_recipe(nci60_pca_rec)
 ```
 
-We can now use `hclust()` on this reduced data set, and sometimes we get quite good results since the clustering method doesn't have to work in high dimensions.
+and now fit this new workflow
+
+```{r}
+nci60_pca <- nci60_pca_wf %>%
+  add_model(hier_clust(linkage_method = "complete")) %>%
+  fit(data = nci60)
+```
+
+we can now visualize on this reduced data set, and sometimes we get quite good results since the clustering method doesn't have to work in high dimensions.
 
 ```{r}
 #| warning: false
 #| fig-alt: |
 #|  Dendrogram visualization. Colors to produce 4 clusters.
 nci60_pca %>%
-  dist() %>%
-  hclust() %>%
+  extract_fit_engine() %>%
   fviz_dend(k = 4, main = "hclust on first five PCs")
 ```

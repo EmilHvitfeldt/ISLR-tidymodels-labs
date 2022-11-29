@@ -1,0 +1,14 @@
+{
+  "hash": "7008efc896e11f0f8a29227609f1b77d",
+  "result": {
+    "markdown": "# Survival Analysis and Censored Data\n\n\n::: {.cell}\n\n:::\n\n\nSurvival analysis is being worked on in tidymodels, please check out [censored](https://github.com/tidymodels/censored) as it is getting quite good, but still lacking a few key interactions with tidymodels to be included in this book.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "hash": "9d926390de284cf68b926897104cddb0",
+  "result": {
+    "markdown": "# Multiple Testing\n\n\n::: {.cell}\n\n:::\n\n\nThis chapter is WIP. If you would like something specific in this chapter please open an [issue](https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues).\n\nThis section is being worked on to include code using the [infer](https://github.com/tidymodels/infer) package.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
