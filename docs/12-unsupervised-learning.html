@@ -263,7 +263,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. Dimensionality reduction will be handled mostly as a preprocessor which is done with <a href="https://recipes.tidymodels.org/">recipes</a> package, and clustering is done with the <a href="https://github.com/emilhvitfeldt/tidyclust">tidyclust</a> package.</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EmilHvitfeldt/tidyclust">tidyclust</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/tidyclust">tidyclust</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/rpkgs/factoextra">factoextra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">proxy</span><span class="op">)</span></span>
@@ -835,23 +835,23 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
  1            1 sse_total        standard   387.     10   8.86  Preprocessor1_M…
  2            1 sse_within_total standard   387.     10   8.86  Preprocessor1_M…
  3            2 sse_total        standard   387.     10   8.86  Preprocessor1_M…
- 4            2 sse_within_total standard   121.     10   4.00  Preprocessor1_M…
+ 4            2 sse_within_total standard   121.     10   4.02  Preprocessor1_M…
  5            3 sse_total        standard   387.     10   8.86  Preprocessor1_M…
  6            3 sse_within_total standard    82.6    10   2.29  Preprocessor1_M…
  7            4 sse_total        standard   387.     10   8.86  Preprocessor1_M…
- 8            4 sse_within_total standard    59.0    10   2.07  Preprocessor1_M…
+ 8            4 sse_within_total standard    59.1    10   2.08  Preprocessor1_M…
  9            5 sse_total        standard   387.     10   8.86  Preprocessor1_M…
-10            5 sse_within_total standard    43.8    10   1.99  Preprocessor1_M…
+10            5 sse_within_total standard    43.6    10   1.97  Preprocessor1_M…
 11            6 sse_total        standard   387.     10   8.86  Preprocessor1_M…
-12            6 sse_within_total standard    33.3    10   1.48  Preprocessor1_M…
+12            6 sse_within_total standard    33.5    10   1.57  Preprocessor1_M…
 13            7 sse_total        standard   387.     10   8.86  Preprocessor1_M…
-14            7 sse_within_total standard    25.0    10   1.25  Preprocessor1_M…
+14            7 sse_within_total standard    25.0    10   1.15  Preprocessor1_M…
 15            8 sse_total        standard   387.     10   8.86  Preprocessor1_M…
-16            8 sse_within_total standard    20.8    10   1.10  Preprocessor1_M…
+16            8 sse_within_total standard    20.5    10   1.12  Preprocessor1_M…
 17            9 sse_total        standard   387.     10   8.86  Preprocessor1_M…
-18            9 sse_within_total standard    17.0    10   1.00  Preprocessor1_M…
+18            9 sse_within_total standard    17.2    10   0.997 Preprocessor1_M…
 19           10 sse_total        standard   387.     10   8.86  Preprocessor1_M…
-20           10 sse_within_total standard    13.9    10   0.695 Preprocessor1_M…</code></pre>
+20           10 sse_within_total standard    14.0    10   0.763 Preprocessor1_M…</code></pre>
 </div>
 </div>
 <p>Now that we have the total within-cluster sum-of-squares we can plot them against <code>k</code> so we can use the <a href="https://en.wikipedia.org/wiki/Elbow_method_(clustering)">elbow method</a> to find the optimal number of clusters. This actually pops right out if we use <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> on the results.</p>
@@ -1007,43 +1007,50 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 </div>
 </section><section id="clustering-on-nci60-dataset" class="level2" data-number="12.6"><h2 data-number="12.6" class="anchored" data-anchor-id="clustering-on-nci60-dataset">
 <span class="header-section-number">12.6</span> Clustering on nci60 dataset</h2>
-<p>Let us now see what happens if we perform clustering on the <code>nci60</code> data set. Before we start it would be good if we create a scaled version of this data set. We can use the recipes package to perform those transformations.</p>
+<p>Let us now see what happens if we perform clustering on the <code>nci60</code> data set. Before we start it would be good if we create a scaled version of this data set. We can use the recipes package to perform those transformations. And a workflow to be able to combine it with the cluster model later</p>
 <div class="cell">
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_scaled</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">label</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">prep</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">bake</span><span class="op">(</span>new_data <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">nci60_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">nci60_rec</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we start by fitting multiple hierarchical clustering models using different agglomeration methods.</p>
 <div class="cell">
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_complete</span> <span class="op">&lt;-</span> <span class="va">nci60_scaled</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_complete</span> <span class="op">&lt;-</span> <span class="va">nci60_wf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust</a></span><span class="op">(</span>linkage_method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">nci60_average</span> <span class="op">&lt;-</span> <span class="va">nci60_scaled</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
+<span><span class="va">nci60_average</span> <span class="op">&lt;-</span> <span class="va">nci60_wf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust</a></span><span class="op">(</span>linkage_method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">nci60_single</span> <span class="op">&lt;-</span> <span class="va">nci60_scaled</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">nci60_single</span> <span class="op">&lt;-</span> <span class="va">nci60_wf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust</a></span><span class="op">(</span>linkage_method <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We then visualize them to see if any of them have some good natural separations.</p>
 <div class="cell">
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_complete</span>, main <span class="op">=</span> <span class="st">"Complete"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_complete</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Complete"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has most of the splits happen at larger hights." width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_average</span>, main <span class="op">=</span> <span class="st">"Average"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_average</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Average"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has most of the splits happen at larger hights." width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span><span class="va">nci60_single</span>, main <span class="op">=</span> <span class="st">"Single"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_single</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>main <span class="op">=</span> <span class="st">"Single"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-55-1.png" class="img-fluid" alt="Dendrogram visualization. Not colored, has most of the splits happen at larger hight, very close together, with a few splits a lower heights." width="672"></p>
 </div>
@@ -1051,84 +1058,119 @@ Levels: Cluster_1 Cluster_2 Cluster_3</code></pre>
 <p>We now color according to <code>k = 4</code> and we get the following separations.</p>
 <div class="cell">
 <div class="sourceCode" id="cb78"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_complete</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, main <span class="op">=</span> <span class="st">"hclust(complete) on nci60"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid" alt="Dendrogram visualization. Colors for 4 clusters." width="672"></p>
 </div>
 </div>
-<p>We now take the clustering id extracted with <code>cutree</code> and calculate which label is the most common one within each cluster.</p>
+<p>We now take find the clustering and calculate which label is the most common one within each cluster.</p>
 <div class="cell">
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
-<span>  label <span class="op">=</span> <span class="va">nci60</span><span class="op">$</span><span class="va">label</span>,</span>
-<span>  cluster_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">nci60_complete</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">count</span><span class="op">(</span><span class="va">label</span>, <span class="va">cluster_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">cluster_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">nci60_complete</span>, new_data <span class="op">=</span> <span class="va">nci60</span>, num_clusters <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>label <span class="op">=</span> <span class="va">nci60</span><span class="op">$</span><span class="va">label</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">count</span><span class="op">(</span><span class="va">label</span>, <span class="va">.pred_cluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">.pred_cluster</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>prop <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">slice_max</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, order_by <span class="op">=</span> <span class="va">prop</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 4
-  label    cluster_id     n  prop
-  &lt;fct&gt;         &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
-1 MELANOMA          1     8 0.2  
-2 NSCLC             1     8 0.2  
-3 RENAL             1     8 0.2  
-4 BREAST            2     3 0.429
-5 LEUKEMIA          3     6 0.75 
-6 COLON             4     5 0.556</code></pre>
+<pre><code># A tibble: 4 × 4
+  label    .pred_cluster     n  prop
+  &lt;fct&gt;    &lt;fct&gt;         &lt;int&gt; &lt;dbl&gt;
+1 MELANOMA Cluster_1         5 0.357
+2 RENAL    Cluster_2         7 0.333
+3 LEUKEMIA Cluster_3         5 0.714
+4 COLON    Cluster_4         7 0.318</code></pre>
 </div>
 </div>
 <p>We can also see what happens if we try to fit a K-means clustering. We liked 4 clusters from earlier so let’s stick with that.</p>
 <div class="cell">
 <div class="sourceCode" id="cb81"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">res_kmeans_scaled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/kmeans.html">kmeans</a></span><span class="op">(</span><span class="va">nci60_scaled</span>, centers <span class="op">=</span> <span class="fl">4</span>, nstart <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">nci60_kmeans</span> <span class="op">&lt;-</span> <span class="va">nci60_wf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/k_means.html">k_means</a></span><span class="op">(</span>num_clusters <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We can again use <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> to extract cluster information, note that we only look at <code>cluster</code>, <code>size</code>, and <code>withinss</code> as there are thousands of other variables denoting the location of the cluster.</p>
+<p>and we can now extract the centroids</p>
 <div class="cell">
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">res_kmeans_scaled</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">cluster</span>, <span class="va">size</span>, <span class="va">withinss</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_kmeans</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/extract_centroids.html">extract_centroids</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 3
-  cluster  size withinss
-  &lt;fct&gt;   &lt;int&gt;    &lt;dbl&gt;
-1 1           8   44071.
-2 2          20  108801.
-3 3          27  154545.
-4 4           9   37150.</code></pre>
+<pre><code># A tibble: 4 × 6,831
+  .cluster      V_1     V_2     V_3     V_4     V_5     V_6    V_7     V_8
+  &lt;fct&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+1 Cluster_1 -0.281  -0.675   0.120  -0.0190  0.0763 -0.260  -0.193  0.0185
+2 Cluster_2 -0.371  -0.0689 -0.0633  0.0788 -0.359  -0.0672 -0.209 -0.124 
+3 Cluster_3  0.325   0.266  -0.0439  0.0210  0.126  -0.0187  0.326  0.218 
+4 Cluster_4  0.0205 -0.0821  0.164  -0.215   0.298   0.431  -0.401 -0.432 
+# … with 6,822 more variables: V_9 &lt;dbl&gt;, V_10 &lt;dbl&gt;, V_11 &lt;dbl&gt;, V_12 &lt;dbl&gt;,
+#   V_13 &lt;dbl&gt;, V_14 &lt;dbl&gt;, V_15 &lt;dbl&gt;, V_16 &lt;dbl&gt;, V_17 &lt;dbl&gt;, V_18 &lt;dbl&gt;,
+#   V_19 &lt;dbl&gt;, V_20 &lt;dbl&gt;, V_21 &lt;dbl&gt;, V_22 &lt;dbl&gt;, V_23 &lt;dbl&gt;, V_24 &lt;dbl&gt;,
+#   V_25 &lt;dbl&gt;, V_26 &lt;dbl&gt;, V_27 &lt;dbl&gt;, V_28 &lt;dbl&gt;, V_29 &lt;dbl&gt;, V_30 &lt;dbl&gt;,
+#   V_31 &lt;dbl&gt;, V_32 &lt;dbl&gt;, V_33 &lt;dbl&gt;, V_34 &lt;dbl&gt;, V_35 &lt;dbl&gt;, V_36 &lt;dbl&gt;,
+#   V_37 &lt;dbl&gt;, V_38 &lt;dbl&gt;, V_39 &lt;dbl&gt;, V_40 &lt;dbl&gt;, V_41 &lt;dbl&gt;, V_42 &lt;dbl&gt;,
+#   V_43 &lt;dbl&gt;, V_44 &lt;dbl&gt;, V_45 &lt;dbl&gt;, V_46 &lt;dbl&gt;, V_47 &lt;dbl&gt;, V_48 &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+<p>and the cluster assignments</p>
+<div class="cell">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_kmeans</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/extract_cluster_assignment.html">extract_cluster_assignment</a></span><span class="op">(</span><span class="va">nci60_kmeans</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 64 × 1
+   .cluster 
+   &lt;fct&gt;    
+ 1 Cluster_1
+ 2 Cluster_1
+ 3 Cluster_1
+ 4 Cluster_2
+ 5 Cluster_2
+ 6 Cluster_2
+ 7 Cluster_2
+ 8 Cluster_2
+ 9 Cluster_1
+10 Cluster_1
+# … with 54 more rows</code></pre>
 </div>
 </div>
 <p>Lastly, let us see how the two different methods we used compare against each other. Let us save the cluster ids in <code>cluster_kmeans</code> and <code>cluster_hclust</code> and then use <code>conf_mat()</code> in a different way to quickly generate a heatmap between the two methods.</p>
 <div class="cell">
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cluster_kmeans</span> <span class="op">&lt;-</span> <span class="va">res_kmeans_scaled</span><span class="op">$</span><span class="va">cluster</span></span>
-<span><span class="va">cluster_hclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cutree.html">cutree</a></span><span class="op">(</span><span class="va">nci60_complete</span>, k <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cluster_kmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">nci60_kmeans</span>, <span class="va">nci60</span><span class="op">)</span></span>
+<span><span class="va">cluster_hclust</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">nci60_complete</span>, <span class="va">nci60</span>, num_clusters <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tibble</span><span class="op">(</span></span>
-<span>  kmeans <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cluster_kmeans</span><span class="op">)</span>,</span>
-<span>  hclust <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cluster_hclust</span><span class="op">)</span></span>
+<span>  kmeans <span class="op">=</span> <span class="va">cluster_kmeans</span><span class="op">$</span><span class="va">.pred_cluster</span>,</span>
+<span>  hclust <span class="op">=</span> <span class="va">cluster_hclust</span><span class="op">$</span><span class="va">.pred_cluster</span></span>
 <span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">conf_mat</span><span class="op">(</span><span class="va">kmeans</span>, <span class="va">hclust</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid" alt="Confusion matrix, truth along x-axis and prediction along y-axis. No agreement between labels." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid" alt="Confusion matrix, truth along x-axis and prediction along y-axis. No agreement between labels." width="672"></p>
 </div>
 </div>
 <p>There is not a lot of agreement between labels which makes sense, since the labels themselves are arbitrarily added. What is important is that they tend to agree quite a lot (the confusion matrix is sparse).</p>
-<p>One last thing is that it is sometimes useful to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of <code>nci60</code> and keep the 5 first components (we could have started with <code>nci60</code> too if we added <code>step_rm()</code> and <code>step_normalize()</code>).</p>
+<p>One last thing is that it is sometimes useful to perform dimensionality reduction before using the clustering method. Let us use the recipes package to calculate the PCA of <code>nci60</code> and keep the 5 first components</p>
 <div class="cell">
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span><span class="va">.</span>, <span class="va">nci60_scaled</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">prep</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">bake</span><span class="op">(</span>new_data <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">label</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">nci60_pca_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">nci60_pca_rec</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We can now use <code><a href="https://rdrr.io/r/stats/hclust.html">hclust()</a></code> on this reduced data set, and sometimes we get quite good results since the clustering method doesn’t have to work in high dimensions.</p>
+<p>and now fit this new workflow</p>
 <div class="cell">
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dist</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op">&lt;-</span> <span class="va">nci60_pca_wf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/tidyclust/man/hier_clust.html">hier_clust</a></span><span class="op">(</span>linkage_method <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nci60</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>we can now visualize on this reduced data set, and sometimes we get quite good results since the clustering method doesn’t have to work in high dimensions.</p>
+<div class="cell">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nci60_pca</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/factoextra/man/fviz_dend.html">fviz_dend</a></span><span class="op">(</span>k <span class="op">=</span> <span class="fl">4</span>, main <span class="op">=</span> <span class="st">"hclust on first five PCs"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-62-1.png" class="img-fluid" alt="Dendrogram visualization. Colors to produce 4 clusters." width="672"></p>
+<p><img src="12-unsupervised-learning_files/figure-html/unnamed-chunk-64-1.png" class="img-fluid" alt="Dendrogram visualization. Colors to produce 4 clusters." width="672"></p>
 </div>
 </div>
 
