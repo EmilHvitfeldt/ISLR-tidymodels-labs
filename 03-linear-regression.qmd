@@ -266,4 +266,4 @@ lm_wf %>% fit(Carseats)
 
 ## Writing functions
 
-This book will not talk about how to write functions in R. If you still want to know how to write functions we recommend the [functions](https://r4ds.hadley.nz/functions.html) of R for Data Science.
+This book will not talk about how to write functions in R. If you still want to know how to write functions, we recommend the [Functions](https://r4ds.hadley.nz/functions.html) chapter of the [R for Data Science (2e)](https://r4ds.hadley.nz/).
