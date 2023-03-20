@@ -1,12 +1,12 @@
 # Introduction
 
-This book aims to be a complement to the 2nd version [An Introduction to Statistical Learning](https://www.statlearning.com/) book with translations of the labs into using the [tidymodels](https://www.tidymodels.org/) set of packages.
+This book aims to be a complement to the 2nd edition [An Introduction to Statistical Learning](https://www.statlearning.com/) book with translations of the labs into using the [tidymodels](https://www.tidymodels.org/) set of packages.
 
 The labs will be mirrored quite closely to stay true to the original material.
 
-## Version Differences {-}
+## Edition Differences {-}
 
-all listed changes will be relative to the 1st version.
+All listed changes will be relative to the 1st edition.
 
 - [Naive Bayes](04-classification.qmd#naive-bayes) has been added to chapter 4 on [Classification](04-classification.qmd)
 - [Poisson Regression](04-classification.qmd#poisson-regression) has been added to chapter 4 on [Classification](04-classification.qmd)
@@ -20,7 +20,7 @@ all listed changes will be relative to the 1st version.
 
 ## Colophon {-}
 
-This book was written in [RStudio](http://www.rstudio.com/ide/) using [**quarto**](https://quarto.org/). The [website](https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html) is hosted via [GitHub Pages](https://pages.github.com/), and the complete source is available on [GitHub](https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs).
+This book was written in [RStudio](https://posit.co/products/open-source/rstudio/) using [**Quarto**](https://quarto.org/). The [website](https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html) is hosted via [GitHub Pages](https://pages.github.com/), and the complete source is available on [GitHub](https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs).
 
 This version of the book was built with `r R.version.string` and the following packages:
 

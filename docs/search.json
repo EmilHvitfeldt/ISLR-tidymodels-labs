@@ -4,21 +4,28 @@
     "href": "index.html",
     "title": "ISLR tidymodels labs",
     "section": "",
-    "text": "This book aims to be a complement to the 2nd version An Introduction to Statistical Learning book with translations of the labs into using the tidymodels set of packages.\nThe labs will be mirrored quite closely to stay true to the original material.\n\nall listed changes will be relative to the 1st version.\n\n\nNaive Bayes has been added to chapter 4 on Classification\n\n\nPoisson Regression has been added to chapter 4 on Classification\n\n“Application to Caravan Insurance Data” section is no longer treated as its own section and is now part of the K-Nearest Neighbors section\n\nBayesian Additive Regression Trees has been added to chapter 8 on Tree-Based Methods\n\nchapter on Unsupervised Learning has been renumbered to chapter 12 instead of 10\n\nMatrix Completion has been added to chapter 12 on Unsupervised Learning\n\nchapter on Deep learning has been added as chapter 10\nchapter on Survival Analysis and Censored Data as been added as chapter 11\nchapter on Multiple Testing as been added as chapter 13\n\nThis book was written in RStudio using quarto. The website is hosted via GitHub Pages, and the complete source is available on GitHub.\nThis version of the book was built with R version 4.2.1 (2022-06-23) and the following packages:\n\n\n\npackage\nversion\nsource\n\n\n\nbroom\n1.0.1\nCRAN (R 4.2.0)\n\n\ncorrr\n0.4.4\nCRAN (R 4.2.0)\n\n\ndials\n1.1.0\nCRAN (R 4.2.1)\n\n\ndiscrim\n1.0.0\nCRAN (R 4.2.0)\n\n\ndownlit\n0.4.2\nCRAN (R 4.2.0)\n\n\ndplyr\n1.0.10\nCRAN (R 4.2.0)\n\n\nfactoextra\n1.0.7\nCRAN (R 4.2.0)\n\n\nggplot2\n3.4.0\nCRAN (R 4.2.1)\n\n\nglmnet\n4.1-4\nCRAN (R 4.2.0)\n\n\ninfer\n1.0.3\nCRAN (R 4.2.0)\n\n\nISLR\n1.4\nCRAN (R 4.2.0)\n\n\nISLR2\n1.3-1\nCRAN (R 4.2.0)\n\n\nkernlab\n0.9-31\nCRAN (R 4.2.0)\n\n\nkknn\n1.3.1\nCRAN (R 4.2.0)\n\n\nklaR\n1.7-1\nCRAN (R 4.2.0)\n\n\nMASS\n7.3-57\nCRAN (R 4.2.1)\n\n\nmclust\n6.0.0\nCRAN (R 4.2.0)\n\n\nmodeldata\n1.0.1\nCRAN (R 4.2.1)\n\n\npaletteer\n1.5.0\nCRAN (R 4.2.0)\n\n\nparsnip\n1.0.3\nCRAN (R 4.2.1)\n\n\npatchwork\n1.1.2\nCRAN (R 4.2.0)\n\n\nproxy\n0.4-27\nCRAN (R 4.2.0)\n\n\npurrr\n0.3.5\nCRAN (R 4.2.0)\n\n\nrandomForest\n4.7-1.1\nCRAN (R 4.2.0)\n\n\nreadr\n2.1.3\nCRAN (R 4.2.0)\n\n\nrecipes\n1.0.3\nCRAN (R 4.2.0)\n\n\nrpart\n4.1.16\nCRAN (R 4.2.1)\n\n\nrpart.plot\n3.1.1\nCRAN (R 4.2.0)\n\n\nrsample\n1.1.0\nCRAN (R 4.2.0)\n\n\nscico\n1.3.1\nCRAN (R 4.2.0)\n\n\ntibble\n3.1.8\nCRAN (R 4.2.0)\n\n\ntidyclust\n0.1.0\nCRAN (R 4.2.1)\n\n\ntidymodels\n1.0.0\nCRAN (R 4.2.0)\n\n\ntidyr\n1.2.1\nCRAN (R 4.2.0)\n\n\ntune\n1.0.1\nCRAN (R 4.2.0)\n\n\nvip\n0.3.2\nCRAN (R 4.2.0)\n\n\nworkflows\n1.1.2\nCRAN (R 4.2.0)\n\n\nworkflowsets\n1.0.0\nCRAN (R 4.2.0)\n\n\nxgboost\n1.6.0.1\nCRAN (R 4.2.0)\n\n\nyardstick\n1.1.0\nCRAN (R 4.2.0)"
+    "text": "1 Introduction\nThis book aims to be a complement to the 2nd edition An Introduction to Statistical Learning book with translations of the labs into using the tidymodels set of packages.\nThe labs will be mirrored quite closely to stay true to the original material."
+  },
+  {
+    "objectID": "index.html#edition-differences",
+    "href": "index.html#edition-differences",
+    "title": "ISLR tidymodels labs",
+    "section": "Edition Differences",
+    "text": "Edition Differences\nAll listed changes will be relative to the 1st edition.\n\n\nNaive Bayes has been added to chapter 4 on Classification\n\n\nPoisson Regression has been added to chapter 4 on Classification\n\n“Application to Caravan Insurance Data” section is no longer treated as its own section and is now part of the K-Nearest Neighbors section\n\nBayesian Additive Regression Trees has been added to chapter 8 on Tree-Based Methods\n\nchapter on Unsupervised Learning has been renumbered to chapter 12 instead of 10\n\nMatrix Completion has been added to chapter 12 on Unsupervised Learning\n\nchapter on Deep learning has been added as chapter 10\nchapter on Survival Analysis and Censored Data as been added as chapter 11\nchapter on Multiple Testing as been added as chapter 13"
+  },
+  {
+    "objectID": "index.html#colophon",
+    "href": "index.html#colophon",
+    "title": "ISLR tidymodels labs",
+    "section": "Colophon",
+    "text": "Colophon\nThis book was written in RStudio using Quarto. The website is hosted via GitHub Pages, and the complete source is available on GitHub.\nThis version of the book was built with R version 4.2.1 (2022-06-23) and the following packages:\n\n\n\npackage\nversion\nsource\n\n\n\nbroom\n1.0.4\nCRAN (R 4.2.0)\n\n\ncorrr\n0.4.4\nCRAN (R 4.2.0)\n\n\ndials\n1.1.0\nCRAN (R 4.2.0)\n\n\ndiscrim\n1.0.1\nCRAN (R 4.2.0)\n\n\ndownlit\n0.4.2\nCRAN (R 4.2.0)\n\n\ndplyr\n1.1.0\nCRAN (R 4.2.0)\n\n\nfactoextra\n1.0.7\nCRAN (R 4.2.0)\n\n\nggplot2\n3.4.1\nCRAN (R 4.2.0)\n\n\nglmnet\n4.1-6\nCRAN (R 4.2.1)\n\n\ninfer\n1.0.4\nCRAN (R 4.2.1)\n\n\nISLR\n1.4\nCRAN (R 4.2.0)\n\n\nISLR2\n1.3-1\nCRAN (R 4.2.0)\n\n\nkernlab\n0.9-32\nCRAN (R 4.2.0)\n\n\nkknn\n1.3.1\nCRAN (R 4.2.0)\n\n\nklaR\n1.7-1\nCRAN (R 4.2.0)\n\n\nMASS\n7.3-57\nCRAN (R 4.2.1)\n\n\nmclust\n6.0.0\nCRAN (R 4.2.0)\n\n\nmodeldata\n1.1.0\nCRAN (R 4.2.0)\n\n\npaletteer\n1.5.0\nCRAN (R 4.2.0)\n\n\nparsnip\n1.0.4\nCRAN (R 4.2.0)\n\n\npatchwork\n1.1.2\nCRAN (R 4.2.0)\n\n\nproxy\n0.4-27\nCRAN (R 4.2.0)\n\n\npurrr\n1.0.1\nCRAN (R 4.2.0)\n\n\nrandomForest\n4.7-1.1\nCRAN (R 4.2.0)\n\n\nreadr\n2.1.4\nCRAN (R 4.2.0)\n\n\nrecipes\n1.0.5\nCRAN (R 4.2.0)\n\n\nrpart\n4.1.16\nCRAN (R 4.2.1)\n\n\nrpart.plot\n3.1.1\nCRAN (R 4.2.0)\n\n\nrsample\n1.1.1\nCRAN (R 4.2.0)\n\n\nscico\n1.3.1\nCRAN (R 4.2.0)\n\n\ntibble\n3.2.1\nCRAN (R 4.2.1)\n\n\ntidyclust\n0.1.2\nCRAN (R 4.2.0)\n\n\ntidymodels\n1.0.0\nCRAN (R 4.2.0)\n\n\ntidyr\n1.3.0\nCRAN (R 4.2.0)\n\n\ntune\n1.0.1\nCRAN (R 4.2.0)\n\n\nvip\n0.3.2\nCRAN (R 4.2.0)\n\n\nworkflows\n1.1.3\nCRAN (R 4.2.0)\n\n\nworkflowsets\n1.0.0\nCRAN (R 4.2.0)\n\n\nxgboost\n1.7.3.1\nCRAN (R 4.2.0)\n\n\nyardstick\n1.1.0\nCRAN (R 4.2.0)"
   },
   {
     "objectID": "02-statistical-learning.html",
     "href": "02-statistical-learning.html",
     "title": "2  Statistical learning",
     "section": "",
-    "text": "The primary purpose of this book is to rewrite the labs of ISLR using the tidymodels packages. A great introduction to tidymodels can be found on the tidymodels website.\nProper introductions to the various tidymodels packages will not be present in these labs since they aim to mirror the labs in ISLR. The getting started page has good introductions to\n\nparsnip\nrecipes and workflows\nrsample\ntune\n\nThe charts whenever possible will be created using ggplot2, if you are unfamiliar with ggplot2 I would recommend you start by reading the Data Visualisation chapter of the R for Data Science book.\nThe tidymodels packages can be installed as a whole using install.packages(\"tidymodels\") and the ISLR package which contains many of the data set we will be using can be installed using install.packages(\"ISLR\")."
-  },
-  {
-    "objectID": "03-linear-regression.html",
-    "href": "03-linear-regression.html",
-    "title": "\n3  Linear Regression\n",
-    "section": "",
-    "text": "This lab will go over how to perform linear regression. This will include simple linear regression and multiple linear regression in addition to how you can apply transformations to the predictors. This chapter will use parsnip for model fitting and recipes and workflows to perform the transformations."
+    "text": "The original labs introduce you to the basics of R. We will not repeat that endeavor here as it was done well. You will notice that the labs in this book will look slightly different since we are following the tidyverse style guide.\nThe primary purpose of this book is to rewrite the labs of ISLR using the tidymodels packages. A great introduction to tidymodels can be found on the tidymodels website.\nProper introductions to the various tidymodels packages will not be present in these labs since they aim to mirror the labs in ISLR. The getting started page has good introductions to\n\nparsnip\nrecipes and workflows\nrsample\ntune\n\nThe charts whenever possible will be created using ggplot2, if you are unfamiliar with ggplot2 I would recommend you start by reading the Data Visualisation chapter of the R for Data Science (2e) book.\nThe tidymodels packages can be installed as a whole using install.packages(\"tidymodels\") and the ISLR package which contains many of the data set we will be using can be installed using install.packages(\"ISLR\")."
   },
   {
     "objectID": "03-linear-regression.html#libraries",
@@ -67,14 +74,7 @@
     "href": "03-linear-regression.html#writing-functions",
     "title": "\n3  Linear Regression\n",
     "section": "\n3.7 Writing functions",
-    "text": "3.7 Writing functions\nThis book will not talk about how to write functions in R. If you still want to know how to write functions we recommend the functions of R for Data Science."
-  },
-  {
-    "objectID": "04-classification.html",
-    "href": "04-classification.html",
-    "title": "\n4  Classification\n",
-    "section": "",
-    "text": "This lab will be our first experience with classification models. These models differ from the regression model we saw in the last chapter by the fact that the response variable is a qualitative variable instead of a continuous variable. This chapter will use parsnip for model fitting and recipes and workflows to perform the transformations."
+    "text": "3.7 Writing functions\nThis book will not talk about how to write functions in R. If you still want to know how to write functions, we recommend the Functions chapter of the R for Data Science (2e)."
   },
   {
     "objectID": "04-classification.html#the-stock-market-data",
@@ -133,13 +133,6 @@
     "text": "4.8 Extra - comparing multiple models\nThis section is new and not part of ISLR. We have fitted a lot of different models in this lab. And we were able to calculate the performance metrics one by one, but it is not ideal if we want to compare the different models. Below is an example of how you can more conveniently calculate performance metrics for multiple models at the same time.\nStart of by creating a named list of the fitted models you want to evaluate. I have made sure only to include models that were fitted on the same parameters to make it easier to compare them.\n\nmodels <- list(\"logistic regression\" = lr_fit3,\n               \"LDA\" = lda_fit,\n               \"QDA\" = qda_fit,\n               \"KNN\" = knn_fit)\n\nNext use imap_dfr() from the purrr package to apply augment() to each of the models using the testing data set. .id = \"model\" creates a column named \"model\" that is added to the resulting tibble using the names of models.\n\npreds <- imap_dfr(models, augment, \n                  new_data = Smarket_test, .id = \"model\")\n\npreds %>%\n  select(model, Direction, .pred_class, .pred_Down, .pred_Up)\n\n# A tibble: 1,008 × 5\n   model               Direction .pred_class .pred_Down .pred_Up\n   <chr>               <fct>     <fct>            <dbl>    <dbl>\n 1 logistic regression Down      Up               0.490    0.510\n 2 logistic regression Down      Up               0.479    0.521\n 3 logistic regression Down      Up               0.467    0.533\n 4 logistic regression Up        Up               0.474    0.526\n 5 logistic regression Down      Up               0.493    0.507\n 6 logistic regression Up        Up               0.494    0.506\n 7 logistic regression Down      Up               0.495    0.505\n 8 logistic regression Up        Up               0.487    0.513\n 9 logistic regression Down      Up               0.491    0.509\n10 logistic regression Up        Up               0.484    0.516\n# … with 998 more rows\n\n\nWe have seen how to use accuracy() a lot of times by now, but it is not the only metric to use for classification, and yardstick provides many more. You can combine multiple different metrics together with metric_set()\n\nmulti_metric <- metric_set(accuracy, sensitivity, specificity)\n\nand then the resulting function can be applied to calculate multiple metrics at the same time. All of the yardstick works with grouped tibbles so by calling group_by(model) we can calculate the metrics for each of the models in one go.\n\npreds %>%\n  group_by(model) %>%\n  multi_metric(truth = Direction, estimate = .pred_class)\n\n# A tibble: 12 × 4\n   model               .metric     .estimator .estimate\n   <chr>               <chr>       <chr>          <dbl>\n 1 KNN                 accuracy    binary         0.5  \n 2 LDA                 accuracy    binary         0.560\n 3 logistic regression accuracy    binary         0.560\n 4 QDA                 accuracy    binary         0.599\n 5 KNN                 sensitivity binary         0.387\n 6 LDA                 sensitivity binary         0.315\n 7 logistic regression sensitivity binary         0.315\n 8 QDA                 sensitivity binary         0.270\n 9 KNN                 specificity binary         0.589\n10 LDA                 specificity binary         0.752\n11 logistic regression specificity binary         0.752\n12 QDA                 specificity binary         0.858\n\n\nThe same technique can be used to create ROC curves.\n\npreds %>%\n  group_by(model) %>%\n  roc_curve(Direction, .pred_Down) %>%\n  autoplot()\n\n\n\n\nHere you can’t see the LDA because it lies perfectly under the logistic regression."
   },
   {
-    "objectID": "05-resampling-methods.html",
-    "href": "05-resampling-methods.html",
-    "title": "\n5  Resampling Methods\n",
-    "section": "",
-    "text": "This lab will show us how to perform different resampling techniques. Some of these tasks are quite general and useful in many different areas. The bootstrap being such an example. This chapter introduces a lot of new packages. This chapter will bring rsample into view for creating resampled data frames as well as yardstick to calculate performance metrics. Finally, we will use tune to fit our models within resamples and dials to help with the selection of hyperparameter tuning values."
-  },
-  {
     "objectID": "05-resampling-methods.html#the-validation-set-approach",
     "href": "05-resampling-methods.html#the-validation-set-approach",
     "title": "\n5  Resampling Methods\n",
@@ -166,13 +159,6 @@
     "title": "\n5  Resampling Methods\n",
     "section": "\n5.4 The Bootstrap",
     "text": "5.4 The Bootstrap\nThis section illustrates the use of the bootstrap in the simple Section 5.2 of ISLR, as well as on an example involving estimating the accuracy of the linear regression model on the Auto data set.\nFirst, we want to look at the accuracy of a statistic of interest. This statistic is justified in ISLR. We want to calculate the metric within many different bootstraps. We start by calculating 1000 bootstraps of the Portfolio data set.\n\nPortfolio_boots <- bootstraps(Portfolio, times = 1000)\nPortfolio_boots\n\n# Bootstrap sampling \n# A tibble: 1,000 × 2\n   splits           id           \n   <list>           <chr>        \n 1 <split [100/36]> Bootstrap0001\n 2 <split [100/39]> Bootstrap0002\n 3 <split [100/39]> Bootstrap0003\n 4 <split [100/33]> Bootstrap0004\n 5 <split [100/39]> Bootstrap0005\n 6 <split [100/34]> Bootstrap0006\n 7 <split [100/40]> Bootstrap0007\n 8 <split [100/38]> Bootstrap0008\n 9 <split [100/36]> Bootstrap0009\n10 <split [100/41]> Bootstrap0010\n# … with 990 more rows\n\n\nThe result is a tibble of boot_split objects. The rsample has constructed these splits in such a way that these 1000 bootstraps take up way less than 1000 times the space as Portfolio.\nNext, we create a function that takes a boot_split object and returns the calculated metric.\n\nalpha.fn <- function(split) {\n  data <- analysis(split)\n  X <- data$X\n  Y <- data$Y\n  \n  (var(Y) - cov(X, Y)) / (var(X) + var(Y) - 2 * cov(X, Y))\n}\n\nNow we can use mutate() and map_dbl() from dplyr and purrr respectively to apply alpha.fn to each of the bootstraps.\n\nalpha_res <- Portfolio_boots %>%\n  mutate(alpha = map_dbl(splits, alpha.fn))\n\nalpha_res\n\n# Bootstrap sampling \n# A tibble: 1,000 × 3\n   splits           id            alpha\n   <list>           <chr>         <dbl>\n 1 <split [100/36]> Bootstrap0001 0.516\n 2 <split [100/39]> Bootstrap0002 0.687\n 3 <split [100/39]> Bootstrap0003 0.599\n 4 <split [100/33]> Bootstrap0004 0.556\n 5 <split [100/39]> Bootstrap0005 0.549\n 6 <split [100/34]> Bootstrap0006 0.619\n 7 <split [100/40]> Bootstrap0007 0.387\n 8 <split [100/38]> Bootstrap0008 0.675\n 9 <split [100/36]> Bootstrap0009 0.538\n10 <split [100/41]> Bootstrap0010 0.407\n# … with 990 more rows\n\n\nand now we have all the bootstrap sample values. These can now further be analyzed.\nIn the next example do we want to study the variability of the slope and intercept estimate of the linear regression model. And it follows the same structure. First, we create some bootstraps of the data. Then we create a function that takes a split and returns some values. This function will return a tibble for each bootstrap.\n\nAuto_boots <- bootstraps(Auto)\n\nboot.fn <- function(split) {\n  lm_fit <- lm_spec %>% fit(mpg ~ horsepower, data = analysis(split))\n  tidy(lm_fit)\n}\n\nthen we use mutate() and map() to apply the function to each of the bootstraps.\n\nboot_res <- Auto_boots %>%\n  mutate(models = map(splits, boot.fn))\n\nAnd we can now unnest() and use group_by() and summarise() to get an estimate of the variability of the slope and intercept in this linear regression model.\n\nboot_res %>%\n  unnest(cols = c(models)) %>%\n  group_by(term) %>%\n  summarise(mean = mean(estimate),\n            sd = sd(estimate))\n\n# A tibble: 2 × 3\n  term          mean      sd\n  <chr>        <dbl>   <dbl>\n1 (Intercept) 39.8   0.759  \n2 horsepower  -0.156 0.00593"
-  },
-  {
-    "objectID": "06-regularization.html",
-    "href": "06-regularization.html",
-    "title": "\n6  Linear Model Selection and Regularization\n",
-    "section": "",
-    "text": "This lab will take a look at regularization models and hyperparameter tuning. These models are related to the models we saw in chapter 3 and 4, with the difference that they contain a regularization term. This chapter will use parsnip for model fitting and recipes and workflows to perform the transformations, and tune and dials to tune the hyperparameters of the model.\nWe will be using the Hitters data set from the ISLR package. We wish to predict the baseball players Salary based on several different characteristics which are included in the data set. Since we wish to predict Salary, then we need to remove any missing data from that column. Otherwise, we won’t be able to run the models."
   },
   {
     "objectID": "06-regularization.html#best-subset-selection",
@@ -217,13 +203,6 @@
     "text": "6.6 Partial Least Squares\nLastly, we have a partial least squares model. We will treat this much like the PCA section and say that partial least squares calculations will be done as a preprocessing that we tune. The following code is almost identical to previous chapters and will be shown in full without many explanations to avoid repetition. If you skipped to this section, go back and read the previous sections for more commentary.\n\npls_recipe <- \n  recipe(formula = Salary ~ ., data = Hitters_train) %>% \n  step_novel(all_nominal_predictors()) %>% \n  step_dummy(all_nominal_predictors()) %>% \n  step_zv(all_predictors()) %>% \n  step_normalize(all_predictors()) %>%\n  step_pls(all_predictors(), num_comp = tune(), outcome = \"Salary\")\n\nlm_spec <- linear_reg() %>% \n  set_mode(\"regression\") %>% \n  set_engine(\"lm\") \n\npls_workflow <- workflow() %>% \n  add_recipe(pls_recipe) %>% \n  add_model(lm_spec) \n\nnum_comp_grid <- grid_regular(num_comp(c(1, 20)), levels = 10)\n\ntune_res <- tune_grid(\n  pls_workflow,\n  resamples = Hitters_fold, \n  grid = num_comp_grid\n)\n\nbest_threshold <- select_best(tune_res, metric = \"rmse\")\n\npls_final <- finalize_workflow(pls_workflow, best_threshold)\n\npls_final_fit <- fit(pls_final, data = Hitters_train)"
   },
   {
-    "objectID": "07-moving-beyond-linearity.html",
-    "href": "07-moving-beyond-linearity.html",
-    "title": "\n7  Moving Beyond Linearity\n",
-    "section": "",
-    "text": "This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include: polynomials expansion, step functions, and splines.\nThe GAMs section is WIP since they are now supported in parsnip.\nThis chapter will use parsnip for model fitting and recipes and workflows to perform the transformations."
-  },
-  {
     "objectID": "07-moving-beyond-linearity.html#polynomial-regression-and-step-functions",
     "href": "07-moving-beyond-linearity.html#polynomial-regression-and-step-functions",
     "title": "\n7  Moving Beyond Linearity\n",
@@ -243,13 +222,6 @@
     "title": "\n7  Moving Beyond Linearity\n",
     "section": "\n7.3 GAMs",
     "text": "7.3 GAMs\nGAM section is WIP since they are now supported in parsnip."
-  },
-  {
-    "objectID": "08-tree-based-methods.html",
-    "href": "08-tree-based-methods.html",
-    "title": "\n8  Tree-Based Methods\n",
-    "section": "",
-    "text": "This lab will take a look at different tree-based models, in doing so we will explore how changing the hyperparameters can help improve performance. This chapter will use parsnip for model fitting and recipes and workflows to perform the transformations, and tune and dials to tune the hyperparameters of the model. rpart.plot is used to visualize the decision trees created using the rpart package as engine, and vip is used to visualize variable importance for later models.\nThe Boston data set contain various statistics for 506 neighborhoods in Boston. We will build a regression model that related the median value of owner-occupied homes (medv) as the response with the remaining variables as predictors.\nWe will also use the Carseats data set from the ISLR package to demonstrate a classification model. We create a new variable High to denote if Sales <= 8, then the Sales predictor is removed as it is a perfect predictor of High."
   },
   {
     "objectID": "08-tree-based-methods.html#fitting-classification-trees",
@@ -285,13 +257,6 @@
     "title": "\n8  Tree-Based Methods\n",
     "section": "\n8.5 Bayesian Additive Regression Trees",
     "text": "8.5 Bayesian Additive Regression Trees\nThis section is WIP."
-  },
-  {
-    "objectID": "09-support-vector-machines.html",
-    "href": "09-support-vector-machines.html",
-    "title": "\n9  Support Vector Machines\n",
-    "section": "",
-    "text": "This lab will take a look at support vector machines, in doing so we will explore how changing the hyperparameters can help improve performance. This chapter will use parsnip for model fitting and recipes and workflows to perform the transformations, and tune and dials to tune the hyperparameters of the model."
   },
   {
     "objectID": "09-support-vector-machines.html#support-vector-classifier",
@@ -334,13 +299,6 @@
     "title": "\n11  Survival Analysis and Censored Data\n",
     "section": "",
     "text": "Survival analysis is being worked on in tidymodels, please check out censored as it is getting quite good, but still lacking a few key interactions with tidymodels to be included in this book."
-  },
-  {
-    "objectID": "12-unsupervised-learning.html",
-    "href": "12-unsupervised-learning.html",
-    "title": "\n12  Unsupervised Learning\n",
-    "section": "",
-    "text": "This final chapter talks about unsupervised learning. This is broken into two parts. Dimensionality reduction and clustering. Dimensionality reduction will be handled mostly as a preprocessor which is done with recipes package, and clustering is done with the tidyclust package."
   },
   {
     "objectID": "12-unsupervised-learning.html#principal-components-analysis",
