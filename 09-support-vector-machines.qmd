@@ -138,7 +138,7 @@ sim_data_test <- tibble(
          x2 = ifelse(y == 1, x2 + 1.5, x2))
 ```
 
-and accessing the model on this testing data set shows us that the model still performs very well.
+and asseessing the model on this testing data set shows us that the model still performs very well.
 
 ```{r}
 augment(svm_linear_fit, new_data = sim_data_test) %>%
