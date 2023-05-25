@@ -2,16 +2,15 @@ Package: ISLR-tidymodels-labs
 Title: ISLR tidymodels Labs
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Emil",
-           family = "Hvitfeldt",
-           role = c("aut", "cre"),
-           email = "emilhhvitfeldt@gmail.com",
+    person("Emil", "Hvitfeldt", , "emilhhvitfeldt@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0679-1945"))
 License: MIT + file LICENSE
 Imports: 
     broom,
     corrr,
     dials,
+    discrim,
+    downlit,
     dplyr,
     factoextra,
     ggplot2,
@@ -48,9 +47,7 @@ Imports:
     workflows,
     workflowsets,
     xgboost,
-    yardstick,
-    downlit,
-    discrim
+    yardstick
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
