@@ -4,6 +4,7 @@ project:
 
 execute:
   freeze: true
+  keep-md: true
 
 book:
   title: "ISLR tidymodels labs"
