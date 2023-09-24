@@ -13,7 +13,7 @@ book:
   repo-url: https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs
   repo-actions: [edit, issue]
   sharing: [twitter, facebook]
-  date: "2022/08/06"
+  date: "2023/09/24"
   chapters:
     - index.qmd
     - 02-statistical-learning.qmd
