@@ -22,7 +22,7 @@ All listed changes will be relative to the 1st edition.
 
 This book was written in [RStudio](https://posit.co/products/open-source/rstudio/) using [**Quarto**](https://quarto.org/). The [website](https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html) is hosted via [GitHub Pages](https://pages.github.com/), and the complete source is available on [GitHub](https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs).
 
-This version of the book was built with R version 4.3.1 (2023-06-16) and the following packages:
+This version of the book was built with R version 4.3.1 (2023-06-16) and Quarto version 1.4.104 and the following packages:
 
 
 ::: {.cell-output-display}
