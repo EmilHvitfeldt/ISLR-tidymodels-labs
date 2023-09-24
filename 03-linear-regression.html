@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.104">
+<meta name="generator" content="quarto-1.3.450">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
 <title>ISLR tidymodels labs - 3&nbsp; Linear Regression</title>
 <style>
 code{white-space: pre-wrap;}
@@ -53,6 +56,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -70,7 +74,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -90,11 +95,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+
+
 </head>
+
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -105,30 +115,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">ISLR tidymodels labs</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
-<li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=%7Curl%7C">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
               <i class="bi bi-bi-twitter pe-1"></i>
             Twitter
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=%7Curl%7C">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
               <i class="bi bi-bi-facebook pe-1"></i>
             Facebook
             </a>
           </li>
       </ul>
-</div>
+    </div>
 </div>
     </div>
       </div>
@@ -139,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
@@ -218,27 +232,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
     </ul>
-</div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries"><span class="header-section-number">3.1</span> Libraries</a></li>
+  <li><a href="#libraries" id="toc-libraries" class="nav-link active" data-scroll-target="#libraries"><span class="header-section-number">3.1</span> Libraries</a></li>
   <li><a href="#simple-linear-regression" id="toc-simple-linear-regression" class="nav-link" data-scroll-target="#simple-linear-regression"><span class="header-section-number">3.2</span> Simple linear regression</a></li>
   <li><a href="#multiple-linear-regression" id="toc-multiple-linear-regression" class="nav-link" data-scroll-target="#multiple-linear-regression"><span class="header-section-number">3.3</span> Multiple linear regression</a></li>
   <li><a href="#interaction-terms" id="toc-interaction-terms" class="nav-link" data-scroll-target="#interaction-terms"><span class="header-section-number">3.4</span> Interaction terms</a></li>
   <li><a href="#non-linear-transformations-of-the-predictors" id="toc-non-linear-transformations-of-the-predictors" class="nav-link" data-scroll-target="#non-linear-transformations-of-the-predictors"><span class="header-section-number">3.5</span> Non-linear transformations of the predictors</a></li>
   <li><a href="#qualitative-predictors" id="toc-qualitative-predictors" class="nav-link" data-scroll-target="#qualitative-predictors"><span class="header-section-number">3.6</span> Qualitative predictors</a></li>
   <li><a href="#writing-functions" id="toc-writing-functions" class="nav-link" data-scroll-target="#writing-functions"><span class="header-section-number">3.7</span> Writing functions</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/03-linear-regression.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/03-linear-regression.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">
-<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Regression</span>
-</h1>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Regression</span></h1>
 </div>
 
 
@@ -251,17 +269,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><p>This lab will go over how to perform linear regression. This will include <a href="./03-linear-regression.html#simple-linear-regression">simple linear regression</a> and <a href="./03-linear-regression.html#multiple-linear-regression">multiple linear regression</a> in addition to how you can apply transformations to the predictors. This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip</a> for model fitting and <a href="https://www.tidymodels.org/start/recipes/">recipes and workflows</a> to perform the transformations.</p>
-<section id="libraries" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="libraries">
-<span class="header-section-number">3.1</span> Libraries</h2>
+</header>
+
+<p>This lab will go over how to perform linear regression. This will include <a href="./03-linear-regression.html#simple-linear-regression">simple linear regression</a> and <a href="./03-linear-regression.html#multiple-linear-regression">multiple linear regression</a> in addition to how you can apply transformations to the predictors. This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip</a> for model fitting and <a href="https://www.tidymodels.org/start/recipes/">recipes and workflows</a> to perform the transformations.</p>
+<section id="libraries" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="libraries"><span class="header-section-number">3.1</span> Libraries</h2>
 <p>We load tidymodels and ISLR and MASS for data sets.</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span> <span class="co"># For Boston data set</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.statlearning.com">ISLR</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS) <span class="co"># For Boston data set</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="simple-linear-regression" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="simple-linear-regression">
-<span class="header-section-number">3.2</span> Simple linear regression</h2>
+</section>
+<section id="simple-linear-regression" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="simple-linear-regression"><span class="header-section-number">3.2</span> Simple linear regression</h2>
 <p>The <code>Boston</code> data set contains various statistics for 506 neighborhoods in Boston. We will build a simple linear regression model that related the median value of owner-occupied homes (<code>medv</code>) as the response with a variable indicating the percentage of the population that belongs to a lower status (<code>lstat</code>) as the predictor.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -278,14 +299,14 @@ Important
 </div>
 <p>We start by creating a parsnip specification for a linear regression model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>While it is unnecessary to set the mode for a linear regression since it can only be regression, we continue to do it in these labs to be explicit.</p>
 <p>The specification doesn’t perform any calculations by itself. It is just a specification of what we want to do.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_spec</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lm_spec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Linear Regression Model Specification (regression)
 
@@ -294,10 +315,10 @@ Computational engine: lm </code></pre>
 </div>
 <p>Once we have the specification we can <code>fit</code> it by supplying a formula expression and the data we want to fit the model on. The formula is written on the form <code>y ~ x</code> where <code>y</code> is the name of the response and <code>x</code> is the name of the predictors. The names used in the formula should match the names of the variables in the data set passed to <code>data</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_fit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">&lt;-</span> lm_spec <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>lm_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>parsnip model object
 
@@ -312,8 +333,8 @@ Coefficients:
 </div>
 <p>The result of this fit is a parsnip model object. This object contains the underlying fit as well as some parsnip-specific information. If we want to look at the underlying fit object we can access it with <code>lm_fit$fit</code> or with</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_fit</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">pluck</span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"fit"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -324,11 +345,11 @@ Coefficients:
       34.55        -0.95  </code></pre>
 </div>
 </div>
-<p>The <code>lm</code> object has a nice <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method that shows more information about the fit, including parameter estimates and lack-of-fit statistics.</p>
+<p>The <code>lm</code> object has a nice <code>summary()</code> method that shows more information about the fit, including parameter estimates and lack-of-fit statistics.</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_fit</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">pluck</span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">"fit"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -353,7 +374,7 @@ F-statistic: 601.6 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>We can use packages from the <a href="https://broom.tidymodels.org/">broom</a> package to extract key information out of the model objects in tidy formats.</p>
 <p>the <code>tidy()</code> function returns the parameter estimates of a <code>lm</code> object</p>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lm_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 5
   term        estimate std.error statistic   p.value
@@ -364,7 +385,7 @@ F-statistic: 601.6 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>and <code>glance()</code> can be used to extract the model statistics.</p>
 <div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">glance</span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(lm_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 12
   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
@@ -373,16 +394,16 @@ F-statistic: 601.6 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
 # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
 </div>
 </div>
-<p>Suppose that we like the model fit and we want to generate predictions, we would typically use the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function like so:</p>
+<p>Suppose that we like the model fit and we want to generate predictions, we would typically use the <code>predict()</code> function like so:</p>
 <div class="cell">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(lm_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in predict.model_fit(lm_fit): argument "new_data" is missing, with no default</code></pre>
 </div>
 </div>
 <p>But this produces an error when used on a parsnip model object. This is happening because we need to explicitly supply the data set that the predictions should be performed on via the <code>new_data</code> argument</p>
 <div class="cell">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(lm_fit, <span class="at">new_data =</span> Boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 506 × 1
    .pred
@@ -403,7 +424,7 @@ F-statistic: 601.6 on 1 and 504 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Notice how the predictions are returned as a tibble. This will always be the case for parsnip models, no matter what engine is used. This is very useful since consistency allows us to combine data sets easily.</p>
 <p>We can also return other types of predicts by specifying the <code>type</code> argument. Setting <code>type = "conf_int"</code> return a 95% confidence interval.</p>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(lm_fit, <span class="at">new_data =</span> Boston, <span class="at">type =</span> <span class="st">"conf_int"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 506 × 2
    .pred_lower .pred_upper
@@ -436,11 +457,11 @@ Note
 </div>
 <p>If you want to evaluate the performance of a model, you might want to compare the observed value and the predicted value for a data set. You</p>
 <div class="cell">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">bind_cols</span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span>,</span>
-<span>  <span class="va">Boston</span></span>
-<span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">medv</span>, <span class="va">.pred</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_cols</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(lm_fit, <span class="at">new_data =</span> Boston),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  Boston</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(medv, .pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 506 × 2
     medv .pred
@@ -460,8 +481,8 @@ Note
 </div>
 <p>You can get the same results using the <code>augment()</code> function to save you a little bit of typing.</p>
 <div class="cell">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">augment</span><span class="op">(</span><span class="va">lm_fit</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">medv</span>, <span class="va">.pred</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(lm_fit, <span class="at">new_data =</span> Boston) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(medv, .pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 506 × 2
     medv .pred
@@ -479,14 +500,15 @@ Note
 # ℹ 496 more rows</code></pre>
 </div>
 </div>
-</section><section id="multiple-linear-regression" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="multiple-linear-regression">
-<span class="header-section-number">3.3</span> Multiple linear regression</h2>
+</section>
+<section id="multiple-linear-regression" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="multiple-linear-regression"><span class="header-section-number">3.3</span> Multiple linear regression</h2>
 <p>The multiple linear regression model can be fit in much the same way as the <a href="./03-linear-regression.html#simple-linear-regression">simple linear regression</a> model. The only difference is how we specify the predictors. We are using the same formula expression <code>y ~ x</code>, but we can specify multiple values by separating them with <code>+</code>s.</p>
 <div class="cell">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_fit2</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_fit2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>lm_fit2 <span class="ot">&lt;-</span> lm_spec <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(medv <span class="sc">~</span> lstat <span class="sc">+</span> age, <span class="at">data =</span> Boston)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>lm_fit2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>parsnip model object
 
@@ -501,7 +523,7 @@ Coefficients:
 </div>
 <p>Everything else works the same. From extracting parameter estimates</p>
 <div class="cell">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">lm_fit2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lm_fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 5
   term        estimate std.error statistic   p.value
@@ -513,7 +535,7 @@ Coefficients:
 </div>
 <p>to predicting new values</p>
 <div class="cell">
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lm_fit2</span>, new_data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(lm_fit2, <span class="at">new_data =</span> Boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 506 × 1
    .pred
@@ -533,10 +555,10 @@ Coefficients:
 </div>
 <p>A shortcut when using formulas is to use the form <code>y ~ .</code> which means; set <code>y</code> as the response and set the remaining variables as predictors. This is very useful if you have a lot of variables and you don’t want to type them out.</p>
 <div class="cell">
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_fit3</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_fit3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>lm_fit3 <span class="ot">&lt;-</span> lm_spec <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>lm_fit3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>parsnip model object
 
@@ -553,23 +575,22 @@ Coefficients:
   9.312e-03   -5.248e-01  </code></pre>
 </div>
 </div>
-<p>For more formula syntax look at <code><a href="https://rdrr.io/r/stats/formula.html">?formula</a></code>.</p>
-</section><section id="interaction-terms" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="interaction-terms">
-<span class="header-section-number">3.4</span> Interaction terms</h2>
+<p>For more formula syntax look at <code>?formula</code>.</p>
+</section>
+<section id="interaction-terms" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="interaction-terms"><span class="header-section-number">3.4</span> Interaction terms</h2>
 <p>Adding interaction terms is quite easy to do using formula expressions. However, the syntax used to describe them isn’t accepted by all engines so we will go over how to include interaction terms using recipes as well.</p>
 <p>There are two ways on including an interaction term; <code>x:y</code> and <code>x * y</code></p>
 <ul>
-<li>
-<code>x:y</code> will include the interaction between <code>x</code> and <code>y</code>,</li>
-<li>
-<code>x * y</code> will include the interaction between <code>x</code> and <code>y</code>, <code>x</code>, and <code>y</code>, i.e.&nbsp;it is short for <code>x:y + x + y</code>.</li>
+<li><code>x:y</code> will include the interaction between <code>x</code> and <code>y</code>,</li>
+<li><code>x * y</code> will include the interaction between <code>x</code> and <code>y</code>, <code>x</code>, and <code>y</code>, i.e.&nbsp;it is short for <code>x:y + x + y</code>.</li>
 </ul>
 <p>with that out of the way let expand <code>lm_fit2</code> by adding an interaction term</p>
 <div class="cell">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_fit4</span> <span class="op">&lt;-</span> <span class="va">lm_spec</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">*</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_fit4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>lm_fit4 <span class="ot">&lt;-</span> lm_spec <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(medv <span class="sc">~</span> lstat <span class="sc">*</span> age, <span class="at">data =</span> Boston)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>lm_fit4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>parsnip model object
 
@@ -586,14 +607,14 @@ Coefficients:
 <p>Sometimes we want to perform transformations, and we want those transformations to be applied, as part of the model fit as a pre-processing step. We will use the recipes package for this task.</p>
 <p>We use the <code>step_interact()</code> to specify the interaction term. Next, we create a workflow object to combine the linear regression model specification <code>lm_spec</code> with the pre-processing specification <code>rec_spec_interact</code> which can then be fitted much like a parsnip model specification.</p>
 <div class="cell">
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_spec_interact</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_interact</span><span class="op">(</span><span class="op">~</span> <span class="va">lstat</span><span class="op">:</span><span class="va">age</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_wf_interact</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_interact</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_wf_interact</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>rec_spec_interact <span class="ot">&lt;-</span> <span class="fu">recipe</span>(medv <span class="sc">~</span> lstat <span class="sc">+</span> age, <span class="at">data =</span> Boston) <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="sc">~</span> lstat<span class="sc">:</span>age)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>lm_wf_interact <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spec_interact)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>lm_wf_interact <span class="sc">%&gt;%</span> <span class="fu">fit</span>(Boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
 Preprocessor: Recipe
@@ -615,19 +636,20 @@ Coefficients:
 </div>
 </div>
 <p>Notice that since we specified the variables in the recipe we don’t need to specify them when fitting the workflow object. Furthermore, take note of the name of the interaction term. <code>step_interact()</code> tries to avoid special characters in variables.</p>
-</section><section id="non-linear-transformations-of-the-predictors" class="level2" data-number="3.5"><h2 data-number="3.5" class="anchored" data-anchor-id="non-linear-transformations-of-the-predictors">
-<span class="header-section-number">3.5</span> Non-linear transformations of the predictors</h2>
+</section>
+<section id="non-linear-transformations-of-the-predictors" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="non-linear-transformations-of-the-predictors"><span class="header-section-number">3.5</span> Non-linear transformations of the predictors</h2>
 <p>Much like we could use recipes to create interaction terms between values are we able to apply transformations to individual variables as well. If you are familiar with the dplyr package then you know how to <code>mutate()</code> which works in much the same way using <code>step_mutate()</code>.</p>
 <p>You would want to keep as much of the pre-processing inside recipes such that the transformation will be applied consistently to new data.</p>
 <div class="cell">
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_spec_pow2</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_mutate</span><span class="op">(</span>lstat2 <span class="op">=</span> <span class="va">lstat</span> <span class="op">^</span> <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_wf_pow2</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_pow2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_wf_pow2</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>rec_spec_pow2 <span class="ot">&lt;-</span> <span class="fu">recipe</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston) <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">lstat2 =</span> lstat <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>lm_wf_pow2 <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spec_pow2)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>lm_wf_pow2 <span class="sc">%&gt;%</span> <span class="fu">fit</span>(Boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
 Preprocessor: Recipe
@@ -650,14 +672,14 @@ Coefficients:
 </div>
 <p>You don’t have to hand-craft every type of linear transformation since recipes have a bunch created already <a href="https://recipes.tidymodels.org/reference/index.html#section-step-functions-individual-transformations">here</a> such as <code>step_log()</code> to take logarithms of variables.</p>
 <div class="cell">
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_spec_log</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">medv</span> <span class="op">~</span> <span class="va">lstat</span>, data <span class="op">=</span> <span class="va">Boston</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_log</span><span class="op">(</span><span class="va">lstat</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_wf_log</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec_log</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_wf_log</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Boston</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>rec_spec_log <span class="ot">&lt;-</span> <span class="fu">recipe</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston) <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_log</span>(lstat)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>lm_wf_log <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spec_log)</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>lm_wf_log <span class="sc">%&gt;%</span> <span class="fu">fit</span>(Boston)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
 Preprocessor: Recipe
@@ -678,19 +700,20 @@ Coefficients:
       52.12       -12.48  </code></pre>
 </div>
 </div>
-</section><section id="qualitative-predictors" class="level2" data-number="3.6"><h2 data-number="3.6" class="anchored" data-anchor-id="qualitative-predictors">
-<span class="header-section-number">3.6</span> Qualitative predictors</h2>
+</section>
+<section id="qualitative-predictors" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="qualitative-predictors"><span class="header-section-number">3.6</span> Qualitative predictors</h2>
 <p>We will now turn our attention to the <code>Carseats</code> data set. We will attempt to predict <code>Sales</code> of child car seats in 400 locations based on a number of predictors. One of these variables is <code>ShelveLoc</code> which is a qualitative predictor that indicates the quality of the shelving location. <code>ShelveLoc</code> takes on three possible values</p>
 <ul>
 <li>Bad</li>
 <li>Medium</li>
 <li>Good</li>
 </ul>
-<p>If you pass such a variable to <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> it will read it and generate dummy variables automatically using the following convention.</p>
+<p>If you pass such a variable to <code>lm()</code> it will read it and generate dummy variables automatically using the following convention.</p>
 <div class="cell">
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Carseats</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">pull</span><span class="op">(</span><span class="va">ShelveLoc</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html">contrasts</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>Carseats <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(ShelveLoc) <span class="sc">%&gt;%</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">contrasts</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Good Medium
 Bad       0      0
@@ -700,8 +723,8 @@ Medium    0      1</code></pre>
 </div>
 <p>So we have no problems including qualitative predictors when using <code>lm</code> as the engine.</p>
 <div class="cell">
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_spec</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">fit</span><span class="op">(</span><span class="va">Sales</span> <span class="op">~</span> <span class="va">.</span> <span class="op">+</span> <span class="va">Income</span><span class="op">:</span><span class="va">Advertising</span> <span class="op">+</span> <span class="va">Price</span><span class="op">:</span><span class="va">Age</span>, data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="sc">%&gt;%</span> </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(Sales <span class="sc">~</span> . <span class="sc">+</span> Income<span class="sc">:</span>Advertising <span class="sc">+</span> Price<span class="sc">:</span>Age, <span class="at">data =</span> Carseats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>parsnip model object
 
@@ -723,15 +746,15 @@ Income:Advertising           Price:Age
 </div>
 <p>However, as with so many things, we can not always guarantee that the underlying engine knows how to deal with qualitative variables. Recipes can be used to handle this as well. The <code>step_dummy()</code> will perform the same transformation of turning 1 qualitative with <code>C</code> levels into <code>C-1</code> indicator variables. While this might seem unnecessary right now, some of the engines, later on, do not handle qualitative variables and this step would be necessary. We are also using the <code>all_nominal_predictors()</code> selector to select all character and factor predictor variables. This allows us to select by type rather than having to type out the names.</p>
 <div class="cell">
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Sales</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Carseats</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_interact</span><span class="op">(</span><span class="op">~</span> <span class="va">Income</span><span class="op">:</span><span class="va">Advertising</span> <span class="op">+</span> <span class="va">Price</span><span class="op">:</span><span class="va">Age</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spec</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_wf</span> <span class="op">%&gt;%</span> <span class="fu">fit</span><span class="op">(</span><span class="va">Carseats</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>rec_spec <span class="ot">&lt;-</span> <span class="fu">recipe</span>(Sales <span class="sc">~</span> ., <span class="at">data =</span> Carseats) <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="sc">~</span> Income<span class="sc">:</span>Advertising <span class="sc">+</span> Price<span class="sc">:</span>Age)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>lm_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spec)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>lm_wf <span class="sc">%&gt;%</span> <span class="fu">fit</span>(Carseats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
 Preprocessor: Recipe
@@ -761,12 +784,16 @@ Income_x_Advertising           Price_x_Age
            0.0007510             0.0001068  </code></pre>
 </div>
 </div>
-</section><section id="writing-functions" class="level2" data-number="3.7"><h2 data-number="3.7" class="anchored" data-anchor-id="writing-functions">
-<span class="header-section-number">3.7</span> Writing functions</h2>
+</section>
+<section id="writing-functions" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="writing-functions"><span class="header-section-number">3.7</span> Writing functions</h2>
 <p>This book will not talk about how to write functions in R. If you still want to know how to write functions, we recommend the <a href="https://r4ds.hadley.nz/functions.html">Functions</a> chapter of the <a href="https://r4ds.hadley.nz/">R for Data Science (2e)</a>.</p>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -845,9 +872,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -857,17 +885,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -880,61 +899,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    if (id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
-        }
-        return container.innerHTML
-      } else {
-        return note.innerHTML;
-      }
-    } else {
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      try { hash = new URL(url).hash; } catch {}
-      const id = hash.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note !== null) {
-        try {
-          const html = processXRef(id, note);
-          instance.setContent(html);
-        } finally {
-          instance.enable();
-          instance.show();
-        }
-      } else {
-        // See if we can fetch this
-        fetch(url.split('#')[0])
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.getElementById(id);
-          console.log(htmlDoc.body.innerHTML);
-          if (note !== null) {
-            const html = processXRef(id, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -978,7 +942,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1062,7 +1025,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./02-statistical-learning.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Statistical learning</span></span>
       </a>          

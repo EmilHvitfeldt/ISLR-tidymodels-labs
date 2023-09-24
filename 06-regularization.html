@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.104">
+<meta name="generator" content="quarto-1.3.450">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
 <title>ISLR tidymodels labs - 6&nbsp; Linear Model Selection and Regularization</title>
 <style>
 code{white-space: pre-wrap;}
@@ -53,6 +56,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -70,7 +74,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -90,11 +95,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+
+
 </head>
+
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -105,30 +115,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">ISLR tidymodels labs</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
-<li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=%7Curl%7C">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
               <i class="bi bi-bi-twitter pe-1"></i>
             Twitter
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=%7Curl%7C">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
               <i class="bi bi-bi-facebook pe-1"></i>
             Facebook
             </a>
           </li>
       </ul>
-</div>
+    </div>
 </div>
     </div>
       </div>
@@ -139,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
@@ -218,26 +232,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
     </ul>
-</div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#best-subset-selection" id="toc-best-subset-selection" class="nav-link active" data-scroll-target="#best-subset-selection"><span class="header-section-number">6.1</span> Best Subset Selection</a></li>
+  <li><a href="#best-subset-selection" id="toc-best-subset-selection" class="nav-link active" data-scroll-target="#best-subset-selection"><span class="header-section-number">6.1</span> Best Subset Selection</a></li>
   <li><a href="#forward-and-backward-stepwise-selection" id="toc-forward-and-backward-stepwise-selection" class="nav-link" data-scroll-target="#forward-and-backward-stepwise-selection"><span class="header-section-number">6.2</span> Forward and Backward Stepwise Selection</a></li>
   <li><a href="#ridge-regression" id="toc-ridge-regression" class="nav-link" data-scroll-target="#ridge-regression"><span class="header-section-number">6.3</span> Ridge Regression</a></li>
   <li><a href="#the-lasso" id="toc-the-lasso" class="nav-link" data-scroll-target="#the-lasso"><span class="header-section-number">6.4</span> The Lasso</a></li>
   <li><a href="#principal-components-regression" id="toc-principal-components-regression" class="nav-link" data-scroll-target="#principal-components-regression"><span class="header-section-number">6.5</span> Principal Components Regression</a></li>
   <li><a href="#partial-least-squares" id="toc-partial-least-squares" class="nav-link" data-scroll-target="#partial-least-squares"><span class="header-section-number">6.6</span> Partial Least Squares</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/06-regularization.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/06-regularization.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">
-<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Linear Model Selection and Regularization</span>
-</h1>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Linear Model Selection and Regularization</span></h1>
 </div>
 
 
@@ -250,36 +268,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><p>This lab will take a look at regularization models and hyperparameter tuning. These models are related to the models we saw in chapter 3 and 4, with the difference that they contain a regularization term. This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip</a> for model fitting and <a href="https://www.tidymodels.org/start/recipes/">recipes and workflows</a> to perform the transformations, and <a href="https://www.tidymodels.org/start/tuning/">tune and dials</a> to tune the hyperparameters of the model.</p>
+</header>
+
+<p>This lab will take a look at regularization models and hyperparameter tuning. These models are related to the models we saw in chapter 3 and 4, with the difference that they contain a regularization term. This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip</a> for model fitting and <a href="https://www.tidymodels.org/start/recipes/">recipes and workflows</a> to perform the transformations, and <a href="https://www.tidymodels.org/start/tuning/">tune and dials</a> to tune the hyperparameters of the model.</p>
 <p>We will be using the <code>Hitters</code> data set from the <code>ISLR</code> package. We wish to predict the baseball players <code>Salary</code> based on several different characteristics which are included in the data set. Since we wish to predict <code>Salary</code>, then we need to remove any missing data from that column. Otherwise, we won’t be able to run the models.</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.statlearning.com">ISLR</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">Hitters</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Hitters</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Salary</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Hitters <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(Hitters) <span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Salary))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="best-subset-selection" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="best-subset-selection">
-<span class="header-section-number">6.1</span> Best Subset Selection</h2>
+<section id="best-subset-selection" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="best-subset-selection"><span class="header-section-number">6.1</span> Best Subset Selection</h2>
 <p>tidymodels does not currently support subset selection methods, and it unlikely to include it in the <a href="https://stackoverflow.com/questions/66651033/stepwise-algorithm-in-tidymodels#comment117845482_66651033">near future</a>.</p>
-</section><section id="forward-and-backward-stepwise-selection" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="forward-and-backward-stepwise-selection">
-<span class="header-section-number">6.2</span> Forward and Backward Stepwise Selection</h2>
+</section>
+<section id="forward-and-backward-stepwise-selection" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="forward-and-backward-stepwise-selection"><span class="header-section-number">6.2</span> Forward and Backward Stepwise Selection</h2>
 <p>tidymodels does not currently support forward and backward stepwise selection methods, and it unlikely to include it in the <a href="https://stackoverflow.com/questions/66651033/stepwise-algorithm-in-tidymodels#comment117845482_66651033">near future</a>.</p>
-</section><section id="ridge-regression" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="ridge-regression">
-<span class="header-section-number">6.3</span> Ridge Regression</h2>
+</section>
+<section id="ridge-regression" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">6.3</span> Ridge Regression</h2>
 <p>We will use the <code>glmnet</code> package to perform ridge regression. <code>parsnip</code> does not have a dedicated function to create a ridge regression model specification. You need to use <code>linear_reg()</code> and set <code>mixture = 0</code> to specify a ridge model. The <code>mixture</code> argument specifies the amount of different types of regularization, <code>mixture = 0</code> specifies only ridge regularization and <code>mixture = 1</code> specifies only lasso regularization. Setting <code>mixture</code> to a value between 0 and 1 lets us use both. When using the <code>glmnet</code> engine we also need to set a <code>penalty</code> to be able to fit the model. We will set this value to <code>0</code> for now, it is not the best value, but we will look at how to select the best value in a little bit.</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ridge_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>(<span class="at">mixture =</span> <span class="dv">0</span>, <span class="at">penalty =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Once the specification is created we can fit it to our data. We will use all the predictors.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">ridge_spec</span>, <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ridge_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(ridge_spec, Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The <code>glmnet</code> package will fit the model for all values of <code>penalty</code> at once, so let us see what the parameter estimate for the model is now that we have <code>penalty = 0</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(ridge_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 3
    term          estimate penalty
@@ -308,7 +330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Let us instead see what the estimates would be if the penalty was 11498.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">11498</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(ridge_fit, <span class="at">penalty =</span> <span class="dv">11498</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 3
    term         estimate penalty
@@ -337,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Notice how the estimates are decreasing when the amount of penalty goes up. Look below at the parameter estimates for <code>penalty = 705</code> and <code>penalty = 50</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">705</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(ridge_fit, <span class="at">penalty =</span> <span class="dv">705</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 3
    term        estimate penalty
@@ -363,7 +385,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 19 Errors       -0.704      705
 20 NewLeagueN    8.61       705</code></pre>
 </div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">ridge_fit</span>, penalty <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(ridge_fit, <span class="at">penalty =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 20 × 3
    term          estimate penalty
@@ -392,15 +414,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>We can visualize how the magnitude of the coefficients are being regularized towards zero as the penalty goes up.</p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_fit</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">autoplot</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ridge_fit <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="06-regularization_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" alt="Multiple line chart. Log Lambda along the x-axis, Coefficients along the y-axis. The curves starts at different places along the y-axis but slowly converge towards 0 as the Log Lambda value increase." width="672"></p>
 </div>
 </div>
-<p>Prediction is done like normal, if we use <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> by itself, then <code>penalty = 0</code> as we set in the model specification is used.</p>
+<p>Prediction is done like normal, if we use <code>predict()</code> by itself, then <code>penalty = 0</code> as we set in the model specification is used.</p>
 <div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ridge_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ridge_fit, <span class="at">new_data =</span> Hitters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 263 × 1
     .pred
@@ -418,9 +440,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 # ℹ 253 more rows</code></pre>
 </div>
 </div>
-<p>but we can also get predictions for other values of <code>penalty</code> by specifying it in <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code></p>
+<p>but we can also get predictions for other values of <code>penalty</code> by specifying it in <code>predict()</code></p>
 <div class="cell">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">ridge_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters</span>, penalty <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(ridge_fit, <span class="at">new_data =</span> Hitters, <span class="at">penalty =</span> <span class="dv">500</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 263 × 1
    .pred
@@ -441,12 +463,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We saw how we can fit a ridge model and make predictions for different values of <code>penalty</code>. But it would be nice if we could find the “best” value of the penalty. This is something we can use hyperparameter tuning for. Hyperparameter tuning is in its simplest form a way of fitting many models with different sets of hyperparameters trying to find one that performs “best”. The complexity in hyperparameter tuning can come from how you try different models. We will keep it simple for this lab and only look at grid search, only looking at evenly spaced parameter values. This is a fine enough approach if you have one or two tunable parameters but can become computationally infeasible. See the chapter on <a href="https://www.tmwr.org/iterative-search.html">iterative search</a> from <a href="https://www.tmwr.org/">Tidy Modeling with R</a> for more information.</p>
 <p>We start like normal by setting up a validation split. A K-fold cross-validation data set is created on the training data set with 10 folds.</p>
 <div class="cell">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Hitters_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">Hitters</span>, strata <span class="op">=</span> <span class="st">"Salary"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">Hitters_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">Hitters_split</span><span class="op">)</span></span>
-<span><span class="va">Hitters_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">Hitters_split</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">Hitters_fold</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">Hitters_train</span>, v <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Hitters_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(Hitters, <span class="at">strata =</span> <span class="st">"Salary"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>Hitters_train <span class="ot">&lt;-</span> <span class="fu">training</span>(Hitters_split)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>Hitters_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(Hitters_split)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>Hitters_fold <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(Hitters_train, <span class="at">v =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can use the <code>tune_grid()</code> function to perform hyperparameter tuning using a grid search. <code>tune_grid()</code> needs 3 different thing;</p>
 <ul>
@@ -458,30 +480,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We already have a resample object created in <code>Hitters_fold</code>. Now we should create the workflow specification next.</p>
 <p>We just used the data set as is when we fit the model earlier. But ridge regression is scale sensitive so we need to make sure that the variables are on the same scale. We can use <code>step_normalize()</code>. Secondly let us deal with the factor variables ourself using <code>step_novel()</code> and <code>step_dummy()</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_recipe</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_zv</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ridge_recipe <span class="ot">&lt;-</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(<span class="at">formula =</span> Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters_train) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_novel</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The model specification will look very similar to what we have seen earlier, but we will set <code>penalty = tune()</code>. This tells <code>tune_grid()</code> that the <code>penalty</code> parameter should be tuned.</p>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_spec</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">linear_reg</span><span class="op">(</span>penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ridge_spec <span class="ot">&lt;-</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="fu">tune</span>(), <span class="at">mixture =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we combine to create a <code>workflow</code> object.</p>
 <div class="cell">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">ridge_recipe</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">ridge_spec</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ridge_workflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(ridge_recipe) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(ridge_spec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The last thing we need is the values of <code>penalty</code> we are trying. This can be created using <code>grid_regular()</code> which creates a grid of evenly spaces parameter values. We use the <code>penalty()</code> function from the <a href="https://dials.tidymodels.org/">dials</a> package to denote the parameter and set the range of the grid we are searching for. Note that this range is log-scaled.</p>
 <div class="cell">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penalty_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
-<span><span class="va">penalty_grid</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>penalty_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(<span class="fu">penalty</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>)), <span class="at">levels =</span> <span class="dv">50</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>penalty_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 50 × 1
      penalty
@@ -502,13 +524,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Using 50 levels for one parameter might seem overkill and in many applications it is. But remember that <code>glmnet</code> fits all the models in one go so adding more levels to <code>penalty</code> doesn’t affect the computational speed much.</p>
 <p>Now we have everything we need and we can fit all the models.</p>
 <div class="cell">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tune_res</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
-<span>  <span class="va">ridge_workflow</span>,</span>
-<span>  resamples <span class="op">=</span> <span class="va">Hitters_fold</span>, </span>
-<span>  grid <span class="op">=</span> <span class="va">penalty_grid</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">tune_res</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tune_res <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  ridge_workflow,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamples =</span> Hitters_fold, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid =</span> penalty_grid</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>tune_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># Tuning results
 # 10-fold cross-validation 
@@ -529,14 +551,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The output of <code>tune_grid()</code> can be hard to read by itself unprocessed. <code>autoplot()</code> creates a great visualization</p>
 <div class="cell">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(tune_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="06-regularization_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" alt="Facetted connected scatter chart. regularization along the x-axis. Performance values along the y-axis. The facets are rmse and rsq. Both are fairly constant for low values of regularization, rmse starts moderately increasing and rsq starts moderately decreasing once the regularization gets larger." width="672"></p>
 </div>
 </div>
 <p>Here we see that the amount of regularization affects the performance metrics differently. Note how there are areas where the amount of regularization doesn’t have any meaningful influence on the coefficient estimates. We can also see the raw metrics that created this chart by calling <code>collect_matrics()</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">collect_metrics</span>(tune_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 7
      penalty .metric .estimator    mean     n std_err .config              
@@ -556,8 +578,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The “best” values of this can be selected using <code>select_best()</code>, this function requires you to specify a <code>matric</code> that it should select against.</p>
 <div class="cell">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_penalty</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span>
-<span><span class="va">best_penalty</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>best_penalty <span class="ot">&lt;-</span> <span class="fu">select_best</span>(tune_res, <span class="at">metric =</span> <span class="st">"rsq"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>best_penalty</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   penalty .config              
@@ -567,14 +589,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>This value of <code>penalty</code> can then be used with <code>finalize_workflow()</code> to update/finalize the recipe by replacing <code>tune()</code> with the value of <code>best_penalty</code>. Now, this model should be fit again, this time using the whole training data set.</p>
 <div class="cell">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">ridge_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ridge_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">ridge_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ridge_final <span class="ot">&lt;-</span> <span class="fu">finalize_workflow</span>(ridge_workflow, best_penalty)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>ridge_final_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(ridge_final, <span class="at">data =</span> Hitters_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This final model can now be applied on our testing data set to validate the performance</p>
 <div class="cell">
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">augment</span><span class="op">(</span><span class="va">ridge_final_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters_test</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">rsq</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Salary</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(ridge_final_fit, <span class="at">new_data =</span> Hitters_test) <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rsq</span>(<span class="at">truth =</span> Salary, <span class="at">estimate =</span> .pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
@@ -583,60 +605,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>And it performs fairly well given what we saw earlier.</p>
-</section><section id="the-lasso" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="the-lasso">
-<span class="header-section-number">6.4</span> The Lasso</h2>
+</section>
+<section id="the-lasso" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="the-lasso"><span class="header-section-number">6.4</span> The Lasso</h2>
 <p>We will use the <code>glmnet</code> package to perform lasso regression. <code>parsnip</code> does not have a dedicated function to create a ridge regression model specification. You need to use <code>linear_reg()</code> and set <code>mixture = 1</code> to specify a lasso model. The <code>mixture</code> argument specifies the amount of different types of regularization, <code>mixture = 0</code> specifies only ridge regularization and <code>mixture = 1</code> specifies only lasso regularization. Setting <code>mixture</code> to a value between 0 and 1 lets us use both.</p>
 <p>The following procedure will be very similar to what we saw in the ridge regression section. The preprocessing needed is the same, but let us write it out one more time.</p>
 <div class="cell">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lasso_recipe</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_zv</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>lasso_recipe <span class="ot">&lt;-</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(<span class="at">formula =</span> Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters_train) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_novel</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we finish the lasso regression <code>workflow</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lasso_spec</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">linear_reg</span><span class="op">(</span>penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>, mixture <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="va">lasso_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">lasso_recipe</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lasso_spec</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>lasso_spec <span class="ot">&lt;-</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">linear_reg</span>(<span class="at">penalty =</span> <span class="fu">tune</span>(), <span class="at">mixture =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>) </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>lasso_workflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(lasso_recipe) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lasso_spec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>While we are doing a different kind of regularization we still use the same <code>penalty</code> argument. I have picked a different range for the values of penalty since I know it will be a good range. You would in practice have to cast a wide net at first and then narrow on the range of interest.</p>
 <div class="cell">
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">penalty_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>penalty_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(<span class="fu">penalty</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>)), <span class="at">levels =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And we can use <code>tune_grid()</code> again.</p>
 <div class="cell">
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tune_res</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
-<span>  <span class="va">lasso_workflow</span>,</span>
-<span>  resamples <span class="op">=</span> <span class="va">Hitters_fold</span>, </span>
-<span>  grid <span class="op">=</span> <span class="va">penalty_grid</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>tune_res <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  lasso_workflow,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamples =</span> Hitters_fold, </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid =</span> penalty_grid</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(tune_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="06-regularization_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" alt="Facetted connected scatter chart. regularization along the x-axis. Performance values along the y-axis. The facets are rmse and rsq. Both are fairly constant for low values of regularization, rmse starts moderately increasing and rsq starts moderately decreasing once the regularization gets larger." width="672"></p>
 </div>
 </div>
 <p>We select the best value of <code>penalty</code> using <code>select_best()</code></p>
 <div class="cell">
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_penalty</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>best_penalty <span class="ot">&lt;-</span> <span class="fu">select_best</span>(tune_res, <span class="at">metric =</span> <span class="st">"rsq"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And refit the using the whole training data set.</p>
 <div class="cell">
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lasso_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">lasso_workflow</span>, <span class="va">best_penalty</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lasso_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">lasso_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>lasso_final <span class="ot">&lt;-</span> <span class="fu">finalize_workflow</span>(lasso_workflow, best_penalty)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>lasso_final_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(lasso_final, <span class="at">data =</span> Hitters_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And we are done, by calculating the <code>rsq</code> value for the lasso model can we see that for this data ridge regression outperform lasso regression.</p>
 <div class="cell">
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">augment</span><span class="op">(</span><span class="va">lasso_final_fit</span>, new_data <span class="op">=</span> <span class="va">Hitters_test</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">rsq</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Salary</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(lasso_final_fit, <span class="at">new_data =</span> Hitters_test) <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rsq</span>(<span class="at">truth =</span> Salary, <span class="at">estimate =</span> .pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 3
   .metric .estimator .estimate
@@ -644,35 +667,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 1 rsq     standard       0.446</code></pre>
 </div>
 </div>
-</section><section id="principal-components-regression" class="level2" data-number="6.5"><h2 data-number="6.5" class="anchored" data-anchor-id="principal-components-regression">
-<span class="header-section-number">6.5</span> Principal Components Regression</h2>
+</section>
+<section id="principal-components-regression" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="principal-components-regression"><span class="header-section-number">6.5</span> Principal Components Regression</h2>
 <p>We will talk more about principal components analysis in chapter 10. This section will show how principal components can be used as a dimensionality reduction preprocessing step.</p>
 <p>I will treat principal component regression as a linear model with PCA transformations in the preprocessing. But using the tidymodels framework then this is still mostly one model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_spec</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The preprocessing recipe will closely resemble the recipe we saw in the ridge and lasso sections. The main difference is that we end the recipe with <code>step_pca()</code> which will perform principal component analysis on all the predictors, and return the components that explain <code>threshold</code> percent of the variance. We have set <code>threshold = tune()</code> so we can treat the threshold as a hyperparameter to be tuned. By using workflows and tune together can be tune parameters in the preprocessing as well as parameters in the models.</p>
 <div class="cell">
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pca_recipe</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_zv</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, threshold <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">pca_workflow</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">pca_recipe</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>pca_recipe <span class="ot">&lt;-</span> </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(<span class="at">formula =</span> Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters_train) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_novel</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_predictors</span>(), <span class="at">threshold =</span> <span class="fu">tune</span>())</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>pca_workflow <span class="ot">&lt;-</span> </span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(pca_recipe) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We create a smaller grid for <code>threshold</code> and we don’t need to modify the range since <code>[0, 1]</code> is an acceptable range.</p>
 <div class="cell">
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">threshold_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">threshold</span><span class="op">(</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">threshold_grid</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>threshold_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(<span class="fu">threshold</span>(), <span class="at">levels =</span> <span class="dv">10</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>threshold_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 1
    threshold
@@ -691,66 +715,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>And now we fit using <code>tune_grid()</code>. This time we will actually perform 100 fits since we need to fit a model for each value of <code>threshold</code> within each fold.</p>
 <div class="cell">
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">tune_res</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
-<span>  <span class="va">pca_workflow</span>,</span>
-<span>  resamples <span class="op">=</span> <span class="va">Hitters_fold</span>, </span>
-<span>  grid <span class="op">=</span> <span class="va">threshold_grid</span></span>
-<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>tune_res <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  pca_workflow,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamples =</span> Hitters_fold, </span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid =</span> threshold_grid</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The results look a little shaky here.</p>
 <div class="cell">
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(tune_res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="06-regularization_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" alt="Facetted connected scatter chart. regularization along the x-axis. Performance values along the y-axis. The facets are rmse and rsq. Very variable, appears to produce best values for threshold == 0.5." width="672"></p>
 </div>
 </div>
 <p>But we can still select the best model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_threshold</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>best_threshold <span class="ot">&lt;-</span> <span class="fu">select_best</span>(tune_res, <span class="at">metric =</span> <span class="st">"rmse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And fit the model much like have done a couple of times by now. The workflow is finalized using the value we selected with <code>select_best()</code>, and training using the full training data set.</p>
 <div class="cell">
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pca_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">pca_workflow</span>, <span class="va">best_threshold</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">pca_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">pca_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>pca_final <span class="ot">&lt;-</span> <span class="fu">finalize_workflow</span>(pca_workflow, best_threshold)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>pca_final_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(pca_final, <span class="at">data =</span> Hitters_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="partial-least-squares" class="level2" data-number="6.6"><h2 data-number="6.6" class="anchored" data-anchor-id="partial-least-squares">
-<span class="header-section-number">6.6</span> Partial Least Squares</h2>
+</section>
+<section id="partial-least-squares" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="partial-least-squares"><span class="header-section-number">6.6</span> Partial Least Squares</h2>
 <p>Lastly, we have a partial least squares model. We will treat this much like the PCA section and say that partial least squares calculations will be done as a preprocessing that we tune. The following code is almost identical to previous chapters and will be shown in full without many explanations to avoid repetition. If you skipped to this section, go back and read the previous sections for more commentary.</p>
 <div class="cell">
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pls_recipe</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="fu">recipe</span><span class="op">(</span>formula <span class="op">=</span> <span class="va">Salary</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_novel</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_zv</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_pls</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>, outcome <span class="op">=</span> <span class="st">"Salary"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="va">pls_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">pls_recipe</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="va">num_comp_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">num_comp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">tune_res</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
-<span>  <span class="va">pls_workflow</span>,</span>
-<span>  resamples <span class="op">=</span> <span class="va">Hitters_fold</span>, </span>
-<span>  grid <span class="op">=</span> <span class="va">num_comp_grid</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">best_threshold</span> <span class="op">&lt;-</span> <span class="fu">select_best</span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">pls_final</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">pls_workflow</span>, <span class="va">best_threshold</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">pls_final_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">pls_final</span>, data <span class="op">=</span> <span class="va">Hitters_train</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>pls_recipe <span class="ot">&lt;-</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(<span class="at">formula =</span> Salary <span class="sc">~</span> ., <span class="at">data =</span> Hitters_train) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_novel</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_zv</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pls</span>(<span class="fu">all_predictors</span>(), <span class="at">num_comp =</span> <span class="fu">tune</span>(), <span class="at">outcome =</span> <span class="st">"Salary"</span>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) </span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>pls_workflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(pls_recipe) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) </span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>num_comp_grid <span class="ot">&lt;-</span> <span class="fu">grid_regular</span>(<span class="fu">num_comp</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">20</span>)), <span class="at">levels =</span> <span class="dv">10</span>)</span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>tune_res <span class="ot">&lt;-</span> <span class="fu">tune_grid</span>(</span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>  pls_workflow,</span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">resamples =</span> Hitters_fold, </span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid =</span> num_comp_grid</span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>best_threshold <span class="ot">&lt;-</span> <span class="fu">select_best</span>(tune_res, <span class="at">metric =</span> <span class="st">"rmse"</span>)</span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>pls_final <span class="ot">&lt;-</span> <span class="fu">finalize_workflow</span>(pls_workflow, best_threshold)</span>
+<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a>pls_final_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(pls_final, <span class="at">data =</span> Hitters_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -829,9 +857,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -841,17 +870,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -864,61 +884,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    if (id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
-        }
-        return container.innerHTML
-      } else {
-        return note.innerHTML;
-      }
-    } else {
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      try { hash = new URL(url).hash; } catch {}
-      const id = hash.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note !== null) {
-        try {
-          const html = processXRef(id, note);
-          instance.setContent(html);
-        } finally {
-          instance.enable();
-          instance.show();
-        }
-      } else {
-        // See if we can fetch this
-        fetch(url.split('#')[0])
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.getElementById(id);
-          console.log(htmlDoc.body.innerHTML);
-          if (note !== null) {
-            const html = processXRef(id, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -962,7 +927,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1046,7 +1010,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./05-resampling-methods.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Resampling Methods</span></span>
       </a>          

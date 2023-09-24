@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.104">
+<meta name="generator" content="quarto-1.3.450">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
 <title>ISLR tidymodels labs - 7&nbsp; Moving Beyond Linearity</title>
 <style>
 code{white-space: pre-wrap;}
@@ -53,6 +56,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -70,7 +74,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -90,11 +95,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+
+
 </head>
+
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -105,30 +115,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">ISLR tidymodels labs</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
-<li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=%7Curl%7C">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
               <i class="bi bi-bi-twitter pe-1"></i>
             Twitter
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=%7Curl%7C">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
               <i class="bi bi-bi-facebook pe-1"></i>
             Facebook
             </a>
           </li>
       </ul>
-</div>
+    </div>
 </div>
     </div>
       </div>
@@ -139,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
@@ -218,23 +232,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
     </ul>
-</div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#polynomial-regression-and-step-functions" id="toc-polynomial-regression-and-step-functions" class="nav-link active" data-scroll-target="#polynomial-regression-and-step-functions"><span class="header-section-number">7.1</span> Polynomial Regression and Step Functions</a></li>
+  <li><a href="#polynomial-regression-and-step-functions" id="toc-polynomial-regression-and-step-functions" class="nav-link active" data-scroll-target="#polynomial-regression-and-step-functions"><span class="header-section-number">7.1</span> Polynomial Regression and Step Functions</a></li>
   <li><a href="#splines" id="toc-splines" class="nav-link" data-scroll-target="#splines"><span class="header-section-number">7.2</span> Splines</a></li>
   <li><a href="#gams" id="toc-gams" class="nav-link" data-scroll-target="#gams"><span class="header-section-number">7.3</span> GAMs</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/07-moving-beyond-linearity.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/07-moving-beyond-linearity.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">
-<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Moving Beyond Linearity</span>
-</h1>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Moving Beyond Linearity</span></h1>
 </div>
 
 
@@ -247,37 +265,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><p>This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include: polynomials expansion, step functions, and splines.</p>
+</header>
+
+<p>This lab will look at the various ways we can introduce non-linearity into our model by doing preprocessing. Methods include: polynomials expansion, step functions, and splines.</p>
 <p>The GAMs section is WIP since they are now supported in <a href="https://github.com/tidymodels/parsnip/pull/512">parsnip</a>.</p>
 <p>This chapter will use <a href="https://www.tidymodels.org/start/models/">parsnip</a> for model fitting and <a href="https://www.tidymodels.org/start/recipes/">recipes and workflows</a> to perform the transformations.</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.statlearning.com">ISLR</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">Wage</span> <span class="op">&lt;-</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="va">Wage</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Wage <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="polynomial-regression-and-step-functions" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="polynomial-regression-and-step-functions">
-<span class="header-section-number">7.1</span> Polynomial Regression and Step Functions</h2>
+<section id="polynomial-regression-and-step-functions" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="polynomial-regression-and-step-functions"><span class="header-section-number">7.1</span> Polynomial Regression and Step Functions</h2>
 <p>Polynomial regression can be thought of as doing polynomial expansion on a variable and passing that expansion into a linear regression model. We will be very explicit in this formulation in this chapter. <code>step_poly()</code> allows us to do a polynomial expansion on one or more variables.</p>
 <p>The following step will take <code>age</code> and replace it with the variables <code>age</code>, <code>age^2</code>, <code>age^3</code>, and <code>age^4</code> since we set <code>degree = 4</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_poly</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">wage</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_poly</span><span class="op">(</span><span class="va">age</span>, degree <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rec_poly <span class="ot">&lt;-</span> <span class="fu">recipe</span>(wage <span class="sc">~</span> age, <span class="at">data =</span> Wage) <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_poly</span>(age, <span class="at">degree =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This recipe is combined with a linear regression specification and combined to create a workflow object.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">poly_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_poly</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>poly_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_poly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This object can now be <code>fit()</code></p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">poly_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></span>
-<span><span class="va">poly_fit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>poly_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(poly_wf, <span class="at">data =</span> Wage)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>poly_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
 Preprocessor: Recipe
@@ -300,7 +320,7 @@ Coefficients:
 </div>
 <p>And we cal pull the coefficients using <code>tidy()</code></p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tidy</span><span class="op">(</span><span class="va">poly_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(poly_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 5
   term        estimate std.error statistic  p.value
@@ -312,9 +332,9 @@ Coefficients:
 5 age_poly_4     -77.9    39.9       -1.95 5.10e- 2</code></pre>
 </div>
 </div>
-<p>I was lying when I said that <code>step_poly()</code> returned <code>age</code>, <code>age^2</code>, <code>age^3</code>, and <code>age^4</code>. What is happening is that it returns variables that are a basis of orthogonal polynomials, which means that each of the columns is a linear combination of the variables <code>age</code>, <code>age^2</code>, <code>age^3</code>, and <code>age^4</code>. We can see this by using <code><a href="https://rdrr.io/r/stats/poly.html">poly()</a></code> directly with <code>raw = FALSE</code> since it is the default</p>
+<p>I was lying when I said that <code>step_poly()</code> returned <code>age</code>, <code>age^2</code>, <code>age^3</code>, and <code>age^4</code>. What is happening is that it returns variables that are a basis of orthogonal polynomials, which means that each of the columns is a linear combination of the variables <code>age</code>, <code>age^2</code>, <code>age^3</code>, and <code>age^4</code>. We can see this by using <code>poly()</code> directly with <code>raw = FALSE</code> since it is the default</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, degree <span class="op">=</span> <span class="fl">4</span>, raw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">poly</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">degree =</span> <span class="dv">4</span>, <span class="at">raw =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              1          2          3          4
 [1,] -0.5976143  0.5455447 -0.3726780  0.1889822
@@ -338,7 +358,7 @@ attr(,"class")
 </div>
 <p>We see that these variables don’t directly have a format we would have assumed. But this is still a well-reasoned transformation. We can get the raw polynomial transformation by setting <code>raw = TRUE</code></p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, degree <span class="op">=</span> <span class="fl">4</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">poly</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">degree =</span> <span class="dv">4</span>, <span class="at">raw =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     1  2   3    4
 [1,] 1  1   1    1
@@ -356,16 +376,16 @@ attr(,"class")
 <p>These transformations align with what we would expect. It is still recommended to stick with the default of <code>raw = FALSE</code> unless you have a reason not to do that. One of the benefits of using <code>raw = FALSE</code> is that the resulting variables are uncorrelated which is a desirable quality when using a linear regression model.</p>
 <p>You can get the raw polynomials by setting <code>options = list(raw = TRUE)</code> in <code>step_poly()</code></p>
 <div class="cell">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_raw_poly</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">wage</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_poly</span><span class="op">(</span><span class="va">age</span>, degree <span class="op">=</span> <span class="fl">4</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">raw_poly_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_raw_poly</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">raw_poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">raw_poly_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">tidy</span><span class="op">(</span><span class="va">raw_poly_fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rec_raw_poly <span class="ot">&lt;-</span> <span class="fu">recipe</span>(wage <span class="sc">~</span> age, <span class="at">data =</span> Wage) <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_poly</span>(age, <span class="at">degree =</span> <span class="dv">4</span>, <span class="at">options =</span> <span class="fu">list</span>(<span class="at">raw =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>raw_poly_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_raw_poly)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>raw_poly_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(raw_poly_wf, <span class="at">data =</span> Wage)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(raw_poly_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 5
   term            estimate  std.error statistic  p.value
@@ -379,13 +399,13 @@ attr(,"class")
 </div>
 <p>Let us try something new and visualize the polynomial fit on our data. We can do this easily because we only have 1 predictor and 1 response. Starting with creating a tibble with different ranges of <code>age</code>. Then we take this tibble and predict with it, this will give us the repression curve. We are additionally adding confidence intervals by setting <code>type = "conf_int"</code> which we can do since we are using a linear regression model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">age_range</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">Wage</span><span class="op">$</span><span class="va">age</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">Wage</span><span class="op">$</span><span class="va">age</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span></span>
-<span>  <span class="fu">augment</span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">regression_lines</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>age_range <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">age =</span> <span class="fu">seq</span>(<span class="fu">min</span>(Wage<span class="sc">$</span>age), <span class="fu">max</span>(Wage<span class="sc">$</span>age)))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>regression_lines <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>(poly_fit, <span class="at">new_data =</span> age_range),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(poly_fit, <span class="at">new_data =</span> age_range, <span class="at">type =</span> <span class="st">"conf_int"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>regression_lines</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 63 × 4
      age .pred .pred_lower .pred_upper
@@ -405,15 +425,15 @@ attr(,"class")
 </div>
 <p>We will then use <code>ggplot2</code> to visualize the fitted line and confidence interval. The green line is the regression curve and the dashed blue lines are the confidence interval.</p>
 <div class="cell">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Wage</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">age</span>, <span class="va">wage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"darkgreen"</span>,</span>
-<span>            data <span class="op">=</span> <span class="va">regression_lines</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_lower</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
-<span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
-<span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Wage <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(age, wage)) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred), <span class="at">color =</span> <span class="st">"darkgreen"</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> regression_lines) <span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_lower), <span class="at">data =</span> regression_lines, </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_upper), <span class="at">data =</span> regression_lines, </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" alt="Scatter chart, age against the x-axis and wage against y-axis. Fairly normally distributed around wage == 100, with some another blob around wage == 275. A curve in dark green follows the middle of the data with two dottled curves follows closely around." width="672"></p>
 </div>
@@ -421,22 +441,22 @@ attr(,"class")
 <p>The regression curve is now a curve instead of a line as we would have gotten with a simple linear regression model. Notice furthermore that the confidence bands are tighter when there is a lot of data and they wider towards the ends of the data.</p>
 <p>Let us take that one step further and see what happens to the regression line once we go past the domain it was trained on. the previous plot showed individuals within the age range 18-80. Let us see what happens once we push this to 18-100. This is not an impossible range but an unrealistic range.</p>
 <div class="cell">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">wide_age_range</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span></span>
-<span>  <span class="fu">augment</span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">wide_age_range</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">poly_fit</span>, new_data <span class="op">=</span> <span class="va">wide_age_range</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">Wage</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">age</span>, <span class="va">wage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"darkgreen"</span>,</span>
-<span>            data <span class="op">=</span> <span class="va">regression_lines</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_lower</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
-<span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
-<span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>wide_age_range <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">age =</span> <span class="fu">seq</span>(<span class="dv">18</span>, <span class="dv">100</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>regression_lines <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>(poly_fit, <span class="at">new_data =</span> wide_age_range),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(poly_fit, <span class="at">new_data =</span> wide_age_range, <span class="at">type =</span> <span class="st">"conf_int"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>Wage <span class="sc">%&gt;%</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(age, wage)) <span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred), <span class="at">color =</span> <span class="st">"darkgreen"</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> regression_lines) <span class="sc">+</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_lower), <span class="at">data =</span> regression_lines, </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_upper), <span class="at">data =</span> regression_lines, </span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" alt="Scatter chart, age against the x-axis and wage against y-axis. Fairly normally distributed around wage == 100, with some another blob around wage == 275. A curve in dark green follows the middle of the data with two dottled curves follows closely around. The range for age has been increased beyond the data points and the green curve trails negative and the dotted lines quickly move away from the green curve." width="672"></p>
 </div>
@@ -444,29 +464,29 @@ attr(,"class")
 <p>And we see that the curve starts diverging once we get to 93 the predicted <code>wage</code> is negative. The confidence bands also get wider and wider as we get farther away from the data.</p>
 <p>We can also think of this problem as a classification problem, and we will do that just now by setting us the task of predicting whether an individual earns more than $250000 per year. We will add a new factor value denoting this response.</p>
 <div class="cell">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">Wage</span> <span class="op">&lt;-</span> <span class="va">Wage</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>high <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">wage</span> <span class="op">&gt;</span> <span class="fl">250</span>, </span>
-<span>                       levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, </span>
-<span>                       labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"High"</span>, <span class="st">"Low"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Wage <span class="ot">&lt;-</span> Wage <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">high =</span> <span class="fu">factor</span>(wage <span class="sc">&gt;</span> <span class="dv">250</span>, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"High"</span>, <span class="st">"Low"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We cannot use the polynomial expansion recipe <code>rec_poly</code> we created earlier since it had <code>wage</code> as the response and now we want to have <code>high</code> as the response. We also have to create a logistic regression specification that we will use as our classification model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_poly</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_poly</span><span class="op">(</span><span class="va">age</span>, degree <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lr_spec</span> <span class="op">&lt;-</span> <span class="fu">logistic_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glm"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">set_mode</span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lr_poly_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lr_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_poly</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>rec_poly <span class="ot">&lt;-</span> <span class="fu">recipe</span>(high <span class="sc">~</span> age, <span class="at">data =</span> Wage) <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_poly</span>(age, <span class="at">degree =</span> <span class="dv">4</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>lr_spec <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>lr_poly_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lr_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_poly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This polynomial logistic regression model workflow can now be fit and predicted with as usual.</p>
 <div class="cell">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lr_poly_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">lr_poly_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_poly_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>lr_poly_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(lr_poly_wf, <span class="at">data =</span> Wage)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(lr_poly_fit, <span class="at">new_data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3,000 × 1
    .pred_class
@@ -486,7 +506,7 @@ attr(,"class")
 </div>
 <p>If we want we can also get back the underlying probability predictions for the two classes, and their confidence intervals for these probability predictions by setting <code>type = "prob"</code> and <code>type = "conf_int"</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_poly_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(lr_poly_fit, <span class="at">new_data =</span> Wage, <span class="at">type =</span> <span class="st">"prob"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3,000 × 2
       .pred_High .pred_Low
@@ -503,7 +523,7 @@ attr(,"class")
 10 0.0323            0.968
 # ℹ 2,990 more rows</code></pre>
 </div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_poly_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(lr_poly_fit, <span class="at">new_data =</span> Wage, <span class="at">type =</span> <span class="st">"conf_int"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3,000 × 4
    .pred_lower_High .pred_upper_High .pred_lower_Low .pred_upper_Low
@@ -523,34 +543,34 @@ attr(,"class")
 </div>
 <p>We can use these to visualize the probability curve for the classification model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span></span>
-<span>  <span class="fu">augment</span><span class="op">(</span><span class="va">lr_poly_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lr_poly_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">regression_lines</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ylim</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_High</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"darkgreen"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_lower_High</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"blue"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper_High</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"blue"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_jitter</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="op">(</span><span class="va">high</span> <span class="op">==</span> <span class="st">"High"</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">Wage</span>, </span>
-<span>              shape <span class="op">=</span> <span class="st">"|"</span>, height <span class="op">=</span> <span class="fl">0</span>, width <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>regression_lines <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>(lr_poly_fit, <span class="at">new_data =</span> age_range, <span class="at">type =</span> <span class="st">"prob"</span>),</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(lr_poly_fit, <span class="at">new_data =</span> age_range, <span class="at">type =</span> <span class="st">"conf_int"</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>regression_lines <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(age)) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>)) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_High), <span class="at">color =</span> <span class="st">"darkgreen"</span>) <span class="sc">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_lower_High), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_upper_High), <span class="at">color =</span> <span class="st">"blue"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(<span class="at">y =</span> (high <span class="sc">==</span> <span class="st">"High"</span>) <span class="sc">/</span> <span class="dv">5</span>), <span class="at">data =</span> Wage, </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">shape =</span> <span class="st">"|"</span>, <span class="at">height =</span> <span class="dv">0</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" alt="Line chart with age on the x-axis and .pred_High on the y-axis. The green curve starts at zero for low values age. A local maxima is seen at 35 and 60. Curve goes back to zero around 80. Two blue dotted lines representing the confidence interval around the green curve. This confidence interval is around 1% away from the green curve excepts when age is larger than 60, where it quickly widens." width="672"></p>
 </div>
 </div>
 <p>Next, let us take a look at the step function and how to fit a model using it as a preprocessor. You can create step functions in a couple of different ways. <code>step_discretize()</code> will convert a numeric variable into a factor variable with <code>n</code> bins, <code>n</code> here is specified with <code>num_breaks</code>. These will have approximately the same number of points in them according to the training data set.</p>
 <div class="cell">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_discretize</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_discretize</span><span class="op">(</span><span class="va">age</span>, num_breaks <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">discretize_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lr_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_discretize</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">discretize_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">discretize_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></span>
-<span><span class="va">discretize_fit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rec_discretize <span class="ot">&lt;-</span> <span class="fu">recipe</span>(high <span class="sc">~</span> age, <span class="at">data =</span> Wage) <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_discretize</span>(age, <span class="at">num_breaks =</span> <span class="dv">4</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>discretize_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lr_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_discretize)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>discretize_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(discretize_wf, <span class="at">data =</span> Wage)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>discretize_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
 Preprocessor: Recipe
@@ -576,15 +596,15 @@ Residual Deviance: 710.4    AIC: 718.4</code></pre>
 </div>
 <p>If you already know where you want the step function to break then you can use <code>step_cut()</code> and supply the breaks manually.</p>
 <div class="cell">
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_cut</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">high</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_cut</span><span class="op">(</span><span class="va">age</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">50</span>, <span class="fl">70</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">cut_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lr_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_cut</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">cut_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">cut_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></span>
-<span><span class="va">cut_fit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rec_cut <span class="ot">&lt;-</span> <span class="fu">recipe</span>(high <span class="sc">~</span> age, <span class="at">data =</span> Wage) <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_cut</span>(age, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">70</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>cut_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lr_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_cut)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>cut_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(cut_wf, <span class="at">data =</span> Wage)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>cut_fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
 Preprocessor: Recipe
@@ -608,22 +628,23 @@ Null Deviance:      730.5
 Residual Deviance: 704.3    AIC: 712.3</code></pre>
 </div>
 </div>
-</section><section id="splines" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="splines">
-<span class="header-section-number">7.2</span> Splines</h2>
+</section>
+<section id="splines" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="splines"><span class="header-section-number">7.2</span> Splines</h2>
 <p>In order to fit regression splines, or in other words, use splines as preprocessors when fitting a linear model, we use <code>step_bs()</code> to construct the matrices of basis functions. The <code>bs()</code> function is used and arguments such as <code>knots</code> can be passed to <code>bs()</code> by using passing a named list to <code>options</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">rec_spline</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">wage</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">step_bs</span><span class="op">(</span><span class="va">age</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>knots <span class="op">=</span> <span class="fl">25</span>, <span class="fl">40</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rec_spline <span class="ot">&lt;-</span> <span class="fu">recipe</span>(wage <span class="sc">~</span> age, <span class="at">data =</span> Wage) <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_bs</span>(age, <span class="at">options =</span> <span class="fu">list</span>(<span class="at">knots =</span> <span class="dv">25</span>, <span class="dv">40</span>, <span class="dv">60</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We already have the linear regression specification <code>lm_spec</code> so we can create the workflow, fit the model and predict with it like we have seen how to do in the previous chapters.</p>
 <div class="cell">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">spline_wf</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_spec</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">rec_spline</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">spline_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">spline_wf</span>, data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">spline_fit</span>, new_data <span class="op">=</span> <span class="va">Wage</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>spline_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spline)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>spline_fit <span class="ot">&lt;-</span> <span class="fu">fit</span>(spline_wf, <span class="at">data =</span> Wage)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(spline_fit, <span class="at">new_data =</span> Wage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3,000 × 1
    .pred
@@ -643,29 +664,33 @@ Residual Deviance: 704.3    AIC: 712.3</code></pre>
 </div>
 <p>Lastly, we can plot the basic spline on top of the data.</p>
 <div class="cell">
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">regression_lines</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span></span>
-<span>  <span class="fu">augment</span><span class="op">(</span><span class="va">spline_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">spline_fit</span>, new_data <span class="op">=</span> <span class="va">age_range</span>, type <span class="op">=</span> <span class="st">"conf_int"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">Wage</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">age</span>, <span class="va">wage</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, color <span class="op">=</span> <span class="st">"darkgreen"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_lower</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
-<span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">.pred_upper</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">regression_lines</span>, </span>
-<span>            linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>regression_lines <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">augment</span>(spline_fit, <span class="at">new_data =</span> age_range),</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(spline_fit, <span class="at">new_data =</span> age_range, <span class="at">type =</span> <span class="st">"conf_int"</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>Wage <span class="sc">%&gt;%</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(age, wage)) <span class="sc">+</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred), <span class="at">data =</span> regression_lines, <span class="at">color =</span> <span class="st">"darkgreen"</span>) <span class="sc">+</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_lower), <span class="at">data =</span> regression_lines, </span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .pred_upper), <span class="at">data =</span> regression_lines, </span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="07-moving-beyond-linearity_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" alt="Scatter chart, age against the x-axis and wage against y-axis. Fairly normally distributed around wage == 100, with some another blob around wage == 275. A curve in dark green follows the middle of the data with two dottled curves follows closely around." width="672"></p>
 </div>
 </div>
-</section><section id="gams" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="gams">
-<span class="header-section-number">7.3</span> GAMs</h2>
+</section>
+<section id="gams" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="gams"><span class="header-section-number">7.3</span> GAMs</h2>
 <p>GAM section is WIP since they are now supported in <a href="https://github.com/tidymodels/parsnip/pull/512">parsnip</a>.</p>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -744,9 +769,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -756,17 +782,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -779,61 +796,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    if (id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
-        }
-        return container.innerHTML
-      } else {
-        return note.innerHTML;
-      }
-    } else {
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      try { hash = new URL(url).hash; } catch {}
-      const id = hash.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note !== null) {
-        try {
-          const html = processXRef(id, note);
-          instance.setContent(html);
-        } finally {
-          instance.enable();
-          instance.show();
-        }
-      } else {
-        // See if we can fetch this
-        fetch(url.split('#')[0])
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.getElementById(id);
-          console.log(htmlDoc.body.innerHTML);
-          if (note !== null) {
-            const html = processXRef(id, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -877,7 +839,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -961,7 +922,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./06-regularization.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Linear Model Selection and Regularization</span></span>
       </a>          

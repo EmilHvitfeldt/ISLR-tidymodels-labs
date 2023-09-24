@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.104">
+<meta name="generator" content="quarto-1.3.450">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
 <meta name="author" content="Emil Hvitfeldt">
-<meta name="dcterms.date" content="2022-08-06">
+<meta name="dcterms.date" content="2023-09-24">
+
 <title>ISLR tidymodels labs</title>
 <style>
 code{white-space: pre-wrap;}
@@ -20,6 +23,7 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 </style>
+
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -37,7 +41,8 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -57,11 +62,16 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+
+
 </head>
+
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -72,30 +82,34 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">ISLR tidymodels labs</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
     <div class="dropdown">
       <a href="" title="Share" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Share"><i class="bi bi-share"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
-<li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=%7Curl%7C">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
               <i class="bi bi-bi-twitter pe-1"></i>
             Twitter
             </a>
           </li>
           <li>
-            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=%7Curl%7C">
+            <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
               <i class="bi bi-bi-facebook pe-1"></i>
             Facebook
             </a>
           </li>
       </ul>
-</div>
+    </div>
 </div>
     </div>
       </div>
@@ -106,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
@@ -185,24 +199,28 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </li>
     </ul>
-</div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li>
-<a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
   <ul class="collapse">
-<li><a href="#edition-differences" id="toc-edition-differences" class="nav-link" data-scroll-target="#edition-differences">Edition Differences</a></li>
+  <li><a href="#edition-differences" id="toc-edition-differences" class="nav-link" data-scroll-target="#edition-differences">Edition Differences</a></li>
   <li><a href="#colophon" id="toc-colophon" class="nav-link" data-scroll-target="#colophon">Colophon</a></li>
+  </ul></li>
   </ul>
-</li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
 <h1 class="title">ISLR tidymodels labs</h1>
 </div>
 
@@ -220,7 +238,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 6, 2022</p>
+      <p class="date">September 24, 2023</p>
     </div>
   </div>
   
@@ -228,31 +246,29 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
-</header><section id="introduction" class="level1" data-number="1"><h1 data-number="1">
-<span class="header-section-number">1</span> Introduction</h1>
+</header>
+
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>This book aims to be a complement to the 2nd edition <a href="https://www.statlearning.com/">An Introduction to Statistical Learning</a> book with translations of the labs into using the <a href="https://www.tidymodels.org/">tidymodels</a> set of packages.</p>
 <p>The labs will be mirrored quite closely to stay true to the original material.</p>
-<section id="edition-differences" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="edition-differences">Edition Differences</h2>
+<section id="edition-differences" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="edition-differences">Edition Differences</h2>
 <p>All listed changes will be relative to the 1st edition.</p>
 <ul>
-<li>
-<a href="./04-classification.html#naive-bayes">Naive Bayes</a> has been added to chapter 4 on <a href="./04-classification.html">Classification</a>
-</li>
-<li>
-<a href="./04-classification.html#poisson-regression">Poisson Regression</a> has been added to chapter 4 on <a href="./04-classification.html">Classification</a>
-</li>
+<li><a href="./04-classification.html#naive-bayes">Naive Bayes</a> has been added to chapter 4 on <a href="./04-classification.html">Classification</a></li>
+<li><a href="./04-classification.html#poisson-regression">Poisson Regression</a> has been added to chapter 4 on <a href="./04-classification.html">Classification</a></li>
 <li>“Application to Caravan Insurance Data” section is no longer treated as its own section and is now part of the <a href="./04-classification.html#k-nearest-neighbors">K-Nearest Neighbors</a> section</li>
-<li>
-<a href="./08-tree-based-methods.html#bayesian-additive-regression-trees">Bayesian Additive Regression Trees</a> has been added to chapter 8 on <a href="./08-tree-based-methods.html">Tree-Based Methods</a>
-</li>
+<li><a href="./08-tree-based-methods.html#bayesian-additive-regression-trees">Bayesian Additive Regression Trees</a> has been added to chapter 8 on <a href="./08-tree-based-methods.html">Tree-Based Methods</a></li>
 <li>chapter on <a href="./12-unsupervised-learning.html">Unsupervised Learning</a> has been renumbered to chapter 12 instead of 10</li>
-<li>
-<a href="./12-unsupervised-learning.html#matrix-completion">Matrix Completion</a> has been added to chapter 12 on <a href="./12-unsupervised-learning.html">Unsupervised Learning</a>
-</li>
+<li><a href="./12-unsupervised-learning.html#matrix-completion">Matrix Completion</a> has been added to chapter 12 on <a href="./12-unsupervised-learning.html">Unsupervised Learning</a></li>
 <li>chapter on <a href="./10-deep-learning.html">Deep learning</a> has been added as chapter 10</li>
 <li>chapter on <a href="./11-survival-analysis.html">Survival Analysis and Censored Data</a> as been added as chapter 11</li>
 <li>chapter on <a href="./13-multiple-testing.html">Multiple Testing</a> as been added as chapter 13</li>
-</ul></section><section id="colophon" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="colophon">Colophon</h2>
+</ul>
+</section>
+<section id="colophon" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="colophon">Colophon</h2>
 <p>This book was written in <a href="https://posit.co/products/open-source/rstudio/">RStudio</a> using <a href="https://quarto.org/"><strong>Quarto</strong></a>. The <a href="https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html">website</a> is hosted via <a href="https://pages.github.com/">GitHub Pages</a>, and the complete source is available on <a href="https://github.com/EmilHvitfeldt/ISLR-tidymodels-labs">GitHub</a>.</p>
 <p>This version of the book was built with R version 4.3.1 (2023-06-16) and the following packages:</p>
 <div class="cell-output-display">
@@ -262,11 +278,13 @@ ul.task-list li input[type="checkbox"] {
 <col style="width: 10%">
 <col style="width: 72%">
 </colgroup>
-<thead><tr class="header">
+<thead>
+<tr class="header">
 <th style="text-align: left;">package</th>
 <th style="text-align: left;">version</th>
 <th style="text-align: left;">source</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">broom</td>
@@ -483,7 +501,11 @@ ul.task-list li input[type="checkbox"] {
 </div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -562,9 +584,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -574,17 +597,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -597,61 +611,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
-    });
-  }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    if (id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
-        }
-        return container.innerHTML
-      } else {
-        return note.innerHTML;
-      }
-    } else {
-      return note.innerHTML;
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      try { hash = new URL(url).hash; } catch {}
-      const id = hash.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      if (note !== null) {
-        try {
-          const html = processXRef(id, note);
-          instance.setContent(html);
-        } finally {
-          instance.enable();
-          instance.show();
-        }
-      } else {
-        // See if we can fetch this
-        fetch(url.split('#')[0])
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.getElementById(id);
-          console.log(htmlDoc.body.innerHTML);
-          if (note !== null) {
-            const html = processXRef(id, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -695,7 +654,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
-            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -779,7 +737,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
       <a href="./02-statistical-learning.html" class="pagination-link">
