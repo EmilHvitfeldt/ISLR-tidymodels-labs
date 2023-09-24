@@ -34,6 +34,7 @@ Imports:
     randomForest,
     readr,
     recipes (>= 0.1.16.9000),
+    rmarkdown,
     rpart,
     rpart.plot,
     rsample,
